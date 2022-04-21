@@ -6,14 +6,13 @@ export default function Home() {
   return (
     <div className="container">
       <Head>
-        <title>Next.js Starter!</title>
+        <title>Demo site</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <Header title="Welcome to my app!" />
         <p className="description">
-          HOWDY
+          Fiserv.developer demo site
         </p>
       </main>
 
