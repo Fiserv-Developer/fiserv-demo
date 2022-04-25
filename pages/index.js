@@ -17,8 +17,10 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from './Menu/listItems';
 import ExamplePage from './PageExample';
+import LineItem from './Menu/_lineItem';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 function Copyright(props) {
   return (
@@ -134,13 +136,15 @@ function DashboardContent() {
               px: [1],
             }}
           >
+            Fiserv.developer
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+          <LineItem pageName="Example 1" icon={<ShoppingCartIcon/>} />
+      <LineItem pageName="Example 2" icon={<BarChartIcon/>} />
           </List>
         </Drawer>
         <Box
