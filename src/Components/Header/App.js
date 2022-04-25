@@ -18,7 +18,7 @@ export default function Header() {
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
-        <img src="../logo.svg"/>
+        <img alt="Fiserv developer logo" src="../logo.svg"/>
         </Toolbar>
       </AppBar>
       <Drawer
