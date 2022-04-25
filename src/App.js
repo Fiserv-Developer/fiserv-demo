@@ -16,7 +16,6 @@ function App() {
       <Body>
         <Routes>
           {routes.map((value, index) => {
-            console.log("Adding route for", value, index);
             return (<Route key={index} path={value.url} element={value.component} />)
           })}
         </Routes>

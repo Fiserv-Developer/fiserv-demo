@@ -15,15 +15,9 @@ export default function Home() {
   }, [apiKey]);
 
   return (
-    <div>
+    <div className="content">
       <div>Home</div>
       <label>Api Key (saved into local storage)<input type="text" name={localApiKey} value={apiKey} onChange={(e) => setApiKey(e.target.value)}/></label>
-      <div>
-        <ul>
-          <li><a href="">Ecommerce Demo</a></li>
-          <li><a href="portal">Portal Demo</a></li>
-        </ul>
-      </div>
     </div>
   )
 }

@@ -25,28 +25,30 @@ export default function Home() {
   }, []);
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>id</th>
-          <th>status</th>
-          <th>created</th>
-          <th>amount</th>
-          <th>currency</th>
-          <th>terminal id</th>
-        </tr>
-      </thead>
-      <tbody>
-        {authorisations.map((row) => (
-              <tr>
-                <td>{row.id}</td>
-                <td>{row.created}</td>
-                <td>{row.status}</td>
-                <td>{row.code}</td>
-                <td align="right">{`$${row.financial.amounts.authorised}`}</td>
-              </tr>
-            ))}
-      </tbody>
-    </table>
+    <div className="content">
+      <table>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>status</th>
+            <th>created</th>
+            <th>amount</th>
+            <th>currency</th>
+            <th>terminal id</th>
+          </tr>
+        </thead>
+        <tbody>
+          {authorisations.map((row) => (
+                <tr>
+                  <td>{row.id}</td>
+                  <td>{row.created}</td>
+                  <td>{row.status}</td>
+                  <td>{row.code}</td>
+                  <td align="right">{`$${row.financial.amounts.authorised}`}</td>
+                </tr>
+              ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

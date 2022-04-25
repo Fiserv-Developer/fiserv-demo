@@ -35,13 +35,12 @@ export default function Header() {
         <Box sx={{ overflow: 'auto' }}>
           <List>
             {routes.map((value, index) => (
-              <ListItem key={index} button>
-                <Link to={value.url}>{value.name}</Link>
-                <ListItemIcon>
-                    {value.icon}
-                </ListItemIcon>
-                <ListItemText primary={value.name} />
-              </ListItem>
+              <Link key={index} to={value.url}>
+                <ListItem button>
+                  <ListItemIcon>{value.icon}</ListItemIcon>
+                  <ListItemText primary={value.name} />
+                </ListItem>
+              </Link>
             ))}
           </List>
         </Box>
