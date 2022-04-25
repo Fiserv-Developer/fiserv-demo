@@ -11,17 +11,20 @@ import ExamplePage from "./Pages/ExamplePage/ExamplePage";
 function App() {
   return (
   <ThemeProvider theme={theme}>
+    <BrowserRouter>
       <Header />
       <Body>
-      <BrowserRouter>
-      <Routes>
-        {routes.map((value, index) => {
-          return (<Route key={index} path={value.link} element={value.component} />)
-        })}
-      </Routes>
-    </BrowserRouter>
+        
+          <Routes>
+            {routes.map((value, index) => {
+              console.log("Adding route for", value, index);
+              return (<Route key={index} path={value.url} element={value.component} />)
+            })}
+          </Routes>
+        
       </Body>
-      <Footer />
+      </BrowserRouter>
+    <Footer />
     </ThemeProvider>
   );
 }

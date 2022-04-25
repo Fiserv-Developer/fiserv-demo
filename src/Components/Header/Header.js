@@ -9,11 +9,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import routes from '../../Config/routes';
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
 export default function Header() {
-
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -35,9 +35,8 @@ export default function Header() {
         <Box sx={{ overflow: 'auto' }}>
           <List>
             {routes.map((value, index) => (
-              <ListItem key={index} button onClick={() => {
-                window.location = value.url;
-              }}>
+              <ListItem key={index} button>
+                <Link to={value.url}>{value.name}</Link>
                 <ListItemIcon>
                     {value.icon}
                 </ListItemIcon>
