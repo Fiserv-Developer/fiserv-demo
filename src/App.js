@@ -2,8 +2,6 @@ import "./App.css";
 import Body from "./Components/Body/App";
 import Footer from "./Components/Footer/App";
 import Header from "./Components/Header/App";
-import Home from "./Pages/Home/App";
-import ExamplePage from "./Pages/ExamplePage/App";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import routes from './Config/routes';
 import { ThemeProvider } from "@mui/private-theming";
@@ -13,7 +11,6 @@ function App() {
   return (
 
   <ThemeProvider theme={theme}>
-    <div className="App">
       <Header />
       <Body>
       <BrowserRouter>
@@ -25,7 +22,6 @@ function App() {
     </BrowserRouter>
       </Body>
       <Footer />
-    </div>
     </ThemeProvider>
   );
 }
