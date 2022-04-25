@@ -14,14 +14,12 @@ function App() {
     <BrowserRouter>
       <Header />
       <Body>
-        
-          <Routes>
-            {routes.map((value, index) => {
-              console.log("Adding route for", value, index);
-              return (<Route key={index} path={value.url} element={value.component} />)
-            })}
-          </Routes>
-        
+        <Routes>
+          {routes.map((value, index) => {
+            console.log("Adding route for", value, index);
+            return (<Route key={index} path={value.url} element={value.component} />)
+          })}
+        </Routes>
       </Body>
       </BrowserRouter>
     <Footer />
