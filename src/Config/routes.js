@@ -1,10 +1,10 @@
-import ExamplePage from '../Pages/ExamplePage/App';
-import Home from '../Pages/Home/App';
+import ExamplePage from '../Pages/ExamplePage/ExamplePage';
+import Home from '../Pages/Home/Home';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 
 let routes = [
-    {"name":"Home", "link":"/", "component":<Home/>, icon:<InboxIcon/>},
-    {"name":"Example page", "link":"/page", "component":<ExamplePage/>, icon:<InboxIcon/>}
+    {"name":"Home", "url":"/", "component":<Home/>, icon:<InboxIcon/>},
+    {"name":"Example page", "url":"/page", "component":<ExamplePage/>, icon:<InboxIcon/>}
 ]
 
 

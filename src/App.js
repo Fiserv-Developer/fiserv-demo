@@ -1,11 +1,12 @@
 import "./App.css";
-import Body from "./Components/Body/App";
-import Footer from "./Components/Footer/App";
-import Header from "./Components/Header/App";
+import Body from "./Components/Body/Body";
+import Footer from "./Components/Footer/Footer";
+import Header from "./Components/Header/Header";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import routes from './Config/routes';
 import { ThemeProvider } from "@mui/private-theming";
 import theme from "./Config/theme";
+import ExamplePage from "./Pages/ExamplePage/ExamplePage";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
       <BrowserRouter>
       <Routes>
         {routes.map((value, index) => {
-          return (<Route path={value.link} element={value.component} />)
+          return (<Route key={index} path={value.link} element={value.component} />)
         })}
       </Routes>
     </BrowserRouter>

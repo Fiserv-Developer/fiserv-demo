@@ -13,10 +13,12 @@ import routes from '../../Config/routes';
 const drawerWidth = 240;
 
 export default function Header() {
+
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <AppBar position="fixed" sx={{ backgroundColor:'#111', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
         <img alt="Fiserv developer logo" src="../logo.svg"/>
         </Toolbar>
@@ -33,7 +35,9 @@ export default function Header() {
         <Box sx={{ overflow: 'auto' }}>
           <List>
             {routes.map((value, index) => (
-              <ListItem button key={index}>
+              <ListItem key={index} button onClick={() => {
+                window.location = value.url;
+              }}>
                 <ListItemIcon>
                     {value.icon}
                 </ListItemIcon>
