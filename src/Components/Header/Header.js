@@ -11,6 +11,7 @@ import {
   ListItemText,
   styled,
   useTheme,
+  Typography,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 
@@ -82,6 +83,9 @@ export default function Header() {
         sx={{
           backgroundColor: "var(--bg)",
           zIndex: (theme) => theme.zIndex.drawer + 1,
+          height:'81px',
+          display:'flex',
+          justifyContent:'center',
         }}
       >
         <Toolbar>
@@ -90,11 +94,14 @@ export default function Header() {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
+            sx={{ mr: 2, ...(open && { display: "none" })
+           }}
           >
             <MenuIcon />
           </IconButton>
-          <p>{getPageTitle(location.pathname)}</p>
+          <Typography variant="h4" component="p" sx={{fontSize:'18px', fontWeight:'600', color: 'var(--white)'}}>{getPageTitle(location.pathname)}</Typography>
+
+
         </Toolbar>
       </AppBar>
       <Drawer
@@ -116,7 +123,8 @@ export default function Header() {
           backgroundColor:'var(--bg)',
           display:'flex',
           justifyContent:'center',
-          alignItems:'center'
+          alignItems:'center',
+          height:'81px',
       }}
         >
           <img alt="Fiserv developer logo" src="../logo.svg" width="80%" />
@@ -129,7 +137,6 @@ export default function Header() {
             )}
           </IconButton>
         </DrawerHeader>
-        <Toolbar />
         <Box sx={{ overflow: "auto" }}>
           <List>
             {routes.map((value, index) => {
@@ -138,8 +145,8 @@ export default function Header() {
                 return (
                   <Link key={index} to={value.url} onClick={() => setOpen(false)}>
                   <ListItem button>
-                    <ListItemIcon>{value.icon}</ListItemIcon>
-                    <ListItemText primary={value.name} />
+                    <ListItemIcon sx={{color:'var(--white)'}}>{value.icon}</ListItemIcon>
+                    <ListItemText primary={value.name} sx={{color:'var(--white)', textDecoration:'none'}}/>
                   </ListItem>
                 </Link>
                   )
@@ -148,8 +155,8 @@ export default function Header() {
                 return (
                   <Link key={index} to={value.url} onClick={() => window.location = value.url}>
                   <ListItem button>
-                    <ListItemIcon>{value.icon}</ListItemIcon>
-                    <ListItemText primary={value.name} />
+                    <ListItemIcon sx={{color:'var(--white)'}}>{value.icon}</ListItemIcon>
+                    <ListItemText sx={{color:'var(--white)', textDecoration:'none'}} primary={value.name} />
                   </ListItem>
                 </Link>
                   )
