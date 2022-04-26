@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import routes from './Config/routes';
 import { ThemeProvider } from "@mui/private-theming";
 import theme from "./Config/theme";
-import ExamplePage from "./Pages/ExamplePage/ExamplePage";
 
 function App() {
   return (

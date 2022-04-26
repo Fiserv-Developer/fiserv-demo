@@ -17,6 +17,7 @@ import MuiAppBar from "@mui/material/AppBar";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useLocation } from 'react-router-dom'
 
 import routes from "../../Config/routes";
 import { Link } from "react-router-dom";
@@ -61,6 +62,17 @@ export default function Header() {
     setOpen(false);
   };
 
+  const location = useLocation();
+  const getPageTitle = () => {
+    let pageName = '';
+   routes.filter((value) => {
+      if(value.url === location.pathname) {
+        pageName = value.name;
+      }
+    });
+    return pageName;
+  }
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -82,7 +94,7 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton>
-          <img alt="Fiserv developer logo" src="../logo.svg" />
+          <p>{getPageTitle(location.pathname)}</p>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -100,8 +112,15 @@ export default function Header() {
         open={open}
       >
         <DrawerHeader
-        sx={{backgroundColor:'var(--bg)'}}
+        sx={{
+          backgroundColor:'var(--bg)',
+          display:'flex',
+          justifyContent:'center',
+          alignItems:'center'
+      }}
         >
+          <img alt="Fiserv developer logo" src="../logo.svg" width="80%" />
+
           <IconButton onClick={handleDrawerClose} sx={{color:'var(--white)'}}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
@@ -113,14 +132,31 @@ export default function Header() {
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
           <List>
-            {routes.map((value, index) => (
-              <Link key={index} to={value.url} onClick={() => setOpen(false)}>
-                <ListItem button>
-                  <ListItemIcon>{value.icon}</ListItemIcon>
-                  <ListItemText primary={value.name} />
-                </ListItem>
-              </Link>
-            ))}
+            {routes.map((value, index) => {
+
+              if(value.type === 'component') {
+                return (
+                  <Link key={index} to={value.url} onClick={() => setOpen(false)}>
+                  <ListItem button>
+                    <ListItemIcon>{value.icon}</ListItemIcon>
+                    <ListItemText primary={value.name} />
+                  </ListItem>
+                </Link>
+                  )
+              }
+              else {
+                return (
+                  <Link key={index} to={value.url} onClick={() => window.location = value.url}>
+                  <ListItem button>
+                    <ListItemIcon>{value.icon}</ListItemIcon>
+                    <ListItemText primary={value.name} />
+                  </ListItem>
+                </Link>
+                  )
+              }
+
+            
+            })}
           </List>
         </Box>
       </Drawer>
