@@ -70,6 +70,7 @@ export default function Header() {
       if(value.url === location.pathname) {
         pageName = value.name;
       }
+      return value;
     });
     return pageName;
   }
