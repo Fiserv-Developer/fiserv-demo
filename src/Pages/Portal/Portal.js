@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 export default function Home() {
   const localApiKey = "apiKey";
@@ -15,40 +20,38 @@ export default function Home() {
         'Accept': 'application/json'
       }
     }).then(results => results.json())
-      .then(data => {
-        console.log(data);
-        setAuthorisations(data);
-      })
-      .catch(rejected => {
-        console.log(rejected);
-    });
+      .then(data => setAuthorisations(data))
+      .catch(rejected => console.log(rejected));
   }, []);
 
   return (
     <div className="content">
-      <table>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>status</th>
-            <th>created</th>
-            <th>amount</th>
-            <th>currency</th>
-            <th>terminal id</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>id</TableCell>
+            <TableCell>created</TableCell>
+            <TableCell>status</TableCell>
+            <TableCell>code</TableCell>
+            <TableCell>terminal id</TableCell>
+            <TableCell>currency</TableCell>
+            <TableCell>amount</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {authorisations.map((row) => (
-                <tr>
-                  <td>{row.id}</td>
-                  <td>{row.created}</td>
-                  <td>{row.status}</td>
-                  <td>{row.code}</td>
-                  <td align="right">{`$${row.financial.amounts.authorised}`}</td>
-                </tr>
+                <TableRow key={row.id}>
+                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.created}</TableCell>
+                  <TableCell>{row.status}</TableCell>
+                  <TableCell>{row.code}</TableCell>
+                  <TableCell>{row.captureEnvironment.terminal.id}</TableCell>
+                  <TableCell>{row.financial.amounts.currencyCode}</TableCell>
+                  <TableCell align="right">{`$${row.financial.amounts.authorised}`}</TableCell>
+                </TableRow>
               ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }
