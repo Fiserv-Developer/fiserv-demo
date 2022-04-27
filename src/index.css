@@ -20,6 +20,7 @@ code {
   --light-gray: rgb(68, 68, 68);
   --black: black;
   --white: white;
+  --accent: #ff6600;
 }
 
 .MuiDrawer-paperAnchorLeft {

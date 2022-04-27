@@ -1,7 +1,23 @@
-import React from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, } from "@mui/material";
-import { Fingerprint, FormatAlignCenter, LocalAtm, Lock, LockOpen, Policy, } from "@mui/icons-material";
-import moment from 'moment';
+import React, {useState, useEffect} from "react";
+import {
+  Tooltip,
+  Box,
+  Typography,
+  Dialog,
+  DialogTitle,
+} from "@mui/material";
+import { TreeItem, TreeView } from '@mui/lab';
+import {
+  Fingerprint,
+  FormatAlignCenter,
+  ChevronRightIcon,
+  LocalAtm,
+  Lock,
+  ExpandMoreIcon,
+  LockOpen,
+  Policy,
+} from "@mui/icons-material";
+import moment from "moment";
 
 export default function Documents() {
   const documents = [
@@ -99,106 +115,197 @@ export default function Documents() {
     },
   ];
 
-  let headCells = [];
-  Object.keys(documents[0]).filter((value, index) => {
-    headCells.push({
-      id: value,
-      numeric: false,
-      disablePadding: true,
-      label: value,
-    });
-    return value;
-  });
+  const localApiKey = "apiKey";
+  // const [documents, setDocuments] = useState([]);
+  
+  // useEffect(() => {
+  //   const apiKeyJson = localStorage.getItem(localApiKey);
+  //   const apiKey = JSON.parse(apiKeyJson);
+
+  //   fetch('https://test.emea.api.fiservapps.com/sandbox/exp/v1/documents', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Api-Key': apiKey,
+  //       'Accept': 'application/json'
+  //     }
+  //   }).then(results => results.json())
+  //     .then(data => setDocuments(data))
+  //     .catch(rejected => console.log(rejected));
+  // }, []);
+
+
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState({});
+
+  const handleClickOpen = (e, value) => {
+    setOpen(true);
+    setSelectedValue(value);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+  };
 
   return (
-    <div style={{paddingLeft:'20px'}}>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {headCells.map((headCell) => (
-                <TableCell
-                  key={headCell.id}
-                  align={headCell.numeric ? "right" : "left"}
-                  padding={headCell.disablePadding ? "none" : "normal"}
-                >
-                  {headCell.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {documents.map((row, index) => (
-              <TableRow
-                key={index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell>{row.id}</TableCell>
-                <TableCell>
-                  <DocumentType type={row.type} />
-                </TableCell>
-                <TableCell>{row.title}</TableCell>
-                <TableCell>
-                  <DocumentState state={row.state} />
-                </TableCell>
-                <TableCell>{row.description}</TableCell>
-                <TableCell>{row.filename}</TableCell>
-                <TableCell>{row.documentReference}</TableCell>
-                <TableCell>{row.idReference}</TableCell>
-                <TableCell>{row.financialReference}</TableCell>
-                <TableCell>{row.otherReference}</TableCell>
-                <TableCell>{GenDate(row.closeDateTime)}</TableCell>
-                <TableCell>{row.requestType}</TableCell>
-                <TableCell>{row.subType}</TableCell>
-                <TableCell>{row.signatureMethod}</TableCell>
-                <TableCell>{GenDate(row.generationDateTime)}</TableCell>
-                <TableCell>{row.merchantId}</TableCell>
-                <TableCell>{row.sourceReference}</TableCell>
-                <TableCell>{row.obsolete}</TableCell>
-                <TableCell>{row.partnerCode}</TableCell>
-                <TableCell>{GenDate(row.createdDateTime)}</TableCell>
-                <TableCell>{GenDate(row.modifiedDateTime)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+    <div
+      style={{ paddingLeft: "20px", display: "flex", justifyContent: "center" }}
+    >
+    
+      {documents.map((row, index) => (
+        <Box
+          key={index}
+          sx={{
+            cursor:'pointer',
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            marginRight: "20px",
+          }}
+          onClick={(e) => { handleClickOpen(e, row) }}
+        >
+          <Box
+            sx={{
+              width: "220px",
+              height: "160px",
+              borderRadius: "6px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "var(--accent)",
+            }}
+          >
+            <Typography>
+              <DocumentType
+                type={row.type}
+                sx={{ color: "var(--white)", width: "40px", height: "40px" }}
+              />
+            </Typography>
+
+            <Box
+              sx={{
+                position: "relative",
+                height: 0,
+                width: 0,
+                right: "-80px",
+                top: "-98px",
+              }}
+            >
+              <DocumentState
+                state={row.state}
+                sx={{ color: "var(--white)", width: "22px", height: "22px" }}
+              />
+            </Box>
+          </Box>
+          <Typography
+            variant="subtitle2"
+            component="subtitle2"
+            sx={{ textAlign: "center", paddingTop: "8px" }}
+          >
+            {row.filename}
+          </Typography>
+        </Box>
+      ))}
+
+      <SimpleDialog
+        selectedValue={selectedValue}
+        open={open}
+        onClose={handleClose}
+      />
     </div>
   );
 }
 
 
-const GenDate = (date) => {
 
-  if(date === null) {
+const SimpleDialog = (props) => {
+  const { onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>{props.selectedValue.title}</DialogTitle>
+
+      <TreeView
+      aria-label="rich object"
+      // defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpanded={['root']}
+      // defaultExpandIcon={<ChevronRightIcon />}
+      sx={{ maxHeight: 610, flexGrow: 1, maxWidth: 600, overflowY: 'auto', padding:'20px' }}
+    >
+     {Object.keys(selectedValue).map((value, index) => {
+       return (
+        <TreeItem nodeId={index} label={Object.keys(selectedValue)[index] + " : "+selectedValue[Object.keys(selectedValue)[index]]}/>
+       )
+     })}
+    </TreeView>
+     
+    </Dialog>
+  );
+};
+
+const genDate = (date) => {
+  if (date === null) {
     return null;
-  }
-  else {
-    return moment(date).format('Do MMM YY hh:mm:ss Z');
-  }
-}
-
-const DocumentState = ({ state }) => {
-  if (state === "OPEN") {
-    return <Tooltip title={state}><LockOpen /></Tooltip>;
   } else {
-    return <Tooltip title={state}><Lock /></Tooltip>;
+    return moment(date).format("Do MMM YY hh:mm:ss Z");
   }
 };
 
-const DocumentType = ({ type }) => {
+const DocumentState = ({ state, sx }) => {
+  if (state === "OPEN") {
+    return (
+      <Tooltip title={state}>
+        <LockOpen sx={sx} />
+      </Tooltip>
+    );
+  } else {
+    return (
+      <Tooltip title={state}>
+        <Lock sx={sx} />
+      </Tooltip>
+    );
+  }
+};
+
+const DocumentType = ({ type, sx }) => {
   if (type === "FINANCIAL") {
-    return <Tooltip title={type}><LocalAtm /></Tooltip>;
+    return (
+      <Tooltip title={type}>
+        <LocalAtm sx={sx} />
+      </Tooltip>
+    );
   }
   if (type === "IDENTIFICATION") {
-    return <Tooltip title={type}><Fingerprint /></Tooltip>;
+    return (
+      <Tooltip title={type}>
+        <Fingerprint sx={sx} />
+      </Tooltip>
+    );
   }
   if (type === "CONTRACT") {
-    return <Tooltip title={type}><Policy /></Tooltip>;
+    return (
+      <Tooltip title={type}>
+        <Policy sx={sx} />
+      </Tooltip>
+    );
   }
   if (type === "OTHER") {
-    return <Tooltip title={type}><FormatAlignCenter /></Tooltip>;
+    return (
+      <Tooltip title={type}>
+        <FormatAlignCenter sx={sx} />
+      </Tooltip>
+    );
   } else {
-    return <Tooltip title={type}><Lock /></Tooltip>;
+    return (
+      <Tooltip title={type}>
+        <Lock sx={sx} />
+      </Tooltip>
+    );
   }
 };
