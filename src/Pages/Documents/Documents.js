@@ -115,11 +115,10 @@ export default function Documents() {
     },
   ];
 
-  const localApiKey = "apiKey";
   // const [documents, setDocuments] = useState([]);
   
   // useEffect(() => {
-  //   const apiKeyJson = localStorage.getItem(localApiKey);
+  //   const apiKeyJson = localStorage.getItem("apiKey");
   //   const apiKey = JSON.parse(apiKeyJson);
 
   //   fetch('https://test.emea.api.fiservapps.com/sandbox/exp/v1/documents', {
@@ -130,7 +129,7 @@ export default function Documents() {
   //     }
   //   }).then(results => results.json())
   //     .then(data => setDocuments(data))
-  //     .catch(rejected => console.log(rejected));
+  //     .catch(rejected => console.log({rejected}));
   // }, []);
 
 
