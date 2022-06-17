@@ -1,15 +1,15 @@
-import Portal from '../Pages/Portal/Portal';
-import Home from '../Pages/Home/Home';
-import Cottage from '@mui/icons-material/Cottage';
+import Portal from '../Pages/Portal';
+import Home from '../Pages/Home';
+import AccountBalance from '@mui/icons-material/AccountBalance';
 import HomeIcon from '@mui/icons-material/Home';
-import FileDownload from '@mui/icons-material/FileDownload';
+import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
 import Link from '@mui/icons-material/Link';
-import Documents from '../Pages/Documents/Documents';
+import Shop from '../Pages/Shop';
 
 let routes = [
     {type:"component", "name":"Home", "url":"/", "component":<Home/>, icon:<HomeIcon/>},
-    {type:"component", "name":"Portal", "url":"/portal", "component":<Portal/>, icon:<Cottage/>},
-    {type:"component", "name":"Documents", "url":"/documents", "component":<Documents/>, icon:<FileDownload/>},
+    {type:"component", "name":"Portal", "url":"/portal", "component":<Portal/>, icon:<AccountBalance/>},
+    {type:"component", "name":"Shop", "url":"/shop", "component":<Shop/>, icon:<ShoppingBasket/>},
     {type:"link", "name":"Developer Portal", "url":"https://fiserv.dev/", "component":null, icon:<Link/>},
 ];
 
