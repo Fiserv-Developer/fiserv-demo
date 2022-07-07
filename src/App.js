@@ -12,13 +12,14 @@ import { createTheme } from '@mui/material/styles';
 function App() {
    // Theme Management
    const [theme, setTheme] = useState(true)
-   const appliedTheme = createTheme(theme ? light : dark)
+   const dynamicTheme = createTheme(theme ? light : dark)
+   
 
   return (
-    <ThemeProvider theme={appliedTheme}>
+    <ThemeProvider theme={dynamicTheme}>
       <BrowserRouter>
         <Header theme={theme} setTheme={setTheme}/>
-        <Body>
+        <Body backgroundColor={dynamicTheme.palette.primary.main}>
           <Routes>
             {routes.map((value, index) => {
               return (<Route key={index} path={value.url} element={value.component} />)

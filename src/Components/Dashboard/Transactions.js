@@ -9,22 +9,28 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { CreditCard, PhoneAndroid, AccountBalanceWallet } from "@mui/icons-material";
 import Placeholder from './Placeholder';
+import { config } from '../../Config/constants';
 
 export default function Transactions(props) {
-  const baseUrl = 'https://prod.emea.api.fiservapps.com/sandbox/exp/v1';
   const [transactions, setTransactions] = useState([]);
   
   useEffect(() => {
-    fetch(baseUrl + '/transactions?sort=+posted&limit=20', {
+    const url = config.baseUrl + '/transactions?sort=-posted&limit=20';
+    const headers = {
+      'Api-Key': props.apiKey,
+      'Accept': 'application/json',
+    };
+    if (props.merchantId) {
+      headers['Merchant-Id'] = props.merchantId;
+    }
+
+    fetch(url, {
       method: 'GET',
-      headers: {
-        'Api-Key': props.apiKey,
-        'Accept': 'application/json'
-      }
+      headers: headers,
     }).then(results => results.json())
       .then(data => setTransactions(data))
       .catch(rejected => setTransactions([]));
-  }, [props.apiKey]);
+  }, [props.apiKey, props.merchantId]);
 
   if (transactions.length > 0) {
     return (<TransactionsTable transactions={transactions}/>);
@@ -49,8 +55,8 @@ function TransactionsTable(props) {
             <TableCell style={{color: theme.palette.text.main}}>Posted</TableCell>
             <TableCell style={{color: theme.palette.text.main}}>Authorised</TableCell>
             <TableCell style={{color: theme.palette.text.main}}>Channel</TableCell>
-            <TableCell style={{color: theme.palette.text.main}}>Category</TableCell>
             <TableCell style={{color: theme.palette.text.main}}>Method</TableCell>
+            <TableCell style={{color: theme.palette.text.main}}>Brand / Service</TableCell>
             <TableCell style={{color: theme.palette.text.main}} align="right">Amount</TableCell>
           </TableRow>
         </TableHead>

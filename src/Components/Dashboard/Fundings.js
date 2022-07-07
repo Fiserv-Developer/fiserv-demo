@@ -2,35 +2,70 @@ import React, { useState, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Placeholder from './Placeholder';
+import { config } from '../../Config/constants';
 
 const zero = "0.00";
 
 export default function Fundings(props) {
-  const baseUrl = 'https://prod.emea.api.fiservapps.com/sandbox/exp/v1';
   const [net, setNet] = useState(zero);
   const [transactions, setTransactions] = useState(zero);
   const [fees, setFees] = useState(zero);
 
+  const today = new Date().toISOString().substring(0, 10);
+  const lastWeekDate = new Date()
+  lastWeekDate.setDate(lastWeekDate.getDate() - 7);
+
+  // get fundings
   useEffect(() => {
-    fetch(baseUrl + '/fundings', {
+    const url = config.baseUrl + '/fundings?sort=-funded&fundedAfter=' + today + '&fundedBefore=' + today;
+    const headers = {
+      'Api-Key': props.apiKey,
+      'Accept': 'application/json',
+    };
+    if (props.merchantId) {
+      headers['Merchant-Id'] = props.merchantId;
+    }
+
+    fetch(url, {
       method: 'GET',
-      headers: {
-        'Api-Key': props.apiKey,
-        'Accept': 'application/json'
-      }
+      headers: headers,
     }).then(results => results.json())
-      .then(data => {
-        const totals = calculateTotals(data);
-        setNet(totals.net);
-        setTransactions(totals.transactions);
-        setFees(totals.fees);
+      .then(fundings => {
+        
+        // zero everything out
+        setNet(zero);
+        setTransactions(zero);
+        setFees(zero);
+
+        // get all details
+        fundings.forEach(funding => {
+          const url = config.baseUrl + '/fundings/' + funding.id + "/details";
+          fetch(url, {
+            method: 'GET',
+            headers: {
+              'Api-Key': props.apiKey,
+              'Accept': 'application/json'
+            }
+          }).then(results => results.json())
+            .then(details => {
+              const totals = calculateTotals(details);
+              setNet(totals.net);
+              setTransactions(totals.transactions);
+              setFees(totals.fees);
+            })
+            .catch(rejected => {
+              setNet(zero);
+              setTransactions(zero);
+              setFees(zero);
+            });
+        });
       })
       .catch(rejected => {
         setNet(zero);
         setTransactions(zero);
         setFees(zero);
       });
-  }, [props.apiKey]);
+  }, [props.apiKey, props.merchantId, today]);
 
   if (net !== zero || transactions !== zero || fees !== zero) {
     return (
@@ -48,7 +83,7 @@ function FundingCard(props) {
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
-        Funding Summary
+        Latest Funding Summary
       </Typography>
       <Typography component="p" variant="h3" color={theme.palette.text.main}>
         £{props.net}

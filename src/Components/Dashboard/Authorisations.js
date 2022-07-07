@@ -3,22 +3,28 @@ import { useTheme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Typography from '@mui/material/Typography'
 import Placeholder from './Placeholder';
+import { config } from '../../Config/constants';
 
 export default function Authorisations(props) {
-  const baseUrl = 'https://prod.emea.api.fiservapps.com/sandbox/exp/v1';
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(baseUrl + '/authorisations?limit=100', {
+    const url = config.baseUrl + '/authorisations?limit=1000';
+    const headers = {
+      'Api-Key': props.apiKey,
+      'Accept': 'application/json',
+    };
+    if (props.merchantId) {
+      headers['Merchant-Id'] = props.merchantId;
+    }
+
+    fetch(url, {
       method: 'GET',
-      headers: {
-        'Api-Key': props.apiKey,
-        'Accept': 'application/json'
-      }
+      headers: headers
     }).then(results => results.json())
-      .then(data => setData(groupByTenSeconds(data)))
+      .then(data => setData(groupByTenMinutes(data)))
       .catch(rejected => setData([]));
-  }, [props.apiKey]);
+  }, [props.apiKey, props.merchantId]);
 
   if (data.length > 0) {
     return (<AuthorisationsChart data={data}/>);
@@ -87,10 +93,10 @@ function AuthorisationsChart(props) {
   );
 }
 
-function groupByTenSeconds(records) {
+function groupByTenMinutes(records) {
   const groups = [];
   records.forEach((record) => {
-    const time = record.created.slice(11, 18) + 0; // get 10 second bracket
+    const time = record.created.slice(11, 15) + "0"; // get 10 second bracket
     var index = groups.findIndex((entry) => entry.time === time);
     if(index === -1) {
       groups.push({time: time, approved: 0, declined: 0})

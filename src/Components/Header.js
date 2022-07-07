@@ -53,7 +53,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function Header(props) {
   const theme = useTheme()
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = React.useState(false)
   const icon = !props.theme ? <WbSunnyIcon /> : <DarkModeIcon />
 
   const handleDrawerOpen = () => {

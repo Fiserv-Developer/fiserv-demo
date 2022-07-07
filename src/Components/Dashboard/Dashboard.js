@@ -27,7 +27,7 @@ export default function Dashboard(props) {
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           <Grid container spacing={3}>
             {/* Chart */}
-            <Grid item xs={12} md={4} lg={9}>
+            <Grid item xs={12} md={8} lg={9}>
               <Paper
                 sx={{
                   p: 2,
@@ -37,7 +37,7 @@ export default function Dashboard(props) {
                   backgroundColor: theme.palette.secondary.main,
                 }}
               >
-                <Authorisations apiKey={props.apiKey} />
+                <Authorisations apiKey={props.apiKey} merchantId={props.merchantId} />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
@@ -51,7 +51,7 @@ export default function Dashboard(props) {
                   backgroundColor: theme.palette.secondary.main,
                 }}
               >
-                <Fundings apiKey={props.apiKey} />
+                <Fundings apiKey={props.apiKey} merchantId={props.merchantId} />
               </Paper>
             </Grid>
             {/* Recent Orders */}
@@ -64,7 +64,7 @@ export default function Dashboard(props) {
                   flexDirection: 'column', 
                   backgroundColor: theme.palette.secondary.main, 
                 }}>
-                <Transactions apiKey={props.apiKey} />
+                <Transactions apiKey={props.apiKey} merchantId={props.merchantId} />
               </Paper>
             </Grid>
           </Grid>
