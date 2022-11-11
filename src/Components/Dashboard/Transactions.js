@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import Tooltip from '@mui/material/Tooltip';
-import { CreditCard, PhoneAndroid, AccountBalanceWallet } from "@mui/icons-material";
-import Placeholder from './Placeholder';
+import Placeholder from '../Placeholder';
 import { config } from '../../Config/constants';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 export default function Transactions(props) {
   const [transactions, setTransactions] = useState([]);
   
   useEffect(() => {
-    const url = config.baseUrl + '/transactions?sort=-posted&limit=20';
+    const url = config.baseUrl + '/transactions?limit=1000';
     const headers = {
       'Api-Key': props.apiKey,
       'Accept': 'application/json',
@@ -35,74 +31,94 @@ export default function Transactions(props) {
   if (transactions.length > 0) {
     return (<TransactionsTable transactions={transactions}/>);
   } else {
-    return (
-      <Placeholder />
-    );
+    return (<Placeholder />);
   }
 }
 
 function TransactionsTable(props) {
   const theme = useTheme();
-  const transactions = props.transactions;
+
+  const rows = mapTransactions(props.transactions);
+  const columns = [
+    { 
+      field: 'status', headerName: 'Status', width: 150, align: 'center',
+      renderCell: (params) => {
+        if (params.value === 'APPROVED') {
+          return <CheckCircleIcon />
+        } else {
+          return <CancelIcon />
+        }
+      },
+    },
+    { 
+      field: 'authorised', headerName: 'Authorised', width: 300, align: 'center', 
+    },
+    { 
+      field: 'posted', headerName: 'Cleared', width: 300, align: 'center', 
+    },
+    { 
+      field: 'channel', headerName: 'Channel', width: 150, align: 'center',
+    },
+    { 
+      field: 'method', headerName: 'Method', width: 150, align: 'center',
+      renderCell: (params) => {
+        return (
+          <Method type={params.value}/>
+        );
+      },
+    },
+    { 
+      field: 'amount', headerName: 'Amount', width: 150, align: 'center',
+    }
+  ];
+
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
         Recent Transactions
       </Typography>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{color: theme.palette.text.main}}>Posted</TableCell>
-            <TableCell style={{color: theme.palette.text.main}}>Authorised</TableCell>
-            <TableCell style={{color: theme.palette.text.main}}>Channel</TableCell>
-            <TableCell style={{color: theme.palette.text.main}}>Method</TableCell>
-            <TableCell style={{color: theme.palette.text.main}}>Brand / Service</TableCell>
-            <TableCell style={{color: theme.palette.text.main}} align="right">Amount</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {transactions.map((row) => (
-            <TableRow key={row.id} >
-              <TableCell style={{color: theme.palette.text.main}}>{row.posted}</TableCell>
-              <TableCell style={{color: theme.palette.text.main}}>{row.authorised}</TableCell>
-              <TableCell style={{color: theme.palette.text.main}}>{row.channel}</TableCell>
-              <TableCell style={{color: theme.palette.text.main}}><Category value={row.paymentInstrument.category} /></TableCell>
-              <TableCell style={{color: theme.palette.text.main}}>
-                <Method category={row.paymentInstrument.category} 
-                        brand={row.paymentInstrument.brand} 
-                        service={row.paymentInstrument.service}/>
-              </TableCell>
-              <TableCell style={{color: theme.palette.text.main}} align="right">{`£${row.financial.amounts.transacted}`}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <DataGrid rows={rows} columns={columns} 
+        components={{ Toolbar: GridToolbar }} 
+        style={{height: '300px'}} 
+        componentsProps={{
+          toolbar: {
+            sx: {
+              '& .MuiButton-root': {
+                color: theme.palette.text.main
+              }
+            }
+          }
+    }}/>
     </React.Fragment>
   )
 }
 
-const Method = ({ category, brand, service }) => {
+const mapTransactions = (transactions) => {
+  return transactions.map((transaction) => {
+    return {
+      id: transaction.id,
+      authorised: (new Date(transaction.authorised)).toUTCString(),
+      posted: (new Date(transaction.posted)).toUTCString(),
+      status: transaction.status,
+      channel: transaction.channel, // todo map to icon?
+      method: getMethod(transaction.paymentInstrument.category, transaction.paymentInstrument.brand, transaction.paymentInstrument.service),
+      amount: "£" + transaction.financial.amounts.transacted,
+    }
+  })
+};
 
+const getMethod = (category, brand, service) => {
   if (category === "CARD") {
     return brand;
   }
   if (category === "CASH") {
-    return "N/A";
+    return "CASH";
   }
   if (category === "ALTERNATIVE") {
     return service;
   }
 };
 
-
-const Category = ({ value }) => {
-  if (value === "CARD") {
-    return <Tooltip title={value}><CreditCard /></Tooltip>;
-  }
-  if (value === "CASH") {
-    return <Tooltip title={value}><AccountBalanceWallet /></Tooltip>;
-  }
-  if (value === "ALTERNATIVE") {
-    return <Tooltip title={value}><PhoneAndroid /></Tooltip>;
-  }
+const Method = ({ type }) => {
+  return <img alt='Diners card logo' src={"../payment-methods/" + type.toLowerCase() + ".png"} style={{ width: '5em' }} />;
 };

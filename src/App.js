@@ -1,31 +1,32 @@
 import "./App.css";
-import Body from "./Components/Body";
 import Footer from "./Components/Footer";
-import Header from "./Components/Header";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import routes from './Config/routes';
 import { ThemeProvider } from "@mui/private-theming";
-import { dark, light } from "./Config/themes";
-import { useState } from "react";
+import { light } from "./Config/themes";
 import { createTheme } from '@mui/material/styles';
+import Menu from "./Components/Menu";
+import { Box, CssBaseline } from "@mui/material";
 
 function App() {
-   // Theme Management
-   const [theme, setTheme] = useState(true)
-   const dynamicTheme = createTheme(theme ? light : dark)
-   
+  const theme = createTheme(light);
 
   return (
-    <ThemeProvider theme={dynamicTheme}>
+    <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Header theme={theme} setTheme={setTheme}/>
-        <Body backgroundColor={dynamicTheme.palette.primary.main}>
-          <Routes>
-            {routes.map((value, index) => {
-              return (<Route key={index} path={value.url} element={value.component} />)
-            })}
-          </Routes>
-        </Body>
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <Menu />
+          <Box 
+            backgroundColor={theme.palette.primary.main} 
+            sx={{ display: 'flex', width: '100%', minHeight: '100vh',  paddingLeft: '30px', paddingRight: '30px'}}>
+            <Routes>
+              {routes.map((route, index) => {
+                return (<Route key={index} path={route.url} exact element={route.component} />)
+              })}
+            </Routes>
+          </Box>
+        </Box>
       </BrowserRouter>
       <Footer />
     </ThemeProvider>

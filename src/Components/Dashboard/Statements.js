@@ -1,14 +1,11 @@
 import { useTheme } from '@mui/material/styles';
-import { Button, Container, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import Placeholder from '../Components/Dashboard/Placeholder';
-import { config } from '../Config/constants';
-import { getValueOrDefault } from '../Config/utils';
+import Placeholder from '../Placeholder';
+import { config } from '../../Config/constants';
 
 export default function Statements(props) {
-  const theme = useTheme();
   // todo pass these in as state props
-  const [apiKey, setApiKey] = useState(() => getValueOrDefault(config.apiKey, ""));
   const [statements, setStatements] = useState([]);
   const [downloadStatement, setDownloadStatement] = useState(null);
 
@@ -18,9 +15,9 @@ export default function Statements(props) {
   const lastYear = lastYearDate.toISOString().substring(0, 10) + "T23:59:59Z";
   
   useEffect(() => {
-    const url = config.baseUrlTest + '/statements?createdAfter=' + lastYear + "&createdBefore=" + today;
+    const url = config.baseUrl + '/statements?createdAfter=' + lastYear + "&createdBefore=" + today + "&limit=5";
     const headers = {
-      'Api-Key': apiKey,
+      'Api-Key': props.apiKey,
       'Accept': 'application/json',
     };
 
@@ -28,9 +25,9 @@ export default function Statements(props) {
       method: 'GET',
       headers: headers,
     }).then(results => results.json())
-      .then(data => setStatements(data))
+      .then(data => setStatements(data.reverse().slice(0, 3)))
       .catch(rejected => setStatements([]));
-  }, [apiKey]);
+  }, [props.apiKey, today, lastYear]);
 
   useEffect(() => {
     if (downloadStatement) {
@@ -50,15 +47,10 @@ export default function Statements(props) {
   }, [downloadStatement]);
 
   if (statements.length > 0) {
-    return (<StatementsTable apiKey={apiKey} statements={statements} setDownloadStatement={setDownloadStatement} />);
+    return (<StatementsTable apiKey={props.apiKey} statements={statements} setDownloadStatement={setDownloadStatement} />);
   } else {
     return (
-      <React.Fragment>
-        <Typography component="p" variant="p" color={theme.palette.text.main} gutterBottom>
-          <i>Note that this currently requires a <b>non-prod</b> sandbox key for use with the 'test.' environment, as the proxy is not available in prod</i>
-        </Typography>
-        <Placeholder />
-      </React.Fragment>
+      <Placeholder />
     );
   }
 }
@@ -67,38 +59,46 @@ function StatementsTable(props) {
   const theme = useTheme();
 
   return (
-    <Container>
+    <React.Fragment>
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
         Recent Statements
       </Typography>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{color: theme.palette.text.main}}>Created</TableCell>
-            <TableCell style={{color: theme.palette.text.main}}>Date</TableCell>
-            <TableCell style={{color: theme.palette.text.main}}>From</TableCell>
-            <TableCell style={{color: theme.palette.text.main}}>To</TableCell>
+            <TableCell style={{color: theme.palette.text.main}}>Year</TableCell>
+            <TableCell style={{color: theme.palette.text.main}}>Month</TableCell>
             <TableCell style={{color: theme.palette.text.main}} align="right"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {props.statements.map((row) => (
             <TableRow key={row.id} >
-              <TableCell style={{color: theme.palette.text.main}}>{row.created}</TableCell>
-              <TableCell style={{color: theme.palette.text.main}}>{row.date}</TableCell>
-              <TableCell style={{color: theme.palette.text.main}}>{row.from}</TableCell>
-              <TableCell style={{color: theme.palette.text.main}}>{row.to}</TableCell>
+              <TableCell style={{color: theme.palette.text.main}}>{dateToYear(row.from)}</TableCell>
+              <TableCell style={{color: theme.palette.text.main}}>{dateToMonth(row.from)}</TableCell>
               <TableCell style={{color: theme.palette.text.main}} align="right"><Button onClick={() => downloadPdf(props.apiKey, row.id, props.setDownloadStatement)}>View</Button></TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </Container>
+    </React.Fragment>
   );
 }
 
+function dateToYear(date) {
+  return (new Date(date)).getFullYear();
+}
+
+function dateToMonth(date) {
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  return monthNames[(new Date(date)).getMonth()];
+}
+
 function downloadPdf(apiKey, id, setDownloadStatement) {
-  const url = config.baseUrlTest + '/statements/' + id;
+  const url = config.baseUrl + '/statements/' + id;
     const headers = {
       'Api-Key': apiKey,
       'Accept': 'application/json',

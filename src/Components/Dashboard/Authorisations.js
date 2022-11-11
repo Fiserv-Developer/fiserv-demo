@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Typography from '@mui/material/Typography'
-import Placeholder from './Placeholder';
+import Placeholder from '../Placeholder';
 import { config } from '../../Config/constants';
 
 export default function Authorisations(props) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const url = config.baseUrl + '/authorisations?limit=1000';
+    const url = config.baseUrl + '/authorisations?createdAfter=2022-11-01&createdBefore=2022-11-08&limit=1000';
     const headers = {
       'Api-Key': props.apiKey,
       'Accept': 'application/json',

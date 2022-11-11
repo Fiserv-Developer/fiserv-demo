@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Placeholder from './Placeholder';
+import Placeholder from '../Placeholder';
 import { config } from '../../Config/constants';
+// import NumberTicker from 'react-native-number-ticker';
+var bigDecimal = require('js-big-decimal');
 
 const zero = "0.00";
 
@@ -14,6 +16,12 @@ export default function Fundings(props) {
   const today = new Date().toISOString().substring(0, 10);
   const lastWeekDate = new Date()
   lastWeekDate.setDate(lastWeekDate.getDate() - 7);
+
+  const zeroOut = () => {
+    setNet(zero);
+    setTransactions(zero);
+    setFees(zero);
+  };
 
   // get fundings
   useEffect(() => {
@@ -31,13 +39,9 @@ export default function Fundings(props) {
       headers: headers,
     }).then(results => results.json())
       .then(fundings => {
-        
-        // zero everything out
-        setNet(zero);
-        setTransactions(zero);
-        setFees(zero);
+        zeroOut();
 
-        // get all details
+        // get all details and sum up the values
         fundings.forEach(funding => {
           const url = config.baseUrl + '/fundings/' + funding.id + "/details";
           fetch(url, {
@@ -49,22 +53,16 @@ export default function Fundings(props) {
           }).then(results => results.json())
             .then(details => {
               const totals = calculateTotals(details);
-              setNet(totals.net);
-              setTransactions(totals.transactions);
-              setFees(totals.fees);
+              setNet(n => bigDecimal.add(n, totals.net));
+              setTransactions(t => bigDecimal.add(t, totals.transactions));
+              setFees(f => bigDecimal.add(f, totals.fees));
             })
             .catch(rejected => {
-              setNet(zero);
-              setTransactions(zero);
-              setFees(zero);
+              zeroOut();
             });
         });
       })
-      .catch(rejected => {
-        setNet(zero);
-        setTransactions(zero);
-        setFees(zero);
-      });
+      .catch(rejected => zeroOut());
   }, [props.apiKey, props.merchantId, today]);
 
   if (net !== zero || transactions !== zero || fees !== zero) {
@@ -85,7 +83,13 @@ function FundingCard(props) {
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
         Latest Funding Summary
       </Typography>
-      <Typography component="p" variant="h3" color={theme.palette.text.main}>
+      {/* <NumberTicker
+        number={props.net}
+        textSize={40}
+        duration={1500}
+        textStyle={{fontWeight: 'bold', color: theme.palette.text.main}}
+      /> */}
+      <Typography component="p" variant="h3" >
         £{props.net}
       </Typography>
       <Typography component="p" variant="h7" color={theme.palette.green.main}>
@@ -98,12 +102,12 @@ function FundingCard(props) {
   );
 }
 
-function calculateTotals(data)  {
+function calculateTotals(fundingDetails)  {
   var net = 0;
   var transactions = 0;
   var fees = 0;
-  for (var i = 0; i < data.length; i++) {
-    const netAmount = parseFloat(data[i].financial.netAmount);
+  for (var i = 0; i < fundingDetails.length; i++) {
+    const netAmount = parseFloat(fundingDetails[i].financial.netAmount);
     net += netAmount;
     if (netAmount > 0) {
       transactions += netAmount

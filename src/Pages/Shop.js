@@ -1,102 +1,81 @@
-import React, { useState } from 'react'
-import Container from '@mui/material/Container';
-import moment from 'moment-timezone';
+import React from 'react'
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 import { getValueOrDefault } from '../Config/utils';
 import { config } from '../Config/constants';
+import { Button, useTheme } from '@mui/material';
 
-export default function Shop(props) {
+export default function Shop() {
+  // todo pass these through as props, for now we use non-prod due to CORS
+  const baseUrl = config.nonProdBaseUrl;
+  const apiKey = getValueOrDefault(config.nonProdApiKey, "");
+  const secretKey = getValueOrDefault(config.nonProdSecretKey, "");
+  
 
-  // todo pass these through as props
-  const [apiKey, setApiKey] = useState(() => getValueOrDefault(config.apiKey, ""));
-  const [secretKey, setSecretKey] = useState(() => getValueOrDefault(config.secretKey, ""));
-  const [paymentIntegration, setPaymentIntegration] = useState(() => getValueOrDefault(config.paymentIntegration, ""));
-
-  // actual constants
-  const separator = "|";
-
-  // fixed constants - todo consider adding to config screen for this section
-  const url = "https://test.ipg-online.com/connect/gateway/processing";
-  const currency = "826";
-  const hash_algorithm = "HMACSHA256";
-  const language = "en_GB";
-  const paymentMethod = "V";
-  const responseFailURL = "https://test.ipg-online.com/webshop/response_failure.jsp";
-  const responseSuccessURL = "https://test.ipg-online.com/webshop/response_success.jsp";
-  const storename = "72305408";
-  const timezone = "Europe/London";
-  const transactionNotificationURL = "https://mywebshop/transactionNotification";
-  const txntype = "sale";
-
-  // item constants - todo make these dynamic per item
-  const chargetotal = "13.00";
-
-  // state calculated on event
-  const [txndatetime, setTxndatetime] = useState(moment().tz(timezone).format('YYYY:MM:DD-HH:mm:ss'));
-  const [hashExtended, setHashExtended] = useState("");
-
-  const updateTimestamp = () => {
-    setTxndatetime(moment().tz(timezone).format('YYYY:MM:DD-HH:mm:ss'));
-  };
-
-  const handleSubmit = (event) => {
-    if(paymentIntegration === "hostedPaymentPage") {
-      console.log("Processing with the hosted payment page");
-      updateTimestamp();
-
-      const values = [
-        chargetotal, 
-        currency, 
-        paymentMethod, 
-        responseFailURL, 
-        responseSuccessURL, 
-        storename, 
-        timezone, 
-        transactionNotificationURL, 
-        txndatetime, 
-        txntype
-      ];
-      const messageSignatureString = values.join(separator);
-
-      const messageSignature = CryptoJS.HmacSHA256(messageSignatureString, secretKey);
-      const messageSignatureBase64 = CryptoJS.enc.Base64.stringify(messageSignature);
-      setHashExtended(messageSignatureBase64);
-      document.getElementById("paymentForm").submit();
-
-    } else if (paymentIntegration === "paymentsApi") {
-      console.log("Processing with the payments api");
-      buy(apiKey, secretKey);
-
-    } else {
-      console.log("Integration method not configured, check settings.")
-    }
-  };
+  const items = [ // todo add more + images
+    {
+      name: "Drone",
+      value: "89.99"
+    },
+    {
+      name: "Pizza",
+      value: "19.99"
+    },
+  ]
 
   return (
-    <Container>
-      <form id="paymentForm" method="post" action={url} target="_blank">
-        <input type="text" name="chargetotal" value={chargetotal} readOnly />
-        <input type="hidden" name="currency" value={currency} readOnly />
-        <input type="hidden" name="hash_algorithm" value={hash_algorithm} readOnly />
-        <input type="hidden" name="hashExtended" value={hashExtended} readOnly />
-        <input type="hidden" name="language" value={language} readOnly />
-        <input type="hidden" name="paymentMethod" value={paymentMethod} readOnly />
-        <input type="hidden" name="responseFailURL" value={responseFailURL} readOnly />
-        <input type="hidden" name="responseSuccessURL" value={responseSuccessURL} readOnly />
-        <input type="hidden" name="storename" value={storename} readOnly />
-        <input type="hidden" name="timezone" value={timezone} readOnly />
-        <input type="hidden" name="transactionNotificationURL" value={transactionNotificationURL} readOnly />
-        <input type="hidden" name="txndatetime" value={txndatetime} readOnly />
-        <input type="hidden" name="txntype" value={txntype} readOnly />
-        <input type="button" value="Buy" onClick={handleSubmit} />
-      </form>
-    </Container>
+    <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          height: '100vh',
+          overflow: 'auto',
+          width: '100%'
+        }}>
+        <h1>Shop</h1>
+      <Grid container spacing={3}>
+        {items.map((item) => <Item key={item.name} baseUrl={baseUrl} apiKey={apiKey} secretKey={secretKey} name={item.name} value={item.value} />)}
+      </Grid>
+    </Box>
   )
 }
 
-function buy(apiKey, secretKey) {
-  const url = "https://prod.emea.api.fiservapps.com/sandbox/ipp/payments-gateway/v2/payments/";
+function Item(props) {
+  const theme = useTheme();
+  return (
+    <Grid item xs={12} md={4} lg={3}>
+      <Paper
+        sx={{
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          backgroundColor: theme.palette.secondary.main,
+        }}>
+        <img alt={props.name + " product photo"} src={ "../products/" + props.name.toLowerCase() + ".jpeg" } />
+        <p><b>{props.name}</b></p>
+        <p>£{props.value}</p>
+        <Button sx={{color: theme.palette.text.main}} onClick={() => buy(props.baseUrl, props.apiKey, props.secretKey)}>One-click Buy</Button>
+      </Paper>
+    </Grid>
+  )
+} 
+
+function buy(baseUrl, apiKey, secretKey) {
+  const url = baseUrl + "/checkouts";
+  console.log(url)
+
+  const dummyData = {
+    "storeId": "72305408",
+    "transactionType": "SALE",
+    "transactionAmount": {
+      "currency": "EUR",
+      "total": 12.99
+    }
+  };
 
   function withSignature(method, body, callback) {
     var ClientRequestId = uuidv4();
@@ -126,20 +105,10 @@ function buy(apiKey, secretKey) {
   
   withSignature(
     "POST",
-    {
-      requestType: "PaymentCardSaleTransaction",
-      transactionAmount: { total: "13", currency: "GBP" },
-      paymentMethod: {
-        paymentCard: {
-          number: "1234561234561234",
-          securityCode: "123",
-          expiryDate: { month: "02", year: "22" },
-        }
-      }
-    },
+    dummyData,
     (options) => fetch(url, options)
         .then(results => results.json())
-        .then(data => console.log("success!", data))
+        .then(data => window.location = "/" + data.checkout.redirectionUrl)
         .catch(rejected => console.log("Failed!", rejected)));
 }
 
