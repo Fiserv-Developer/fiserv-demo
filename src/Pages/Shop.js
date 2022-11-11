@@ -74,7 +74,16 @@ function buy(baseUrl, apiKey, secretKey) {
     "transactionAmount": {
       "currency": "EUR",
       "total": 12.99
-    }
+    },
+    "checkoutSettings": {
+      "locale": null,
+      "preSelectedPaymentMethod": null,
+      "webHooksUrl": null,
+      "redirectBackUrls": {
+           "successUrl": "https://demo.fiserv.dev/shop?success=true",
+           "failureUrl": "https://demo.fiserv.dev/shop?success=false"
+      }
+ },
   };
 
   function withSignature(method, body, callback) {
@@ -108,7 +117,7 @@ function buy(baseUrl, apiKey, secretKey) {
     dummyData,
     (options) => fetch(url, options)
         .then(results => results.json())
-        .then(data => window.location = "/" + data.checkout.redirectionUrl)
+        .then(data => window.location.href = data.checkout.redirectionUrl)
         .catch(rejected => console.log("Failed!", rejected)));
 }
 
