@@ -11,11 +11,17 @@ export const light = {
       main: '#232323',
       faded: '#E3E3E3',
     },
+    inverse: {
+      main: '#232323',
+    },
     green: {
       main: '#11C118',
     },
     red: {
       main: '#FF2323',
+    },
+    orange: {
+      main: '#FF6600',
     },
     // Used by `getContrastText()` to maximize the contrast between
     // the background and the text.
@@ -43,11 +49,17 @@ export const dark = {
       main: '#FDC201',
       faded: '#333333',
     },
+    inverse: {
+      main: '#FBFAFA',
+    },
     green: {
       main: '#23FF23',
     },
     red: {
       main: '#FF2323',
+    },
+    orange: {
+      main: '#FF6600',
     },
     // Used by `getContrastText()` to maximize the contrast between
     // the background and the text.

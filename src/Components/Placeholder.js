@@ -10,5 +10,5 @@ export default function Placeholder() {
     <Box style={{ textAlign: 'center', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
       <CircularProgress style={{fontSize: '8em', color: theme.palette.text.faded}} />
     </Box>
-  )
+  );
 }
