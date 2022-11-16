@@ -6,7 +6,7 @@ import BodyElement from '../Components/BodyElement';
 import Placeholder from '../Components/Placeholder';
 import { config } from '../Config/constants';
 import { products } from '../Config/data';
-import { getValueOrDefault } from '../Config/utils';
+import { fetchWithRetry, getValueOrDefault } from '../Config/utils';
 
 export default function Shop() {
   const baseUrl = config.nonProdBaseUrl;
@@ -92,8 +92,10 @@ function buy(baseUrl, apiKey, secretKey, setProcessing) {
   withSignature(
     "POST",
     dummyData,
-    (options) => fetch(url, options)
-      .then(results => results.json())
+    (options) => fetchWithRetry(url, options)
       .then(data => window.location.href = data.checkout.redirectionUrl)
-      .catch(rejected => console.log("Failed!", rejected)));
+      .catch(rejected => {
+        console.log("Failed!", rejected);
+        window.location.href = "/shop-failure";
+      }));
 }
