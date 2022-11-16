@@ -101,41 +101,24 @@ export default function Menu(props) {
         </Toolbar>
       </MuiAppBar>
       <Box>
-      <MuiDrawer
-        container={container}
-        variant="temporary"
-        open={mobileOpen}
-        onClose={handleMobileDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}
-        sx={{
-          display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-        }}>
-        <List>
-          {routes.map((route, index) => {
-            return (
-              <NavLink key={index} to={route.url} style={({ isActive }) => handleButtonBackground(isActive)}>
-                <ListItem button sx={{paddingLeft: '20px', background: 'inherit'}} onClick={handleMobileDrawerToggle}>
-                  <ListItemIcon sx={{ color: 'var(--white)' }}>
-                    {route.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={route.name} sx={{ color: 'var(--white)', textDecoration: 'none' }} />
-                </ListItem>
-              </NavLink>
-            );
-          })}
-        </List>
-      </MuiDrawer>
-      <Drawer theme={theme} variant="permanent" open={open} sx={{display: { xs: 'none', sm: 'block' }}}>
-        <br />
-        <Divider />
-        <List>
+        {/* Mobile drawer (temporary) */}
+        <MuiDrawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleMobileDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}>
+          <List>
             {routes.map((route, index) => {
               return (
                 <NavLink key={index} to={route.url} style={({ isActive }) => handleButtonBackground(isActive)}>
-                  <ListItem button sx={{paddingLeft: '20px', background: 'inherit'}}>
+                  <ListItem button sx={{paddingLeft: '20px', background: 'inherit'}} onClick={handleMobileDrawerToggle}>
                     <ListItemIcon sx={{ color: 'var(--white)' }}>
                       {route.icon}
                     </ListItemIcon>
@@ -145,16 +128,46 @@ export default function Menu(props) {
               );
             })}
           </List>
-        <Divider />
-        <IconButton sx={{ color: theme.palette.primary.main }} 
-          onClick={() => handleDrawerToggle()}>
-          {open ? <KeyboardDoubleArrowLeftIcon /> : <KeyboardDoubleArrowRightIcon />}
-        </IconButton>
-        <br /><br/>
-        <img alt='Fiserv developer logo' src='../logo-dark.svg' width='80%' style={{position: 'absolute', left: '10%', bottom: '20px'}} />
-        <br /><br />
-        <Divider />
-      </Drawer>
+        </MuiDrawer>
+
+        {/* Desktop drawer (permanent) */}
+        <Drawer theme={theme} variant="permanent" open={open} sx={{display: { xs: 'none', sm: 'block' }}}>
+          <br />
+          <img alt='Fiserv developer logo' src='../logo-dark.svg' width='80%' style={{margin: '0 auto'}} />
+          <br />
+          <Divider />
+          <List>
+              {routes.map((route, index) => {
+                if (route.type === 'component') {
+                  return (
+                    <NavLink key={index} to={route.url} style={({ isActive }) => handleButtonBackground(isActive)}>
+                      <ListItem button sx={{paddingLeft: '20px', background: 'inherit'}}>
+                        <ListItemIcon sx={{ color: 'var(--white)' }}>
+                          {route.icon}
+                        </ListItemIcon>
+                        <ListItemText primary={route.name} sx={{ color: 'var(--white)', textDecoration: 'none' }} />
+                      </ListItem>
+                    </NavLink>
+                  );
+                } else {
+                  return (null); // don't show any non-component links
+                }
+              })}
+            </List>
+          <Divider />
+          <IconButton 
+            sx={{ color: theme.palette.primary.main }} 
+            onClick={() => handleDrawerToggle()}>
+            {open ? <KeyboardDoubleArrowLeftIcon /> : <KeyboardDoubleArrowRightIcon />}
+          </IconButton>
+          <br /><br/>
+          <Box sx={{ position: 'absolute', bottom: '20px', width: '100%', textAlign: 'center' }}>
+            <img alt="Fiserv orange square icon" src="../orange-square.png" style={{ width: '32px' }}/>
+          </Box>
+          
+          <br /><br />
+          <Divider />
+        </Drawer>
       </Box>
     </React.Fragment>
   );

@@ -25,7 +25,7 @@ export default function Statements(props) {
       method: 'GET',
       headers: headers,
     }).then(results => results.json())
-      .then(data => setStatements(data.reverse().slice(0, 3)))
+      .then(data => setStatements(data.reverse().slice(0, 4)))
       .catch(rejected => setStatements([]));
   }, [props.apiKey, today, lastYear]);
 

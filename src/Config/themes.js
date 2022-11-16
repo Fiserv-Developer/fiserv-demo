@@ -9,7 +9,7 @@ export const light = {
     },
     text: {
       main: '#232323',
-      faded: '#E3E3E3',
+      faded: '#C3C3C3',
     },
     inverse: {
       main: '#232323',

@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { Snackbar, Alert, Box } from '@mui/material';
-import { FormControl, FormControlLabel, MenuItem, Radio, RadioGroup, Select, useTheme } from '@mui/material';
-import { config } from '../Config/constants';
-import { getValueOrDefault } from '../Config/utils';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Alert, FormControl, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Snackbar } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import React, { useEffect, useState } from 'react';
+import BodyElement from '../Components/BodyElement';
+import { config } from '../Config/constants';
+import { getValueOrDefault } from '../Config/utils';
 
 export default function Settings() {
-  const theme = useTheme();
-
   const [apiKey, setApiKey] = useState(() => getValueOrDefault(config.apiKey, ""));
   const [secretKey, setSecretKey] = useState(() => getValueOrDefault(config.secretKey, ""));
   const [nonProdApiKey, setNonProdApiKey] = useState(() => getValueOrDefault(config.nonProdApiKey, ""));
@@ -71,8 +69,6 @@ export default function Settings() {
     event.preventDefault();
   };
 
-  // handles the first initialisation of local storage and state
-  // when it detects an 'update', triggers the update notification
   function updateConfig(keyName, value) {
     localStorage.setItem(keyName, value);
   }
@@ -87,8 +83,8 @@ export default function Settings() {
 
 
   return (
-    <Box color={theme.palette.text.main} sx={{ display: 'flex', width: '100%'}}>
-      <FormControl>
+    <React.Fragment>
+      <BodyElement xs={12}>
         <h1>Settings</h1>
         <p>
           <i>This page contains all of your demo configuration, make sure you review all fields to tailor the best demo experience.</i>        
@@ -96,15 +92,18 @@ export default function Settings() {
         <p>
           <i><b>Changes to this configuration are saved and applied automatically.</b></i>
         </p>
-        <h2>Authentication</h2>
+      </BodyElement>
+
+      <BodyElement xs={12}>
+        <h2>Sandbox Authentication</h2>
         <p>
           You <strong>API Key</strong> and <strong>Secret Key</strong> can be found via our <a href="https://portal.fiserv.dev">portal</a>, 
           make sure to use <strong>Sandbox</strong> keys!
         </p>
-
-        <FormControl sx={{ color: theme.palette.text.main, textAlign: 'center', marginBottom: "20px" }} variant="outlined">
+        <FormControl variant="outlined" sx={{ marginBottom: "20px" }}>
           <InputLabel htmlFor="outlined-adornment-password">API Key</InputLabel>
           <OutlinedInput
+            label="API Key"
             type={passwords.apiKey ? 'text' : 'password'}
             value={apiKey}
             onChange={(e) => { showUpdate(); setApiKey(e.target.value) }}
@@ -120,11 +119,10 @@ export default function Settings() {
                 </IconButton>
               </InputAdornment>
             }
-            label="API Key"
           />
         </FormControl>
 
-        <FormControl sx={{ color: theme.palette.text.main, textAlign: 'center', marginBottom: "20px" }} variant="outlined">
+        <FormControl variant="outlined" sx={{ marginBottom: "20px" }}>
           <InputLabel htmlFor="outlined-adornment-password">Secret Key</InputLabel>
           <OutlinedInput
             type={passwords.secretKey ? 'text' : 'password'}
@@ -145,12 +143,15 @@ export default function Settings() {
             label="Secret Key"
           />
         </FormControl>
-        
+      </BodyElement>
+      
+      <BodyElement xs={12}>
+        <h2>Non-prod Sandbox Authentication</h2>
         <p>
-          For testing anything in <b>non-prod</b>, you will need to use different credentials...
+          For testing anything in <b>non-prod</b>, such as an api in development, you will need to use different credentials...
         </p>
         
-        <FormControl sx={{ color: theme.palette.text.main, textAlign: 'center', marginBottom: "20px" }} variant="outlined">
+        <FormControl variant="outlined" sx={{ marginBottom: "20px" }}>
           <InputLabel htmlFor="outlined-adornment-password">Non-prod API Key</InputLabel>
           <OutlinedInput
             type={passwords.nonProdApiKey ? 'text' : 'password'}
@@ -172,7 +173,7 @@ export default function Settings() {
           />
         </FormControl>
 
-        <FormControl sx={{ color: theme.palette.text.main, textAlign: 'center', marginBottom: "20px" }} variant="outlined">
+        <FormControl variant="outlined" sx={{ marginBottom: "20px" }}>
           <InputLabel htmlFor="outlined-adornment-password">Non-prod Secret Key</InputLabel>
           <OutlinedInput
             type={passwords.nonProdSecretKey ? 'text' : 'password'}
@@ -193,8 +194,10 @@ export default function Settings() {
             label="Non-prod Secret Key"
           />
         </FormControl>
+      </BodyElement>
 
-        <h2>Portal</h2>
+      <BodyElement xs={12}>
+        <h2>Dashboard</h2>
         <p>
           If you want to configure your experience for a specific merchant, you can set the ID here.
         </p>
@@ -224,7 +227,8 @@ export default function Settings() {
           <FormControlLabel value="paymentsApi" control={<Radio />} label="Payments API" />
           <FormControlLabel value="hostedPaymentPage" control={<Radio />} label="Hosted Payments Page" />
         </RadioGroup>
-      </FormControl>
+      </BodyElement>
+      
       <Snackbar
         open={open}
         autoHideDuration={3000}
@@ -233,6 +237,6 @@ export default function Settings() {
             Settings saved!
           </Alert>
       </Snackbar>
-    </Box>
+    </React.Fragment>
   );
 }

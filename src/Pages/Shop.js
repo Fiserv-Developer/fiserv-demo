@@ -1,72 +1,49 @@
-import React from 'react'
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import CryptoJS from 'crypto-js';
-import { v4 as uuidv4 } from 'uuid';
-import { getValueOrDefault } from '../Config/utils';
-import { config } from '../Config/constants';
 import { Button, useTheme } from '@mui/material';
+import CryptoJS from 'crypto-js';
+import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import BodyElement from '../Components/BodyElement';
+import Placeholder from '../Components/Placeholder';
+import { config } from '../Config/constants';
+import { products } from '../Config/data';
+import { getValueOrDefault } from '../Config/utils';
 
 export default function Shop() {
-  // todo pass these through as props, for now we use non-prod due to CORS
   const baseUrl = config.nonProdBaseUrl;
   const apiKey = getValueOrDefault(config.nonProdApiKey, "");
   const secretKey = getValueOrDefault(config.nonProdSecretKey, "");
-  
+  const [processing, setProcessing] = useState(false);
 
-  const items = [ // todo add more + images
-    {
-      name: "Drone",
-      value: "89.99"
-    },
-    {
-      name: "Pizza",
-      value: "19.99"
-    },
-  ]
-
-  return (
-    <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
-          width: '100%'
-        }}>
-        <h1>Shop</h1>
-      <Grid container spacing={3}>
-        {items.map((item) => <Item key={item.name} baseUrl={baseUrl} apiKey={apiKey} secretKey={secretKey} name={item.name} value={item.value} />)}
-      </Grid>
-    </Box>
-  )
+  if (processing) {
+    return <Placeholder />
+  } else {
+    return (
+      <React.Fragment>
+        <BodyElement xs={12} md={12} lg={12}>
+          <h1>Shop</h1>
+          <p>Welcome to this amazing ecommerce shop, select a product to instantly buy!</p>
+        </BodyElement>
+        {products.map((item) => <Item setProcessing={setProcessing} key={item.name} baseUrl={baseUrl} apiKey={apiKey} secretKey={secretKey} name={item.name} value={item.value} />)}
+      </React.Fragment>
+    );
+  }
 }
 
 function Item(props) {
   const theme = useTheme();
   return (
-    <Grid item xs={12} md={4} lg={3}>
-      <Paper
-        sx={{
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          backgroundColor: theme.palette.secondary.main,
-        }}>
-        <img alt={props.name + " product photo"} src={ "../products/" + props.name.toLowerCase() + ".jpeg" } />
-        <p><b>{props.name}</b></p>
-        <p>£{props.value}</p>
-        <Button sx={{color: theme.palette.text.main}} onClick={() => buy(props.baseUrl, props.apiKey, props.secretKey)}>One-click Buy</Button>
-      </Paper>
-    </Grid>
-  )
+    <BodyElement xs={12} md={4} lg={3}>
+      <img alt={props.name + " product photo"} src={ "../products/" + props.name.toLowerCase() + ".jpeg" } />
+      <p><b>{props.name}</b></p>
+      <p>£{props.value}</p>
+      <Button sx={{color: theme.palette.text.main}} onClick={() => buy(props.baseUrl, props.apiKey, props.secretKey, props.setProcessing)}>One-click Buy</Button>
+    </BodyElement>
+  );
 } 
 
-function buy(baseUrl, apiKey, secretKey) {
+function buy(baseUrl, apiKey, secretKey, setProcessing) {
+  setProcessing(true);
   const url = baseUrl + "/checkouts";
-  console.log(url)
 
   const dummyData = {
     "storeId": "72305408",
@@ -80,8 +57,8 @@ function buy(baseUrl, apiKey, secretKey) {
       "preSelectedPaymentMethod": null,
       "webHooksUrl": null,
       "redirectBackUrls": {
-           "successUrl": "https://demo.fiserv.dev/shop?success=true",
-           "failureUrl": "https://demo.fiserv.dev/shop?success=false"
+           "successUrl": "https://demo.fiserv.dev/shop-success",
+           "failureUrl": "https://demo.fiserv.dev/shop-failure"
       }
  },
   };
@@ -116,9 +93,7 @@ function buy(baseUrl, apiKey, secretKey) {
     "POST",
     dummyData,
     (options) => fetch(url, options)
-        .then(results => results.json())
-        .then(data => window.location.href = data.checkout.redirectionUrl)
-        .catch(rejected => console.log("Failed!", rejected)));
+      .then(results => results.json())
+      .then(data => window.location.href = data.checkout.redirectionUrl)
+      .catch(rejected => console.log("Failed!", rejected)));
 }
-
-

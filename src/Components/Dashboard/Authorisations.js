@@ -4,6 +4,7 @@ import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recha
 import Typography from '@mui/material/Typography'
 import Placeholder from '../Placeholder';
 import { config } from '../../Config/constants';
+import { fetchWithRetry } from '../../Config/utils';
 
 export default function Authorisations(props) {
   const [data, setData] = useState([]);
@@ -18,11 +19,10 @@ export default function Authorisations(props) {
       headers['Merchant-Id'] = props.merchantId;
     }
 
-    fetch(url, {
+    fetchWithRetry(url, {
       method: 'GET',
       headers: headers
-    }).then(results => results.json())
-      .then(data => setData(groupByTenMinutes(data)))
+    }).then(data => setData(groupByTenMinutes(data)))
       .catch(rejected => setData([]));
   }, [props.apiKey, props.merchantId]);
 
@@ -43,7 +43,7 @@ function AuthorisationsChart(props) {
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
         Authorisations
       </Typography>
-      <ResponsiveContainer>
+      <ResponsiveContainer style={{ height: '220px' }}>
         <LineChart
           data={props.data}
           margin={{
@@ -52,6 +52,7 @@ function AuthorisationsChart(props) {
             bottom: 0,
             left: 24,
           }}
+          style={{ height: '220px' }}
         >
           <XAxis
             dataKey="time"

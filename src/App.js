@@ -1,12 +1,12 @@
-import "./App.css";
-import Footer from "./Components/Footer";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import routes from './Config/routes';
-import { ThemeProvider } from "@mui/private-theming";
-import { light } from "./Config/themes";
-import { createTheme } from '@mui/material/styles';
-import Menu from "./Components/Menu";
 import { Box, CssBaseline } from "@mui/material";
+import { createTheme } from '@mui/material/styles';
+import { ThemeProvider } from "@mui/private-theming";
+import { BrowserRouter } from "react-router-dom";
+import "./App.css";
+import Body from "./Components/Body";
+import Footer from "./Components/Footer";
+import Menu from "./Components/Menu";
+import { light } from "./Config/themes";
 
 function App() {
   const theme = createTheme(light);
@@ -17,15 +17,7 @@ function App() {
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
           <Menu />
-          <Box 
-            backgroundColor={theme.palette.primary.main} 
-            sx={{ display: 'flex', width: '100%', minHeight: '100vh',  paddingLeft: '30px', paddingRight: '30px'}}>
-            <Routes>
-              {routes.map((route, index) => {
-                return (<Route key={index} path={route.url} exact element={route.component} />)
-              })}
-            </Routes>
-          </Box>
+          <Body />
         </Box>
       </BrowserRouter>
       <Footer />

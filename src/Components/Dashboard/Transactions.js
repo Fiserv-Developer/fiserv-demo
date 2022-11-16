@@ -6,6 +6,7 @@ import { config } from '../../Config/constants';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { fetchWithRetry } from '../../Config/utils';
 
 export default function Transactions(props) {
   const [transactions, setTransactions] = useState([]);
@@ -20,11 +21,10 @@ export default function Transactions(props) {
       headers['Merchant-Id'] = props.merchantId;
     }
 
-    fetch(url, {
+    fetchWithRetry(url, {
       method: 'GET',
       headers: headers,
-    }).then(results => results.json())
-      .then(data => setTransactions(data))
+    }).then(data => setTransactions(data))
       .catch(rejected => setTransactions([]));
   }, [props.apiKey, props.merchantId]);
 
@@ -41,9 +41,9 @@ function TransactionsTable(props) {
   const rows = mapTransactions(props.transactions);
   const columns = [
     { 
-      field: 'status', headerName: 'Status', width: 150, align: 'center',
+      field: 'status', headerName: 'Status', width: 150, align: 'center', headerAlign: 'center',
       renderCell: (params) => {
-        if (params.value === 'APPROVED') {
+        if (params.value === 'CLEARED') {
           return <CheckCircleIcon />
         } else {
           return <CancelIcon />
@@ -51,16 +51,16 @@ function TransactionsTable(props) {
       },
     },
     { 
-      field: 'authorised', headerName: 'Authorised', width: 300, align: 'center', 
+      field: 'authorised', headerName: 'Authorised', width: 300, align: 'center', headerAlign: 'center',
     },
     { 
-      field: 'posted', headerName: 'Cleared', width: 300, align: 'center', 
+      field: 'posted', headerName: 'Cleared', width: 300, align: 'center', headerAlign: 'center',
     },
     { 
-      field: 'channel', headerName: 'Channel', width: 150, align: 'center',
+      field: 'channel', headerName: 'Channel', width: 150, align: 'center', headerAlign: 'center',
     },
     { 
-      field: 'method', headerName: 'Method', width: 150, align: 'center',
+      field: 'method', headerName: 'Method', width: 150, align: 'center', headerAlign: 'center',
       renderCell: (params) => {
         return (
           <Method type={params.value}/>
@@ -68,7 +68,7 @@ function TransactionsTable(props) {
       },
     },
     { 
-      field: 'amount', headerName: 'Amount', width: 150, align: 'center',
+      field: 'amount', headerName: 'Amount', width: 150, align: 'center', headerAlign: 'center',
     }
   ];
 
@@ -79,7 +79,7 @@ function TransactionsTable(props) {
       </Typography>
       <DataGrid rows={rows} columns={columns} 
         components={{ Toolbar: GridToolbar }} 
-        style={{height: '300px'}} 
+        style={{height: '100%', minHeight: '400px'}} 
         componentsProps={{
           toolbar: {
             sx: {

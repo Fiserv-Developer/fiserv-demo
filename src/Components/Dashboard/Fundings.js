@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Placeholder from '../Placeholder';
 import { config } from '../../Config/constants';
-// import NumberTicker from 'react-native-number-ticker';
+import { fetchWithRetry } from '../../Config/utils';
 var bigDecimal = require('js-big-decimal');
 
 const zero = "0.00";
@@ -34,32 +34,28 @@ export default function Fundings(props) {
       headers['Merchant-Id'] = props.merchantId;
     }
 
-    fetch(url, {
+    fetchWithRetry(url, {
       method: 'GET',
       headers: headers,
-    }).then(results => results.json())
-      .then(fundings => {
+    }).then(fundings => {
         zeroOut();
 
         // get all details and sum up the values
         fundings.forEach(funding => {
           const url = config.baseUrl + '/fundings/' + funding.id + "/details";
-          fetch(url, {
+          fetchWithRetry(url, {
             method: 'GET',
             headers: {
               'Api-Key': props.apiKey,
               'Accept': 'application/json'
             }
-          }).then(results => results.json())
-            .then(details => {
+          }).then(details => {
               const totals = calculateTotals(details);
               setNet(n => bigDecimal.add(n, totals.net));
               setTransactions(t => bigDecimal.add(t, totals.transactions));
               setFees(f => bigDecimal.add(f, totals.fees));
             })
-            .catch(rejected => {
-              zeroOut();
-            });
+            .catch(rejected => zeroOut());
         });
       })
       .catch(rejected => zeroOut());
@@ -83,12 +79,6 @@ function FundingCard(props) {
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
         Latest Funding Summary
       </Typography>
-      {/* <NumberTicker
-        number={props.net}
-        textSize={40}
-        duration={1500}
-        textStyle={{fontWeight: 'bold', color: theme.palette.text.main}}
-      /> */}
       <Typography component="p" variant="h3" >
         £{props.net}
       </Typography>
