@@ -27,7 +27,7 @@ export default function Fundings(props) {
 
   // get fundings
   useEffect(() => {
-    setError(true);
+    setError(false);
     const url = config.baseUrl + '/fundings?sort=-funded&fundedAfter=' + today + '&fundedBefore=' + today;
     const headers = {
       'Api-Key': props.apiKey,
