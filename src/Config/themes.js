@@ -40,13 +40,13 @@ export const dark = {
   palette: {
     type: 'dark',
     primary: {
-      main: '#232323',
-    },
-    secondary: {
       main: '#121212',
     },
+    secondary: {
+      main: '#232323',
+    },
     text: {
-      main: '#FDC201',
+      main: '#DDDDDD',
       faded: '#333333',
     },
     inverse: {

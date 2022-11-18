@@ -7,11 +7,14 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { fetchWithRetry } from '../../Config/utils';
+import Error from '../Error';
 
 export default function Transactions(props) {
   const [transactions, setTransactions] = useState([]);
+  const [error, setError] = useState(false);
   
   useEffect(() => {
+    setError(false);
     const url = config.baseUrl + '/transactions?limit=1000';
     const headers = {
       'Api-Key': props.apiKey,
@@ -25,13 +28,17 @@ export default function Transactions(props) {
       method: 'GET',
       headers: headers,
     }).then(data => setTransactions(data))
-      .catch(rejected => setTransactions([]));
+      .catch(rejected => {setTransactions([]); setError(true)});
   }, [props.apiKey, props.merchantId]);
 
   if (transactions.length > 0) {
     return (<TransactionsTable transactions={transactions}/>);
-  } else {
+  } else if (!error) {
     return (<Placeholder />);
+  } else {
+    return (
+      <Error />
+    );
   }
 }
 

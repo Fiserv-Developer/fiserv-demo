@@ -15,6 +15,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import routes from '../Config/routes'
 import { NavLink } from 'react-router-dom';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 const drawerWidth = 240;
 
@@ -62,6 +64,7 @@ export default function Menu(props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const icon = !props.themeToggle ? <WbSunnyIcon /> : <DarkModeIcon />
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -164,15 +167,24 @@ export default function Menu(props) {
             </List>
           <Divider />
           <IconButton 
-            sx={{ color: theme.palette.primary.main }} 
+            sx={{ color: 'var(--white)' }} 
             onClick={() => handleDrawerToggle()}>
             {open ? <KeyboardDoubleArrowLeftIcon /> : <KeyboardDoubleArrowRightIcon />}
           </IconButton>
           <br /><br/>
+
           <Box sx={{ position: 'absolute', bottom: '20px', width: '100%', textAlign: 'center' }}>
-            <img alt="Fiserv orange square icon" src="../orange-square.png" style={{ width: '32px' }}/>
-          </Box>
-          
+            <IconButton
+              edge="end"
+              color="inherit"
+              aria-label="mode"
+              onClick={() => {
+                props.setThemeToggle(!props.themeToggle);
+              }}
+              sx={{ color: theme.palette.orange.main, margin: 0}}>
+                {icon}
+            </IconButton>
+          </Box>         
           <br /><br />
           <Divider />
         </Drawer>

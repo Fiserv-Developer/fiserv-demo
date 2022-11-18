@@ -23,7 +23,7 @@ export default function ShopFailure() {
           <Link to="/shop" style={ {margin: '0 auto', marginBottom: '1em', }}>
             <Button style={{color: theme.palette.text.main}}>Return to Shop</Button>
           </Link>
-      </BodyElement>
+        </BodyElement>
       </Box>
     </Box>
   );

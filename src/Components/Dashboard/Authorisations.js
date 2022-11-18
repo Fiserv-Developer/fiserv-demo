@@ -5,11 +5,14 @@ import Typography from '@mui/material/Typography'
 import Placeholder from '../Placeholder';
 import { config } from '../../Config/constants';
 import { fetchWithRetry } from '../../Config/utils';
+import Error from '../Error';
 
 export default function Authorisations(props) {
   const [data, setData] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
+    setError(false);
     const url = config.baseUrl + '/authorisations?createdAfter=2022-11-01&createdBefore=2022-11-08&limit=1000';
     const headers = {
       'Api-Key': props.apiKey,
@@ -23,15 +26,19 @@ export default function Authorisations(props) {
       method: 'GET',
       headers: headers
     }).then(data => setData(groupByTenMinutes(data)))
-      .catch(rejected => setData([]));
+      .catch(rejected => { setData([]); setError(true) });
   }, [props.apiKey, props.merchantId]);
 
   if (data.length > 0) {
     return (<AuthorisationsChart data={data}/>);
-  } else {
+  } else if (!error) {
     return (
       <Placeholder />
     );
+  } else {
+    return (
+      <Error />
+    )
   }
 }
 

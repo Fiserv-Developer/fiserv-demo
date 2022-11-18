@@ -4,11 +4,12 @@ import React, { useEffect, useState } from 'react'
 import Placeholder from '../Placeholder';
 import { config } from '../../Config/constants';
 import { fetchWithRetry } from '../../Config/utils';
+import Error from '../Error';
 
 export default function Statements(props) {
-  // todo pass these in as state props
   const [statements, setStatements] = useState([]);
   const [downloadStatement, setDownloadStatement] = useState(null);
+  const [error, setError] = useState(false);
 
   const today = new Date().toISOString().substring(0, 10) + "T00:00:00Z";
   const lastYearDate = new Date()
@@ -16,6 +17,7 @@ export default function Statements(props) {
   const lastYear = lastYearDate.toISOString().substring(0, 10) + "T23:59:59Z";
   
   useEffect(() => {
+    setError(false);
     const url = config.baseUrl + '/statements?createdAfter=' + lastYear + "&createdBefore=" + today + "&limit=5";
     const headers = {
       'Api-Key': props.apiKey,
@@ -26,7 +28,7 @@ export default function Statements(props) {
       method: 'GET',
       headers: headers,
     }).then(data => setStatements(data.reverse().slice(0, 4)))
-      .catch(rejected => setStatements([]));
+      .catch(rejected => { setStatements([]); setError(true)});
   }, [props.apiKey, today, lastYear]);
 
   useEffect(() => {
@@ -48,9 +50,13 @@ export default function Statements(props) {
 
   if (statements.length > 0) {
     return (<StatementsTable apiKey={props.apiKey} statements={statements} setDownloadStatement={setDownloadStatement} />);
-  } else {
+  } else if (!error) {
     return (
       <Placeholder />
+    );
+  } else {
+    return (
+      <Error />
     );
   }
 }

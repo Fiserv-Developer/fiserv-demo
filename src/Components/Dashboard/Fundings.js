@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Placeholder from '../Placeholder';
 import { config } from '../../Config/constants';
 import { fetchWithRetry } from '../../Config/utils';
+import Error from '../Error';
 var bigDecimal = require('js-big-decimal');
 
 const zero = "0.00";
@@ -12,6 +13,7 @@ export default function Fundings(props) {
   const [net, setNet] = useState(zero);
   const [transactions, setTransactions] = useState(zero);
   const [fees, setFees] = useState(zero);
+  const [error, setError] = useState(false);
 
   const today = new Date().toISOString().substring(0, 10);
   const lastWeekDate = new Date()
@@ -25,6 +27,7 @@ export default function Fundings(props) {
 
   // get fundings
   useEffect(() => {
+    setError(true);
     const url = config.baseUrl + '/fundings?sort=-funded&fundedAfter=' + today + '&fundedBefore=' + today;
     const headers = {
       'Api-Key': props.apiKey,
@@ -55,19 +58,23 @@ export default function Fundings(props) {
               setTransactions(t => bigDecimal.add(t, totals.transactions));
               setFees(f => bigDecimal.add(f, totals.fees));
             })
-            .catch(rejected => zeroOut());
+            .catch(rejected => { zeroOut(); setError(true) });
         });
       })
-      .catch(rejected => zeroOut());
+      .catch(rejected => { zeroOut(); setError(true) });
   }, [props.apiKey, props.merchantId, today]);
 
   if (net !== zero || transactions !== zero || fees !== zero) {
     return (
       <FundingCard net={net} transactions={transactions} fees={fees}/>
     );
-  } else {
+  } else if (!error) {
     return (
       <Placeholder />
+    );
+  } else {
+    return (
+      <Error />
     );
   }
 }

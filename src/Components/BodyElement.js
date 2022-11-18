@@ -9,6 +9,7 @@ export default function BodyElement(props) {
       <Paper
         sx={{
           p: 2,
+          color: theme.palette.text.main,
           backgroundColor: theme.palette.secondary.main,
           height: '100%',
           display: 'flex',

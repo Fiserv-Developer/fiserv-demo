@@ -1,12 +1,7 @@
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Alert, FormControl, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Snackbar } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import { Alert, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Snackbar } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import BodyElement from '../Components/BodyElement';
+import KeyFormControl from '../Components/Settings/KeyFormControl';
 import { config } from '../Config/constants';
 import { getValueOrDefault } from '../Config/utils';
 
@@ -100,49 +95,24 @@ export default function Settings() {
           You <strong>API Key</strong> and <strong>Secret Key</strong> can be found via our <a href="https://portal.fiserv.dev">portal</a>, 
           make sure to use <strong>Sandbox</strong> keys!
         </p>
-        <FormControl variant="outlined" sx={{ marginBottom: "20px" }}>
-          <InputLabel htmlFor="outlined-adornment-password">API Key</InputLabel>
-          <OutlinedInput
-            label="API Key"
-            type={passwords.apiKey ? 'text' : 'password'}
-            value={apiKey}
-            onChange={(e) => { showUpdate(); setApiKey(e.target.value) }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => togglePasswordVisibility("apiKey")}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {passwords.apiKey ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
 
-        <FormControl variant="outlined" sx={{ marginBottom: "20px" }}>
-          <InputLabel htmlFor="outlined-adornment-password">Secret Key</InputLabel>
-          <OutlinedInput
-            type={passwords.secretKey ? 'text' : 'password'}
-            value={secretKey}
-            onChange={(e) => { showUpdate(); setSecretKey(e.target.value) }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => togglePasswordVisibility("secretKey")}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {passwords.secretKey ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Secret Key"
-          />
-        </FormControl>
+        <KeyFormControl 
+          label="API Key" 
+          display={passwords.apiKey} 
+          value={apiKey} 
+          onChange={(value) => { showUpdate(); setApiKey(value)}}
+          onClick={() => togglePasswordVisibility("apiKey")}
+          onMouseDown={handleMouseDownPassword}
+        />
+
+        <KeyFormControl 
+          label="Secret Key" 
+          display={passwords.secretKey} 
+          value={secretKey} 
+          onChange={(value) => { showUpdate(); setSecretKey(value)}}
+          onClick={() => togglePasswordVisibility("secretKey")}
+          onMouseDown={handleMouseDownPassword}
+        />
       </BodyElement>
       
       <BodyElement xs={12} md={6}>
@@ -150,50 +120,24 @@ export default function Settings() {
         <p>
           For testing anything in <b>non-prod</b>, such as an api in development, you will need to use different credentials...
         </p>
-        
-        <FormControl variant="outlined" sx={{ marginBottom: "20px" }}>
-          <InputLabel htmlFor="outlined-adornment-password">Non-prod API Key</InputLabel>
-          <OutlinedInput
-            type={passwords.nonProdApiKey ? 'text' : 'password'}
-            value={nonProdApiKey}
-            onChange={(e) => { showUpdate(); setNonProdApiKey(e.target.value) }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => togglePasswordVisibility("nonProdApiKey")}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {passwords.nonProdApiKey ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Non-prod API Key"
-          />
-        </FormControl>
 
-        <FormControl variant="outlined" sx={{ marginBottom: "20px" }}>
-          <InputLabel htmlFor="outlined-adornment-password">Non-prod Secret Key</InputLabel>
-          <OutlinedInput
-            type={passwords.nonProdSecretKey ? 'text' : 'password'}
-            value={nonProdSecretKey}
-            onChange={(e) => { showUpdate(); setNonProdSecretKey(e.target.value) }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => togglePasswordVisibility("nonProdSecretKey")}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {passwords.nonProdSecretKey ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Non-prod Secret Key"
-          />
-        </FormControl>
+        <KeyFormControl 
+          label="Non-prod API Key" 
+          display={passwords.nonProdApiKey} 
+          value={nonProdApiKey} 
+          onChange={(value) => { showUpdate(); setNonProdApiKey(value)}}
+          onClick={() => togglePasswordVisibility("nonProdApiKey")}
+          onMouseDown={handleMouseDownPassword}
+        />
+
+        <KeyFormControl 
+          label="Non-prod Secret Key" 
+          display={passwords.nonProdSecretKey} 
+          value={nonProdSecretKey} 
+          onChange={(value) => { showUpdate(); setNonProdSecretKey(value)}}
+          onClick={() => togglePasswordVisibility("nonProdSecretKey")}
+          onMouseDown={handleMouseDownPassword}
+        />
       </BodyElement>
 
       <BodyElement xs={12}>
