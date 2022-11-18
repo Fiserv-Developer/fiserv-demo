@@ -114,20 +114,28 @@ export default function Menu(props) {
             display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}>
-          <List>
-            {routes.map((route, index) => {
-              return (
-                <NavLink key={index} to={route.url} style={({ isActive }) => handleButtonBackground(isActive)}>
-                  <ListItem button sx={{paddingLeft: '20px', background: 'inherit'}} onClick={handleMobileDrawerToggle}>
-                    <ListItemIcon sx={{ color: 'var(--white)' }}>
-                      {route.icon}
-                    </ListItemIcon>
-                    <ListItemText primary={route.name} sx={{ color: 'var(--white)', textDecoration: 'none' }} />
-                  </ListItem>
-                </NavLink>
-              );
-            })}
-          </List>
+            <br />
+            <img alt='Fiserv developer logo' src='../logo-dark.svg' width='80%' style={{margin: '0 auto'}} />
+            <br />
+            <Divider />
+            <List>
+              {routes.map((route, index) => {
+                if (route.type === 'component') {
+                  return (
+                  <NavLink key={index} to={route.url} style={({ isActive }) => handleButtonBackground(isActive)}>
+                    <ListItem button sx={{paddingLeft: '20px', background: 'inherit'}} onClick={handleMobileDrawerToggle}>
+                      <ListItemIcon sx={{ color: 'var(--white)' }}>
+                        {route.icon}
+                      </ListItemIcon>
+                      <ListItemText primary={route.name} sx={{ color: 'var(--white)', textDecoration: 'none' }} />
+                    </ListItem>
+                  </NavLink>
+                );
+              } else {
+                return (null); // don't show any non-component links
+              }
+              })}
+            </List>
         </MuiDrawer>
 
         {/* Desktop drawer (permanent) */}

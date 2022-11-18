@@ -3,6 +3,7 @@ import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } 
 import React, { useEffect, useState } from 'react'
 import Placeholder from '../Placeholder';
 import { config } from '../../Config/constants';
+import { fetchWithRetry } from '../../Config/utils';
 
 export default function Statements(props) {
   // todo pass these in as state props
@@ -21,11 +22,10 @@ export default function Statements(props) {
       'Accept': 'application/json',
     };
 
-    fetch(url, {
+    fetchWithRetry(url, {
       method: 'GET',
       headers: headers,
-    }).then(results => results.json())
-      .then(data => setStatements(data.reverse().slice(0, 4)))
+    }).then(data => setStatements(data.reverse().slice(0, 4)))
       .catch(rejected => setStatements([]));
   }, [props.apiKey, today, lastYear]);
 

@@ -94,7 +94,7 @@ export default function Settings() {
         </p>
       </BodyElement>
 
-      <BodyElement xs={12}>
+      <BodyElement xs={12} md={6}>
         <h2>Sandbox Authentication</h2>
         <p>
           You <strong>API Key</strong> and <strong>Secret Key</strong> can be found via our <a href="https://portal.fiserv.dev">portal</a>, 
@@ -145,7 +145,7 @@ export default function Settings() {
         </FormControl>
       </BodyElement>
       
-      <BodyElement xs={12}>
+      <BodyElement xs={12} md={6}>
         <h2>Non-prod Sandbox Authentication</h2>
         <p>
           For testing anything in <b>non-prod</b>, such as an api in development, you will need to use different credentials...

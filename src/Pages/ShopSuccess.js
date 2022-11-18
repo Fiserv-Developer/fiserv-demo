@@ -1,26 +1,30 @@
-import { Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import BodyElement from "../Components/BodyElement";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 export default function ShopSuccess() {
   const theme = useTheme();
   
   return (
-    <React.Fragment>
-      <BodyElement xs={12}>
-        <Typography gutterBottom component="p" variant="h6" 
-          style={{
-            color: theme.palette.text.main,
-            margin: '0 auto',
-            paddingTop: '40vh'
-          }}>
-          Your transaction was successful!
-        </Typography>
-        <Link to="/shop" style={{margin: '0 auto'}}>
-          <Button style={{color: theme.palette.text.main}}>Continue Shopping</Button>
-        </Link>
+    <Box style={{ textAlign: 'center', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0 auto'}}>
+      <Box style={{display: 'block' }}>
+        <BodyElement xs={12} sx={{padding: '2em'}}>
+          <ThumbUpIcon style={{ fontSize: '4em', margin: '0 auto', marginBottom: '0.5em',}}/>
+          <Typography gutterBottom component="p" variant="h6" 
+            style={{
+              color: theme.palette.text.main,
+              margin: '0 auto',
+              marginBottom: '1em',
+            }}>
+            Your transaction was successful!
+          </Typography>
+          <Link to="/shop" style={ {margin: '0 auto', marginBottom: '1em', }}>
+            <Button style={{color: theme.palette.text.main}}>Continue Shopping</Button>
+          </Link>
       </BodyElement>
-    </React.Fragment>
+      </Box>
+    </Box>
   );
 }
