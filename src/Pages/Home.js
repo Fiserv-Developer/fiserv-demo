@@ -13,6 +13,7 @@ export default function Home() {
         <li><a href="/dashboard">Dashboard</a> - an example merchant dashboard showing transactional data and statements</li>
         <li><a href="/shop">Shop</a> - an example ecommerce store showing our checkouts flow</li>
       </ul>
+      <p>The <b>source code</b> for this demo is open source and can be found on <a href="https://github.com/Fiserv-Developer/fiserv-demo">GitHub</a>.</p>
     </BodyElement>
   );
 }

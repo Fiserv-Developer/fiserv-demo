@@ -92,8 +92,8 @@ export default function Settings() {
       <BodyElement xs={12} md={6}>
         <h2>Sandbox Authentication</h2>
         <p>
-          You <strong>API Key</strong> and <strong>Secret Key</strong> can be found via our <a href="https://portal.fiserv.dev">portal</a>, 
-          make sure to use <strong>Sandbox</strong> keys!
+          Your <strong>API Key</strong> and <strong>Secret Key</strong> can be found via our <a href="https://portal.fiserv.dev">portal</a>, 
+          make sure to use <strong>Sandbox</strong> keys and <i>not</i> production!
         </p>
 
         <KeyFormControl 
