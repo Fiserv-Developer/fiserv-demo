@@ -48,6 +48,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
+    backgroundColor: theme.palette.menu.main,
     ...(open && {
       ...openedMixin(theme),
       '& .MuiDrawer-paper': openedMixin(theme),
@@ -88,7 +89,7 @@ export default function Menu(props) {
           display: { xs: 'block', sm: 'none' },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          background: theme.palette.inverse.main,
+          backgroundColor: theme.palette.menu.main,
         }}
       >
         <Toolbar>
@@ -116,6 +117,7 @@ export default function Menu(props) {
           sx={{
             display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paperAnchorLeft': { backgroundColor: theme.palette.menu.main + ' !important'}
           }}>
             <br />
             <img alt='Fiserv developer logo' src='../logo-dark.svg' width='80%' style={{margin: '0 auto'}} />
@@ -142,7 +144,11 @@ export default function Menu(props) {
         </MuiDrawer>
 
         {/* Desktop drawer (permanent) */}
-        <Drawer theme={theme} variant="permanent" open={open} sx={{display: { xs: 'none', sm: 'block' }}}>
+        <Drawer theme={theme} variant="permanent" open={open} 
+          sx={{
+            display: { xs: 'none', sm: 'block',
+            '& .MuiDrawer-paperAnchorLeft': { backgroundColor: theme.palette.menu.main + ' !important'}
+          }}}>
           <br />
           <img alt='Fiserv developer logo' src='../logo-dark.svg' width='80%' style={{margin: '0 auto'}} />
           <br />

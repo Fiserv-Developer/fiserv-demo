@@ -11,8 +11,8 @@ export const light = {
       main: '#232323',
       faded: '#C3C3C3',
     },
-    inverse: {
-      main: '#232323',
+    menu: {
+      main: '#111111',
     },
     green: {
       main: '#11C118',
@@ -49,8 +49,8 @@ export const dark = {
       main: '#DDDDDD',
       faded: '#333333',
     },
-    inverse: {
-      main: '#FBFAFA',
+    menu: {
+      main: '#111111',
     },
     green: {
       main: '#23FF23',
