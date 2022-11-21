@@ -5,6 +5,10 @@ import { config } from '../../Config/constants';
 import { fetchWithRetry } from '../../Config/utils';
 import Error from '../Error';
 import Placeholder from '../Placeholder';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 var bigDecimal = require('js-big-decimal');
 
 const zero = "0.00";
@@ -83,20 +87,36 @@ export default function Fundings(props) {
 
 function FundingCard(props) {
   const theme = useTheme();
-  
+
+  const chartData = {
+    labels: ['Transactions', 'Deductions'], // todo split up deductions?
+    datasets: [
+      {
+        label: 'Funding breakdown',
+        data: [props.transactions, props.fees],
+        backgroundColor: [
+          theme.palette.green.main,
+          theme.palette.red.main,
+        ],
+        borderColor: [
+          theme.palette.green.main,
+          theme.palette.red.main,
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
-        Latest Funding Summary (Yesterday)
-      </Typography>      
-      <Typography component="p" variant="h3" >
-        £{props.net}
-      </Typography>
-      <Typography component="p" variant="h7" color={theme.palette.green.main}>
-        Transactions: £{props.transactions}
-      </Typography>
-      <Typography component="p" variant="h7" color={theme.palette.red.main}>
-        Deductions: £{props.fees}
+        Yesterday's Funding Summary
+      </Typography>  
+
+      <Doughnut data={chartData} style={{maxHeight: '300px'}}/>
+
+      <Typography component="p" variant="h6" style={{textAlign: 'center'}}>
+        Net Funded: £{props.net}
       </Typography>
     </React.Fragment>
   );
