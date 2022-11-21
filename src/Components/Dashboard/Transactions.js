@@ -86,7 +86,13 @@ function TransactionsTable(props) {
       </Typography>
       <DataGrid rows={rows} columns={columns} 
         components={{ Toolbar: GridToolbar }} 
-        style={{height: '100%', minHeight: '400px'}} 
+        sx={{
+          height: '100%', minHeight: '400px',
+          '& .MuiDataGrid-cellContent, & .MuiDataGrid-columnHeaderTitleContainer, & .MuiButton-root, & .MuiTablePagination-displayedRows, & .MuiTablePagination-actions': {
+            color: theme.palette.text.main
+          },
+        }}
+        checkboxSelection={true} 
         componentsProps={{
           toolbar: {
             sx: {
@@ -95,7 +101,7 @@ function TransactionsTable(props) {
               }
             }
           }
-    }}/>
+      }}/>
     </React.Fragment>
   )
 }

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Placeholder from '../Placeholder';
+import React, { useEffect, useState } from 'react';
 import { config } from '../../Config/constants';
 import { fetchWithRetry } from '../../Config/utils';
 import Error from '../Error';
+import Placeholder from '../Placeholder';
 var bigDecimal = require('js-big-decimal');
 
 const zero = "0.00";
@@ -15,10 +15,6 @@ export default function Fundings(props) {
   const [fees, setFees] = useState(zero);
   const [error, setError] = useState(false);
 
-  const today = new Date().toISOString().substring(0, 10);
-  const lastWeekDate = new Date()
-  lastWeekDate.setDate(lastWeekDate.getDate() - 7);
-
   const zeroOut = () => {
     setNet(zero);
     setTransactions(zero);
@@ -28,7 +24,12 @@ export default function Fundings(props) {
   // get fundings
   useEffect(() => {
     setError(false);
-    const url = config.baseUrl + '/fundings?sort=-funded&fundedAfter=' + today + '&fundedBefore=' + today;
+
+    // get yesterdays date
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayISO = yesterday.toISOString().substring(0, 10);
+
     const headers = {
       'Api-Key': props.apiKey,
       'Accept': 'application/json',
@@ -37,7 +38,8 @@ export default function Fundings(props) {
       headers['Merchant-Id'] = props.merchantId;
     }
 
-    fetchWithRetry(url, {
+    // make api call to get fundings
+    fetchWithRetry(config.baseUrl + '/fundings?sort=-funded&fundedAfter=' + yesterdayISO + '&fundedBefore=' + yesterdayISO, {
       method: 'GET',
       headers: headers,
     }).then(fundings => {
@@ -62,7 +64,7 @@ export default function Fundings(props) {
         });
       })
       .catch(rejected => { zeroOut(); setError(true) });
-  }, [props.apiKey, props.merchantId, today]);
+  }, [props.apiKey, props.merchantId]);
 
   if (net !== zero || transactions !== zero || fees !== zero) {
     return (
@@ -81,11 +83,12 @@ export default function Fundings(props) {
 
 function FundingCard(props) {
   const theme = useTheme();
+  
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
-        Latest Funding Summary
-      </Typography>
+        Latest Funding Summary (Yesterday)
+      </Typography>      
       <Typography component="p" variant="h3" >
         £{props.net}
       </Typography>

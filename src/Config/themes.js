@@ -40,10 +40,10 @@ export const dark = {
   palette: {
     type: 'dark',
     primary: {
-      main: '#121212',
+      main: '#232323',
     },
     secondary: {
-      main: '#232323',
+      main: '#111111',
     },
     text: {
       main: '#DDDDDD',

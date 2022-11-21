@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
-import Typography from '@mui/material/Typography'
-import Placeholder from '../Placeholder';
+import Typography from '@mui/material/Typography';
+import { Chart, registerables } from 'chart.js';
+import React, { useEffect, useState } from 'react';
+import { Line } from 'react-chartjs-2';
 import { config } from '../../Config/constants';
 import { fetchWithRetry } from '../../Config/utils';
 import Error from '../Error';
+import Placeholder from '../Placeholder';
+
+Chart.register(...registerables); // avoid having to register manually, maybe tidy later
 
 export default function Authorisations(props) {
   const [data, setData] = useState([]);
+  const [lineData, setLineData] = useState({labels: [], approved: [], declined: []});
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -25,12 +29,12 @@ export default function Authorisations(props) {
     fetchWithRetry(url, {
       method: 'GET',
       headers: headers
-    }).then(data => setData(groupByTenMinutes(data)))
+    }).then(data => { setData(data); setLineData(groupByTenMinutes(data)) })
       .catch(rejected => { setData([]); setError(true) });
   }, [props.apiKey, props.merchantId]);
 
   if (data.length > 0) {
-    return (<AuthorisationsChart data={data}/>);
+    return (<AuthorisationsChart data={lineData}/>);
   } else if (!error) {
     return (
       <Placeholder />
@@ -45,76 +49,72 @@ export default function Authorisations(props) {
 function AuthorisationsChart(props) {
   const theme = useTheme();
 
+  const lineData = {
+    labels: props.data.labels,
+    datasets: [
+      {
+        label: 'Approved',
+        data: props.data.approved,
+        borderColor: theme.palette.green.main,
+        backgroundColor: theme.palette.green.main,
+      },
+      {
+        label: 'Declined',
+        data: props.data.declined,
+        borderColor: theme.palette.red.main,
+        backgroundColor: theme.palette.red.main,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Line Chart',
+      },
+    },
+  };
+
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
         Authorisations
       </Typography>
-      <ResponsiveContainer style={{ height: '220px' }}>
-        <LineChart
-          data={props.data}
-          margin={{
-            top: 16,
-            right: 16,
-            bottom: 0,
-            left: 24,
-          }}
-          style={{ height: '220px' }}
-        >
-          <XAxis
-            dataKey="time"
-            stroke={theme.palette.text.main}
-            style={theme.typography.body2}
-          />
-          <YAxis
-            stroke={theme.palette.text.main}
-            style={theme.typography.body2}
-          >
-            <Label
-              angle={270}
-              position="left"
-              style={{
-                textAnchor: 'middle',
-                fill: theme.palette.text.main,
-              }}
-            >
-              Approves vs Declines
-            </Label>
-          </YAxis>
-          <Line
-            isAnimationActive={false}
-            type="monotone"
-            dataKey="approved"
-            stroke={theme.palette.green.main}
-            dot={false}
-          />
-          <Line
-            isAnimationActive={false}
-            type="monotone"
-            dataKey="declined"
-            stroke={theme.palette.red.main}
-            dot={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      <Line options={options} data={lineData}/>
     </React.Fragment>
   );
 }
 
 function groupByTenMinutes(records) {
   const groups = [];
+  const labels = [];
+  const approved = [];
+  const declined = [];
   records.forEach((record) => {
-    const time = record.created.slice(11, 15) + "0"; // get 10 second bracket
+    console.log("Calcating line chart")
+    const time = record.created.slice(11, 15) + "0"; // get 10 minute bracket
     var index = groups.findIndex((entry) => entry.time === time);
     if(index === -1) {
-      groups.push({time: time, approved: 0, declined: 0})
-      index = 0;
+      labels.push(time);
+      approved.push(0);
+      declined.push(0);
+      groups.push({time: time, approved: 0, declined: 0});
+      index = groups.findIndex((entry) => entry.time === time);
     }
     if (record.status === "APPROVED")  {
-      groups[index].approved += 1;
+      approved[index] += 1;
     } else if (record.status === "DECLINED") {
-      groups[index].declined += 1;
+      declined[index] += 1;
     }    
   });
-  return groups;
+  return {
+    labels: labels,
+    approved: approved,
+    declined: declined
+  };
 }

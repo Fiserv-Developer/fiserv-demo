@@ -1,4 +1,4 @@
-import { Alert, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Snackbar } from '@mui/material';
+import { Alert, MenuItem, Select, Snackbar } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import BodyElement from '../Components/BodyElement';
 import KeyFormControl from '../Components/Settings/KeyFormControl';
@@ -10,7 +10,6 @@ export default function Settings() {
   const [secretKey, setSecretKey] = useState(() => getValueOrDefault(config.secretKey, ""));
   const [nonProdApiKey, setNonProdApiKey] = useState(() => getValueOrDefault(config.nonProdApiKey, ""));
   const [nonProdSecretKey, setNonProdSecretKey] = useState(() => getValueOrDefault(config.nonProdSecretKey, ""));
-  const [paymentIntegration, setPaymentIntegration] = useState(() => getValueOrDefault(config.paymentIntegration, ""));
   const [merchantId, setMerchantId] = useState(() => getValueOrDefault(config.merchantId, ""));
   const [open, setOpen] = useState(false);
   const [passwords, setPasswords] = useState({
@@ -18,31 +17,13 @@ export default function Settings() {
     secretKey: false,
     nonProdApiKey: false,
     nonProdSecretKey: false,
-  })
+  });
 
-  useEffect(() => {
-    updateConfig(config.apiKey, apiKey);
-  }, [apiKey]);
-
-  useEffect(() => {
-    updateConfig(config.secretKey, secretKey);
-  }, [secretKey]);
-
-  useEffect(() => {
-    updateConfig(config.nonProdApiKey, nonProdApiKey);
-  }, [nonProdApiKey]);
-
-  useEffect(() => {
-    updateConfig(config.nonProdSecretKey, nonProdSecretKey);
-  }, [nonProdSecretKey]);
-
-  useEffect(() => {
-    updateConfig(config.paymentIntegration, paymentIntegration);
-  }, [paymentIntegration]);
-
-  useEffect(() => {
-    updateConfig(config.merchantId, merchantId)
-  }, [merchantId]);
+  useEffect(() => updateConfig(config.apiKey, apiKey), [apiKey]);
+  useEffect(() => updateConfig(config.secretKey, secretKey), [secretKey]);
+  useEffect(() => updateConfig(config.nonProdApiKey, nonProdApiKey), [nonProdApiKey]);
+  useEffect(() => updateConfig(config.nonProdSecretKey, nonProdSecretKey), [nonProdSecretKey]);
+  useEffect(() => updateConfig(config.merchantId, merchantId), [merchantId]);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -55,27 +36,23 @@ export default function Settings() {
   const togglePasswordVisibility = (field) => {
     const updated = {
       ...passwords
-    }
+    };
     updated[field] = !updated[field];
     setPasswords(updated);
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  function updateConfig(keyName, value) {
-    localStorage.setItem(keyName, value);
+  const onSettingChange = (value, updateState) => {
+    showUpdate();
+    updateState(value);
   }
 
-  function showUpdate() {
-    setOpen(true);
-  }
+  const handleMouseDownPassword = (event) => event.preventDefault();
 
-  function hideUpdate() {
-    setOpen(false);
-  }
+  const updateConfig = (keyName, value) => localStorage.setItem(keyName, value);
 
+  const showUpdate = () => setOpen(true);
+
+  const hideUpdate = () => setOpen(false);
 
   return (
     <React.Fragment>
@@ -100,19 +77,17 @@ export default function Settings() {
           label="API Key" 
           display={passwords.apiKey} 
           value={apiKey} 
-          onChange={(value) => { showUpdate(); setApiKey(value)}}
+          onChange={(value) => onSettingChange(value, setApiKey) }
           onClick={() => togglePasswordVisibility("apiKey")}
-          onMouseDown={handleMouseDownPassword}
-        />
+          onMouseDown={handleMouseDownPassword}/>
 
         <KeyFormControl 
           label="Secret Key" 
           display={passwords.secretKey} 
           value={secretKey} 
-          onChange={(value) => { showUpdate(); setSecretKey(value)}}
+          onChange={(value) => onSettingChange(value, setSecretKey) }
           onClick={() => togglePasswordVisibility("secretKey")}
-          onMouseDown={handleMouseDownPassword}
-        />
+          onMouseDown={handleMouseDownPassword}/>
       </BodyElement>
       
       <BodyElement xs={12} md={6}>
@@ -125,19 +100,17 @@ export default function Settings() {
           label="Non-prod API Key" 
           display={passwords.nonProdApiKey} 
           value={nonProdApiKey} 
-          onChange={(value) => { showUpdate(); setNonProdApiKey(value)}}
+          onChange={(value) => onSettingChange(value, setNonProdApiKey) }
           onClick={() => togglePasswordVisibility("nonProdApiKey")}
-          onMouseDown={handleMouseDownPassword}
-        />
+          onMouseDown={handleMouseDownPassword}/>
 
         <KeyFormControl 
           label="Non-prod Secret Key" 
           display={passwords.nonProdSecretKey} 
           value={nonProdSecretKey} 
-          onChange={(value) => { showUpdate(); setNonProdSecretKey(value)}}
+          onChange={(value) => onSettingChange(value, setNonProdSecretKey) }
           onClick={() => togglePasswordVisibility("nonProdSecretKey")}
-          onMouseDown={handleMouseDownPassword}
-        />
+          onMouseDown={handleMouseDownPassword}/>
       </BodyElement>
 
       <BodyElement xs={12}>
@@ -150,27 +123,13 @@ export default function Settings() {
           id="merchantId"
           value={merchantId}
           label="Merchant ID"
-          onChange={(e) => { showUpdate(); setMerchantId(e.target.value) }}>
+          onChange={(e) => onSettingChange(e.target.value, setMerchantId) }>
           <MenuItem value="">ALL</MenuItem>
           <MenuItem value="60001">60001</MenuItem>
           <MenuItem value="60002">60002</MenuItem>
           <MenuItem value="60003">60003</MenuItem>
           <MenuItem value="60004">60004</MenuItem>
         </Select>
-
-        <h2>Shop</h2>
-        <p>
-          You can configure the 'shop' demo to either use our Payment API or our Hosted Payment Page to see the difference.
-        </p>
-        <RadioGroup
-          id="paymentIntegration"
-          aria-labelledby="demo-radio-buttons-group-label"
-          value={paymentIntegration} 
-          name="radio-buttons-group"
-          onChange={(e) => { showUpdate(); setPaymentIntegration(e.target.value) }}>
-          <FormControlLabel value="paymentsApi" control={<Radio />} label="Payments API" />
-          <FormControlLabel value="hostedPaymentPage" control={<Radio />} label="Hosted Payments Page" />
-        </RadioGroup>
       </BodyElement>
       
       <Snackbar

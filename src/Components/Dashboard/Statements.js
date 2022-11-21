@@ -1,35 +1,41 @@
+import { Box, Button, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import Placeholder from '../Placeholder';
+import { DataGrid } from '@mui/x-data-grid';
+import React, { useEffect, useState } from 'react';
 import { config } from '../../Config/constants';
 import { fetchWithRetry } from '../../Config/utils';
 import Error from '../Error';
+import Placeholder from '../Placeholder';
 
 export default function Statements(props) {
   const [statements, setStatements] = useState([]);
   const [downloadStatement, setDownloadStatement] = useState(null);
   const [error, setError] = useState(false);
-
-  const today = new Date().toISOString().substring(0, 10) + "T00:00:00Z";
-  const lastYearDate = new Date()
-  lastYearDate.setDate(lastYearDate.getDate() - 365);
-  const lastYear = lastYearDate.toISOString().substring(0, 10) + "T23:59:59Z";
   
   useEffect(() => {
     setError(false);
-    const url = config.baseUrl + '/statements?createdAfter=' + lastYear + "&createdBefore=" + today + "&limit=5";
+
+    // calculate dates
+    const lastYearDate = new Date()
+    lastYearDate.setDate(lastYearDate.getDate() - 365);
+    const lastYear = lastYearDate.toISOString().substring(0, 10) + "T23:59:59Z";
+    const today = new Date().toISOString().substring(0, 10) + "T00:00:00Z";
+    
     const headers = {
       'Api-Key': props.apiKey,
       'Accept': 'application/json',
     };
+    if (props.merchantId) {
+      headers['Merchant-Id'] = props.merchantId;
+    }
 
-    fetchWithRetry(url, {
+    // make request
+    fetchWithRetry(config.baseUrl + '/statements?createdAfter=' + lastYear + "&createdBefore=" + today + "&limit=12", {
       method: 'GET',
       headers: headers,
-    }).then(data => setStatements(data.reverse().slice(0, 4)))
+    }).then(data => setStatements(data.reverse()))
       .catch(rejected => { setStatements([]); setError(true)});
-  }, [props.apiKey, today, lastYear]);
+  }, [props.apiKey, props.merchantId]);
 
   useEffect(() => {
     if (downloadStatement) {
@@ -51,44 +57,71 @@ export default function Statements(props) {
   if (statements.length > 0) {
     return (<StatementsTable apiKey={props.apiKey} statements={statements} setDownloadStatement={setDownloadStatement} />);
   } else if (!error) {
-    return (
-      <Placeholder />
-    );
+    return (<Placeholder />);
   } else {
-    return (
-      <Error />
-    );
+    return (<Error />);
   }
 }
 
 function StatementsTable(props) {
   const theme = useTheme();
 
+  const rows = mapStatements(props.statements);
+  const columns = [
+    { 
+      field: 'year', headerName: 'Year', width: 150, align: 'center', headerAlign: 'center',
+    },
+    { 
+      field: 'month', headerName: 'Month', width: 150, align: 'center', headerAlign: 'center',
+      sortComparator: (v1, v2) => new Date(`${v1} 1, 2022`).getMonth() - new Date(`${v2} 1, 2022`).getMonth(),
+    },
+    { 
+      field: 'id', headerName: '', width: 150, align: 'center', headerAlign: 'center',
+      renderCell: (params) => {
+        return (
+          <Button onClick={() => downloadPdf(props.apiKey, params.value, props.setDownloadStatement)}>View</Button>
+        );
+      },
+    }
+  ];
+
+
   return (
-    <React.Fragment>
+    <Box style={{ overflow: 'auto', height: '100%'}}>
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
         Recent Statements
       </Typography>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{color: theme.palette.text.main}}>Year</TableCell>
-            <TableCell style={{color: theme.palette.text.main}}>Month</TableCell>
-            <TableCell style={{color: theme.palette.text.main}} align="right"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {props.statements.map((row) => (
-            <TableRow key={row.id} >
-              <TableCell style={{color: theme.palette.text.main}}>{dateToYear(row.from)}</TableCell>
-              <TableCell style={{color: theme.palette.text.main}}>{dateToMonth(row.from)}</TableCell>
-              <TableCell style={{color: theme.palette.text.main}} align="right"><Button onClick={() => downloadPdf(props.apiKey, row.id, props.setDownloadStatement)}>View</Button></TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </React.Fragment>
+      <DataGrid rows={rows} columns={columns} 
+        sx={{
+          height: '100%', minHeight: '300px', maxHeight: '300px', color: theme.palette.text.main,
+          '& .MuiDataGrid-cellContent, & .MuiDataGrid-columnHeaderTitleContainer, & .MuiButton-root, & .MuiTablePagination-displayedRows, & .MuiTablePagination-actions': {
+            color: theme.palette.text.main
+          },
+          
+        }}
+        autoPageSize
+        pagination
+        componentsProps={{
+          toolbar: {
+            sx: {
+              '& .MuiButton-root': {
+                color: theme.palette.text.main
+              },
+            }
+          }
+      }}/>
+    </Box>
   );
+}
+
+function mapStatements(statements) {
+  return statements.map((statement) => {
+    return {
+      year: dateToYear(statement.from),
+      month: dateToMonth(statement.from),
+      id: statement.id
+    }
+  });
 }
 
 function dateToYear(date) {

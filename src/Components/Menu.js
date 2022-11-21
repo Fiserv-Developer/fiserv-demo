@@ -150,7 +150,9 @@ export default function Menu(props) {
             '& .MuiDrawer-paperAnchorLeft': { backgroundColor: theme.palette.menu.main + ' !important'}
           }}}>
           <br />
-          <img alt='Fiserv developer logo' src='../logo-dark.svg' width='80%' style={{margin: '0 auto'}} />
+          <a href="https://fiserv.dev" target="_blank" rel="noreferrer noopener" style={{width: '100%', textAlign: 'center'}}>
+            <img alt='Fiserv developer logo' src='../logo-dark.svg'  style={{width: '80%'}} />
+          </a>
           <br />
           <Divider />
           <List>
