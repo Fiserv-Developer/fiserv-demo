@@ -7,7 +7,7 @@ export function getValueOrDefault(key, defaultValue) {
   }
 }
 
-export function fetchWithRetry(url, options = {}, attempts = 0) {
+export async function fetchWithRetry(url, options = {}, attempts = 1) {
   const maxAttempts = 3;
   var wait = 500; // milliseconds
 
@@ -18,7 +18,11 @@ export function fetchWithRetry(url, options = {}, attempts = 0) {
       if (attempts > 1) {
         wait = wait * 2; // double the wait between each attempt for backoff
       }
-      return new Promise(res => setTimeout(res, wait)).then(() => fetchWithRetry(url, options, ++attempts)); 
+      return new Promise(res => { 
+        setTimeout(res, wait); 
+      }).then(() => { 
+        return fetchWithRetry(url, options, attempts + 1);
+      }); 
     } else {
       return Promise.reject(response.json());
     }

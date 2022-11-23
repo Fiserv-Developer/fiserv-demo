@@ -79,6 +79,19 @@ function TransactionsTable(props) {
     }
   ];
 
+  // todo review the master detail pro component
+  // const handleRowClick = (
+  //   params, // GridRowParams
+  //   event, // MuiEvent<React.MouseEvent<HTMLElement>>
+  //   details, // GridCallbackDetails
+  // ) => {
+  //   showDetail();
+  // };
+
+  // const showDetail = () => {
+  //   console.log("Showing grid item ifo")
+  // }
+
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
@@ -86,13 +99,20 @@ function TransactionsTable(props) {
       </Typography>
       <DataGrid rows={rows} columns={columns} 
         components={{ Toolbar: GridToolbar }} 
+        autoHeight
         sx={{
-          height: '100%', minHeight: '400px',
           '& .MuiDataGrid-cellContent, & .MuiDataGrid-columnHeaderTitleContainer, & .MuiButton-root, & .MuiTablePagination-displayedRows, & .MuiTablePagination-actions': {
             color: theme.palette.text.main
           },
         }}
-        checkboxSelection={true} 
+        checkboxSelection={true}
+        disableSelectionOnClick
+        rowsPerPageOptions={[5, 10, 20]}
+        initialState={{
+          pagination: {
+            pageSize: 10,
+          },
+        }}
         componentsProps={{
           toolbar: {
             sx: {

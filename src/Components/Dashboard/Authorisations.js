@@ -69,15 +69,6 @@ function AuthorisationsChart(props) {
 
   const options = {
     responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Line Chart',
-      },
-    },
   };
 
   return (
@@ -85,7 +76,7 @@ function AuthorisationsChart(props) {
       <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
         Authorisations
       </Typography>
-      <Line options={options} data={lineData}/>
+      <Line options={options} data={lineData} style={{ maxHeight: '220px' }}/>
     </React.Fragment>
   );
 }
@@ -96,7 +87,6 @@ function groupByTenMinutes(records) {
   const approved = [];
   const declined = [];
   records.forEach((record) => {
-    console.log("Calcating line chart")
     const time = record.created.slice(11, 15) + "0"; // get 10 minute bracket
     var index = groups.findIndex((entry) => entry.time === time);
     if(index === -1) {
