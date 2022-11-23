@@ -98,14 +98,14 @@ function FeeCard(props) {
       {
         data: [props.interchange, props.refunds, props.chargebacks],
         backgroundColor: [
+          theme.palette.orange.main,
           theme.palette.green.main,
           theme.palette.red.main,
-          theme.palette.orange.main,
         ],
         borderColor: [
+          theme.palette.orange.main,
           theme.palette.green.main,
           theme.palette.red.main,
-          theme.palette.orange.main,
         ],
         borderWidth: 1,
       },

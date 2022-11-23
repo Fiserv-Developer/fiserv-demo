@@ -15,10 +15,10 @@ export const light = {
       main: '#111111',
     },
     green: {
-      main: '#11C118',
+      main: '#005989',
     },
     red: {
-      main: '#FF2323',
+      main: '#91171F',
     },
     orange: {
       main: '#FF6600',
@@ -31,7 +31,7 @@ export const light = {
     // E.g., shift from Red 500 to Red 300 or Red 700.
     tonalOffset: 0.2,
     zIndex:{
-        drawer:'red'
+      drawer: 'red'
     }
   },
 }
@@ -53,10 +53,10 @@ export const dark = {
       main: '#111111',
     },
     green: {
-      main: '#23FF23',
+      main: '#005989',
     },
     red: {
-      main: '#FF2323',
+      main: '#91171F',
     },
     orange: {
       main: '#FF6600',

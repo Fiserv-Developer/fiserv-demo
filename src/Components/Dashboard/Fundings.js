@@ -98,12 +98,12 @@ function FundingCard(props) {
       {
         data: [props.transactions, props.fees],
         backgroundColor: [
+          theme.palette.orange.main,
           theme.palette.green.main,
-          theme.palette.red.main,
         ],
         borderColor: [
+          theme.palette.orange.main,
           theme.palette.green.main,
-          theme.palette.red.main,
         ],
         borderWidth: 1,
       },

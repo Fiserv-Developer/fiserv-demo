@@ -55,14 +55,14 @@ function AuthorisationsChart(props) {
       {
         label: 'Approved',
         data: props.data.approved,
-        borderColor: theme.palette.green.main,
-        backgroundColor: theme.palette.green.main,
+        borderColor: theme.palette.orange.main,
+        backgroundColor: theme.palette.orange.main,
       },
       {
         label: 'Declined',
         data: props.data.declined,
-        borderColor: theme.palette.red.main,
-        backgroundColor: theme.palette.red.main,
+        borderColor: theme.palette.green.main,
+        backgroundColor: theme.palette.green.main,
       },
     ],
   };

@@ -105,7 +105,7 @@ function StatementsTable(props) {
         rowsPerPageOptions={[7, 10, 12]}
         initialState={{
           pagination: {
-            pageSize: 10,
+            pageSize: 7,
           },
         }}
         componentsProps={{
