@@ -23,7 +23,7 @@ export default function Shop() {
       "transactionType": "SALE",
       "transactionAmount": {
         "currency": "EUR",
-        "total": basketTotal
+        "total": parseFloat(basketTotal)
       },
       "checkoutSettings": {
         "locale": null,
