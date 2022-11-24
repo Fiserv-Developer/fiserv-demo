@@ -9,6 +9,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { fetchWithRetry } from '../../Config/utils';
 import Error from '../Error';
 
+// TODO make this look better on mobile
 export default function Transactions(props) {
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(false);

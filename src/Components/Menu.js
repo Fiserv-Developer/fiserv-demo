@@ -154,7 +154,7 @@ export default function Menu(props) {
             <img alt='Fiserv developer logo' src='../logo-dark.svg'  style={{width: '80%'}} />
           </a>
           <br />
-          <Divider />
+          <Divider sx={{borderColor: theme.palette.darkGrey.main}} />
           <List>
               {routes.map((route, index) => {
                 if (route.type === 'component') {
@@ -173,7 +173,8 @@ export default function Menu(props) {
                 }
               })}
             </List>
-          <Divider />
+          <Divider sx={{borderColor: theme.palette.darkGrey.main}} />
+          <br />
           <IconButton 
             sx={{ color: 'var(--white)' }} 
             onClick={() => handleDrawerToggle()}>
@@ -194,7 +195,6 @@ export default function Menu(props) {
             </IconButton>
           </Box>         
           <br /><br />
-          <Divider />
         </Drawer>
       </Box>
     </React.Fragment>

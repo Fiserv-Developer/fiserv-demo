@@ -1,10 +1,10 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import BodyElement from "../Components/BodyElement";
+import BodyElement from "../BodyElement";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
-export default function ShopSuccess() {
+export default function CheckoutSuccess() {
   const theme = useTheme();
   
   return (

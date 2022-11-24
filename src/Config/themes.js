@@ -1,6 +1,7 @@
 export const light = {
   palette: {
     type: 'light',
+    // Dynamic colours
     primary: {
       main: '#FBFAFA',
     },
@@ -14,6 +15,10 @@ export const light = {
     menu: {
       main: '#111111',
     },
+    // Static colours
+    darkGrey: {
+      main: '#444444',
+    },
     green: {
       main: '#005989',
     },
@@ -22,6 +27,9 @@ export const light = {
     },
     orange: {
       main: '#FF6600',
+    },
+    white: {
+      main: '#FFFFFF',
     },
     // Used by `getContrastText()` to maximize the contrast between
     // the background and the text.
@@ -39,6 +47,7 @@ export const light = {
 export const dark = {
   palette: {
     type: 'dark',
+    // Dynamic colours
     primary: {
       main: '#232323',
     },
@@ -52,6 +61,10 @@ export const dark = {
     menu: {
       main: '#111111',
     },
+    // Static colours
+    darkGrey: {
+      main: '#444444',
+    },
     green: {
       main: '#005989',
     },
@@ -60,6 +73,9 @@ export const dark = {
     },
     orange: {
       main: '#FF6600',
+    },
+    white: {
+      main: '#FFFFFF',
     },
     // Used by `getContrastText()` to maximize the contrast between
     // the background and the text.

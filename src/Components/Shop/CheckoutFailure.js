@@ -1,10 +1,10 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import BodyElement from "../Components/BodyElement";
 import WarningIcon from '@mui/icons-material/Warning';
+import BodyElement from "../BodyElement";
 
-export default function ShopFailure() {
+export default function CheckoutFailure() {
   const theme = useTheme();
   
   return (
