@@ -1,6 +1,7 @@
 export const light = {
   palette: {
     type: 'light',
+    // Dynamic colours
     primary: {
       main: '#FBFAFA',
     },
@@ -14,14 +15,21 @@ export const light = {
     menu: {
       main: '#111111',
     },
+    // Static colours
+    darkGrey: {
+      main: '#444444',
+    },
     green: {
-      main: '#11C118',
+      main: '#005989',
     },
     red: {
-      main: '#FF2323',
+      main: '#91171F',
     },
     orange: {
       main: '#FF6600',
+    },
+    white: {
+      main: '#FFFFFF',
     },
     // Used by `getContrastText()` to maximize the contrast between
     // the background and the text.
@@ -31,7 +39,7 @@ export const light = {
     // E.g., shift from Red 500 to Red 300 or Red 700.
     tonalOffset: 0.2,
     zIndex:{
-        drawer:'red'
+      drawer: 'red'
     }
   },
 }
@@ -39,6 +47,7 @@ export const light = {
 export const dark = {
   palette: {
     type: 'dark',
+    // Dynamic colours
     primary: {
       main: '#232323',
     },
@@ -52,14 +61,21 @@ export const dark = {
     menu: {
       main: '#111111',
     },
+    // Static colours
+    darkGrey: {
+      main: '#444444',
+    },
     green: {
-      main: '#23FF23',
+      main: '#005989',
     },
     red: {
-      main: '#FF2323',
+      main: '#91171F',
     },
     orange: {
       main: '#FF6600',
+    },
+    white: {
+      main: '#FFFFFF',
     },
     // Used by `getContrastText()` to maximize the contrast between
     // the background and the text.

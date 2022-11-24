@@ -8,14 +8,14 @@ export default function Body() {
   const theme = useTheme();
   const location = useLocation();
   const [displayLocation, setDisplayLocation] = useState(location);
-  const [transitionStage, setTransistionStage] = useState("fadeIn");
+  const [transitionStage, setTransitionStage] = useState("fadeIn");
 
   useEffect(() => {
-    if (location !== displayLocation) setTransistionStage("fadeOut");
+    if (location.pathname !== displayLocation.pathname) setTransitionStage("fadeOut");
   }, [location, displayLocation]);
 
   return (
-    <Box
+    <Box 
       component="main"
       color={theme.palette.text.main} 
       backgroundColor={theme.palette.primary.main} 
@@ -23,7 +23,7 @@ export default function Body() {
       className={`${transitionStage}`}
       onAnimationEnd={() => {
         if (transitionStage === "fadeOut") {
-          setTransistionStage("fadeIn");
+          setTransitionStage("fadeIn");
           setDisplayLocation(location);
         }
       }}>

@@ -14,16 +14,18 @@ var bigDecimal = require('js-big-decimal');
 
 const zero = "0.00";
 
-export default function Fundings(props) {
-  const [net, setNet] = useState(zero);
-  const [transactions, setTransactions] = useState(zero);
-  const [fees, setFees] = useState(zero);
+export default function Fees(props) {
+  const [total, setTotal] = useState(zero);
+  const [interchange, setInterchange] = useState(zero);
+  const [refunds, setRefunds] = useState(zero);
+  const [chargebacks, setChargebacks] = useState(zero);
   const [error, setError] = useState(false);
 
   const zeroOut = () => {
-    setNet(zero);
-    setTransactions(zero);
-    setFees(zero);
+    setTotal(zero);
+    setInterchange(zero);
+    setRefunds(zero);
+    setChargebacks(zero);
   };
 
   // get fundings
@@ -61,22 +63,20 @@ export default function Fundings(props) {
             }
           }).then(details => {
               const totals = calculateTotals(details);
-              setNet(n => bigDecimal.add(n, totals.net));
-              setTransactions(t => bigDecimal.add(t, totals.transactions));
-              setFees(f => bigDecimal.add(f, totals.fees));
+              setTotal(n => bigDecimal.add(n, totals.total));
+              setInterchange(i => bigDecimal.add(i, totals.interchange));
+              setRefunds(r => bigDecimal.add(r, totals.refunds));
+              setChargebacks(c => bigDecimal.add(c, totals.chargebacks));
             })
-            .catch(rejected => { 
-              zeroOut(); 
-              setError(true);
-            });
+            .catch(rejected => { zeroOut(); setError(true) });
         });
       })
       .catch(rejected => { zeroOut(); setError(true) });
   }, [props.apiKey, props.merchantId]);
 
-  if (net !== zero || transactions !== zero || fees !== zero) {
+  if (total !== zero || interchange !== zero || refunds !== zero || chargebacks !== zero) {
     return (
-      <FundingCard net={net} transactions={transactions} fees={fees}/>
+      <FeeCard total={total} interchange={interchange} refunds={refunds} chargebacks={chargebacks}/>
     );
   } else if (!error) {
     return (
@@ -89,21 +89,23 @@ export default function Fundings(props) {
   }
 }
 
-function FundingCard(props) {
+function FeeCard(props) {
   const theme = useTheme();
 
   const chartData = {
-    labels: ['Transactions', 'Deductions'], // todo split up deductions?
+    labels: ['Interchange', 'Refunds', 'Chargebacks'],
     datasets: [
       {
-        data: [props.transactions, props.fees],
+        data: [props.interchange, props.refunds, props.chargebacks],
         backgroundColor: [
           theme.palette.orange.main,
           theme.palette.green.main,
+          theme.palette.red.main,
         ],
         borderColor: [
           theme.palette.orange.main,
           theme.palette.green.main,
+          theme.palette.red.main,
         ],
         borderWidth: 1,
       },
@@ -122,32 +124,32 @@ function FundingCard(props) {
   return (
     <React.Fragment>
       <Typography component="h2" variant="h6" sx={{color: theme.palette.text.main, width: '100%'}} gutterBottom>
-        Yesterday's Funding Summary
+        Yesterday's Deduction Breakdown
       </Typography>
       <Box sx={{display: 'flex', height: '100%'}}>
-        <Doughnut options={options} data={chartData} style={{maxWidth: '260px', maxHeight: '150px'}}/>
+        <Doughnut options={options} data={chartData} style={{maxWidth: '260px', maxHeight: '150px'}}/>        
       </Box>
     </React.Fragment>
   );
 }
 
 function calculateTotals(fundingDetails)  {
-  var net = 0;
-  var transactions = 0;
-  var fees = 0;
+  var total = 670;
+  var interchange = 0;
+  var refunds = 550;
+  var chargebacks = 120;
   for (var i = 0; i < fundingDetails.length; i++) {
-    const netAmount = parseFloat(fundingDetails[i].financial.netAmount);
-    net += netAmount;
-    if (netAmount > 0) {
-      transactions += netAmount
-    } else {
-      fees += netAmount;
-    }
+    const amount = parseFloat(fundingDetails[i].financial.netAmount);
+    if (fundingDetails[i].type.code === '832') {
+      total += -amount;
+      interchange += -amount;
+    }// todo other types if we had them in sandbox
   }
 
   return {
-    net: net.toFixed(2),
-    transactions: transactions.toFixed(2),
-    fees: fees.toFixed(2),
+    total: '-' + total.toFixed(2),
+    interchange: '-' + interchange.toFixed(2),
+    refunds: '-' + refunds.toFixed(2),
+    chargebacks: '-' + chargebacks.toFixed(2),
   };
 }

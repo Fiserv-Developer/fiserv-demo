@@ -69,14 +69,14 @@ function StatementsTable(props) {
   const rows = mapStatements(props.statements);
   const columns = [
     { 
-      field: 'year', headerName: 'Year', width: 150, align: 'center', headerAlign: 'center',
+      field: 'year', headerName: 'Year', align: 'center', headerAlign: 'center',
     },
     { 
-      field: 'month', headerName: 'Month', width: 150, align: 'center', headerAlign: 'center',
+      field: 'month', headerName: 'Month', align: 'center', headerAlign: 'center',
       sortComparator: (v1, v2) => new Date(`${v1} 1, 2022`).getMonth() - new Date(`${v2} 1, 2022`).getMonth(),
     },
     { 
-      field: 'id', headerName: '', width: 150, align: 'center', headerAlign: 'center',
+      field: 'id', headerName: '', align: 'center', headerAlign: 'center',
       renderCell: (params) => {
         return (
           <Button onClick={() => downloadPdf(props.apiKey, params.value, props.setDownloadStatement)}>View</Button>
@@ -93,14 +93,21 @@ function StatementsTable(props) {
       </Typography>
       <DataGrid rows={rows} columns={columns} 
         sx={{
-          height: '100%', minHeight: '300px', maxHeight: '300px', color: theme.palette.text.main,
+          height: '100%', color: theme.palette.text.main,
           '& .MuiDataGrid-cellContent, & .MuiDataGrid-columnHeaderTitleContainer, & .MuiButton-root, & .MuiTablePagination-displayedRows, & .MuiTablePagination-actions': {
             color: theme.palette.text.main
           },
           
         }}
-        autoPageSize
+        autoHeight
         pagination
+        disableSelectionOnClick
+        rowsPerPageOptions={[7, 10, 12]}
+        initialState={{
+          pagination: {
+            pageSize: 7,
+          },
+        }}
         componentsProps={{
           toolbar: {
             sx: {
@@ -109,7 +116,7 @@ function StatementsTable(props) {
               },
             }
           }
-      }}/>
+        }}/>
     </Box>
   );
 }

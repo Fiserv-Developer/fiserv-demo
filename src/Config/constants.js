@@ -8,3 +8,10 @@ export const config = {
   paymentIntegration: "config-paymentIntegration",
   merchantId: "config-merchantId",
 }
+
+export const queryParams = {
+  success: 'success',
+  failure: 'failure',
+  basket: 'basket',
+  shipping: 'shipping'
+}
