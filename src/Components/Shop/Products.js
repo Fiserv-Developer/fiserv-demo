@@ -132,16 +132,20 @@ function Product(props) {
 function BasketInfo(props) {
   const items = props.basket.reduce((partialSum, item) => partialSum + item.quantity, 0);
 
-  return (
-    <Box sx={{ position: 'absolute', right: '15px', top: '15px' }}>
-      <Paper>
-        <IconButton onClick={props.handleBasketOpen}>
-          <Badge badgeContent={items} color="primary">
-            <ShoppingBasketIcon />
-          </Badge>
-        </IconButton>
-      </Paper>
-    </Box>
-  )
+  if (items > 0) {
+    return (
+      <Box sx={{ position: 'absolute', right: '15px', top: '15px' }}>
+        <Paper>
+          <IconButton onClick={props.handleBasketOpen}>
+            <Badge badgeContent={items} color="primary">
+              <ShoppingBasketIcon />
+            </Badge>
+          </IconButton>
+        </Paper>
+      </Box>
+    );
+  } else {
+    return (null);
+  }
 }
 

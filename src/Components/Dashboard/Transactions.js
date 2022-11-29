@@ -48,7 +48,7 @@ function TransactionsTable(props) {
   const rows = mapTransactions(props.transactions);
   const columns = [
     { 
-      field: 'status', headerName: 'Status', width: 150, align: 'center', headerAlign: 'center',
+      field: 'status', headerName: 'Status', width: 150, align: 'center', headerAlign: 'center', flex: 0.1,
       renderCell: (params) => {
         if (params.value === 'CLEARED') {
           return <CheckCircleIcon />
@@ -58,13 +58,13 @@ function TransactionsTable(props) {
       },
     },
     { 
-      field: 'authorised', headerName: 'Authorised', width: 300, align: 'center', headerAlign: 'center',
+      field: 'authorised', headerName: 'Authorised', width: 300, align: 'center', headerAlign: 'center', flex: 0.2,
     },
     { 
-      field: 'posted', headerName: 'Cleared', width: 300, align: 'center', headerAlign: 'center',
+      field: 'posted', headerName: 'Cleared', width: 300, align: 'center', headerAlign: 'center', flex: 0.2,
     },
     { 
-      field: 'channel', headerName: 'Channel', width: 150, align: 'center', headerAlign: 'center',
+      field: 'channel', headerName: 'Channel', width: 150, align: 'center', headerAlign: 'center', flex: 0.1,
       renderCell: (params) => {
         if (params.value === 'ECOMMERCE') {
           return <LanguageIcon />
@@ -74,7 +74,7 @@ function TransactionsTable(props) {
       },
     },
     { 
-      field: 'method', headerName: 'Method', width: 150, align: 'center', headerAlign: 'center',
+      field: 'method', headerName: 'Method', width: 150, align: 'center', headerAlign: 'center', flex: 0.2,
       renderCell: (params) => {
         return (
           <Method type={params.value}/>
@@ -82,7 +82,7 @@ function TransactionsTable(props) {
       },
     },
     { 
-      field: 'amount', headerName: 'Amount', width: 150, align: 'center', headerAlign: 'center',
+      field: 'amount', headerName: 'Amount', width: 150, align: 'center', headerAlign: 'center', flex: 0.2,
     }
   ];
 

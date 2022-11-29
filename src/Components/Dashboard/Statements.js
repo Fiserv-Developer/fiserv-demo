@@ -66,14 +66,14 @@ function StatementsTable(props) {
   const rows = mapStatements(props.statements);
   const columns = [
     { 
-      field: 'year', headerName: 'Year', align: 'center', headerAlign: 'center',
+      field: 'year', headerName: 'Year', align: 'center', headerAlign: 'center', flex: 1,
     },
     { 
-      field: 'month', headerName: 'Month', align: 'center', headerAlign: 'center',
+      field: 'month', headerName: 'Month', align: 'center', headerAlign: 'center', flex: 1,
       sortComparator: (v1, v2) => new Date(`${v1} 1, 2022`).getMonth() - new Date(`${v2} 1, 2022`).getMonth(),
     },
     { 
-      field: 'id', headerName: '', align: 'center', headerAlign: 'center',
+      field: 'id', headerName: 'Actions', align: 'center', headerAlign: 'center', flex: 1,
       renderCell: (params) => {
         return (
           <Button onClick={() => downloadPdf(props.apiKey, params.value, props.setDownloadStatement)}>View</Button>
