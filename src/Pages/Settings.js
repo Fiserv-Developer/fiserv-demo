@@ -1,4 +1,4 @@
-import { Alert, MenuItem, Select, Snackbar } from '@mui/material';
+import { Alert, Link, MenuItem, Select, Snackbar } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import BodyElement from '../Components/BodyElement';
 import KeyFormControl from '../Components/Settings/KeyFormControl';
@@ -69,7 +69,7 @@ export default function Settings() {
       <BodyElement xs={12} md={6}>
         <h2>Sandbox Authentication</h2>
         <p>
-          Your <strong>API Key</strong> and <strong>Secret Key</strong> can be found via our <a href="https://portal.fiserv.dev">portal</a>, 
+          Your <strong>API Key</strong> and <strong>Secret Key</strong> can be found via our <Link href="https://portal.fiserv.dev">portal</Link>, 
           make sure to use <strong>Sandbox</strong> keys and <i>not</i> production!
         </p>
 
@@ -123,7 +123,8 @@ export default function Settings() {
           id="merchantId"
           value={merchantId}
           label="Merchant ID"
-          onChange={(e) => onSettingChange(e.target.value, setMerchantId) }>
+          onChange={(e) => onSettingChange(e.target.value, setMerchantId) }
+        >
           <MenuItem value="">ALL</MenuItem>
           <MenuItem value="60001">60001</MenuItem>
           <MenuItem value="60002">60002</MenuItem>

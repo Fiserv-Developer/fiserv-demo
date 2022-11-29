@@ -1,12 +1,10 @@
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import BodyElement from "../BodyElement";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 export default function CheckoutSuccess() {
-  const theme = useTheme();
-  
   return (
     <Box style={{ textAlign: 'center', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0 auto'}}>
       <Box style={{display: 'block' }}>
@@ -14,14 +12,13 @@ export default function CheckoutSuccess() {
           <ThumbUpIcon style={{ fontSize: '4em', margin: '0 auto', marginBottom: '0.5em',}}/>
           <Typography gutterBottom component="p" variant="h6" 
             style={{
-              color: theme.palette.text.main,
               margin: '0 auto',
               marginBottom: '1em',
             }}>
             Your transaction was successful!
           </Typography>
           <Link to="/shop" style={ {margin: '0 auto', marginBottom: '1em', }}>
-            <Button style={{color: theme.palette.text.main}}>Continue Shopping</Button>
+            <Button>Continue Shopping</Button>
           </Link>
       </BodyElement>
       </Box>

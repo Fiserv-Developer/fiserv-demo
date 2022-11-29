@@ -7,7 +7,7 @@ export default function Checkout(props) {
   const theme = useTheme();
 
   const backToBasket = () => {
-    props.handleCheckoutClose(); // TODO animate
+    props.handleCheckoutClose();
     props.handleBasketOpen();
   }
 
@@ -28,7 +28,7 @@ export default function Checkout(props) {
         p: 4,
       }}>
         <Paper
-          sx={{ backgroundColor: theme.palette.primary.main, p: 4 }} 
+          sx={{ p: 4 }} 
           className={props.checkoutAnimationState} 
           onAnimationEnd={() => {
             if (props.checkoutAnimationState === "contract") {
@@ -128,19 +128,19 @@ export default function Checkout(props) {
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+                control={<Checkbox name="saveAddress" value="yes" />}
                 label="Use this address for payment details"
               />
             </Grid>
           </Grid>
-          <Divider sx={{ borderColor: theme.palette.primary.main, margin: 4}}/>
+          <Divider sx={{ borderColor: theme.palette.background.default, margin: 4}}/>
           <Button 
-            sx={{color: theme.palette.orange.main, left: '10px', bottom: '10px', position: 'fixed'}}
+            sx={{ left: '10px', bottom: '10px', position: 'fixed'}}
             onClick={backToBasket}>
             <ArrowBackIcon /> Back
           </Button>
           <Button 
-            sx={{color: theme.palette.white.main, backgroundColor: theme.palette.orange.main, right: '10px', bottom: '10px', position: 'fixed'}}
+            sx={{color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, right: '10px', bottom: '10px', position: 'fixed'}}
             onClick={() => { props.handleProcessingOpen(); props.checkout(); }}>
             <PaymentIcon /> Pay
           </Button>

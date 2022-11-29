@@ -1,8 +1,7 @@
-import { Box, Modal, Paper, useTheme } from "@mui/material";
+import { Box, Modal, Paper } from "@mui/material";
 import Placeholder from "../Placeholder";
 
 export default function Processing(props) {
-  const theme = useTheme();
 
   return (
     <Modal
@@ -21,7 +20,7 @@ export default function Processing(props) {
         p: 4,
       }}>
         <Paper
-          sx={{ backgroundColor: theme.palette.primary.main, p: 4 }} 
+          sx={{ p: 4 }} 
           className={props.processingAnimationState}>
           <Placeholder />
         </Paper>

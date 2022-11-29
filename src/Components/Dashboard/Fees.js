@@ -5,11 +5,11 @@ import { config } from '../../Config/constants';
 import { fetchWithRetry } from '../../Config/utils';
 import Error from '../Error';
 import Placeholder from '../Placeholder';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { Box } from '@mui/material';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+Chart.register(ArcElement, Tooltip, Legend);
 var bigDecimal = require('js-big-decimal');
 
 const zero = "0.00";
@@ -20,6 +20,7 @@ export default function Fees(props) {
   const [refunds, setRefunds] = useState(zero);
   const [chargebacks, setChargebacks] = useState(zero);
   const [error, setError] = useState(false);
+  const [processing, setProcessing] = useState(true);
 
   const zeroOut = () => {
     setTotal(zero);
@@ -31,6 +32,7 @@ export default function Fees(props) {
   // get fundings
   useEffect(() => {
     setError(false);
+    setProcessing(true);
 
     // get yesterdays date
     const yesterday = new Date()
@@ -45,52 +47,64 @@ export default function Fees(props) {
       headers['Merchant-Id'] = props.merchantId;
     }
 
+    // so we know when we're finished calculating
+    var count = 0;
+
     // make api call to get fundings
     fetchWithRetry(config.baseUrl + '/fundings?sort=-funded&fundedAfter=' + yesterdayISO + '&fundedBefore=' + yesterdayISO, {
       method: 'GET',
       headers: headers,
     }).then(fundings => {
-        zeroOut();
+      zeroOut();
 
-        // get all details and sum up the values
-        fundings.forEach(funding => {
-          const url = config.baseUrl + '/fundings/' + funding.id + "/details";
-          fetchWithRetry(url, {
-            method: 'GET',
-            headers: {
-              'Api-Key': props.apiKey,
-              'Accept': 'application/json'
-            }
-          }).then(details => {
-              const totals = calculateTotals(details);
-              setTotal(n => bigDecimal.add(n, totals.total));
-              setInterchange(i => bigDecimal.add(i, totals.interchange));
-              setRefunds(r => bigDecimal.add(r, totals.refunds));
-              setChargebacks(c => bigDecimal.add(c, totals.chargebacks));
-            })
-            .catch(rejected => { zeroOut(); setError(true) });
+      // get all details and sum up the values
+      fundings.forEach(funding => {
+        count = count + 1;
+        const url = config.baseUrl + '/fundings/' + funding.id + "/details";
+        fetchWithRetry(url, {
+          method: 'GET',
+          headers: {
+            'Api-Key': props.apiKey,
+            'Accept': 'application/json'
+          }
+        }).then(details => {
+          const totals = calculateTotals(details);
+          setTotal(n => bigDecimal.add(n, totals.total));
+          setInterchange(i => bigDecimal.add(i, totals.interchange));
+          setRefunds(r => bigDecimal.add(r, totals.refunds));
+          setChargebacks(c => bigDecimal.add(c, totals.chargebacks));
+          count = count - 1;
+          if (count < 1) {
+            setProcessing(false);
+          }
+        })
+        .catch(rejected => { 
+          zeroOut(); 
+          setError(true);
+          setProcessing(false);
         });
-      })
-      .catch(rejected => { zeroOut(); setError(true) });
+      });
+    })
+    .catch(rejected => { 
+      zeroOut(); 
+      setError(true);
+    });
   }, [props.apiKey, props.merchantId]);
 
-  if (total !== zero || interchange !== zero || refunds !== zero || chargebacks !== zero) {
-    return (
-      <FeeCard total={total} interchange={interchange} refunds={refunds} chargebacks={chargebacks}/>
-    );
-  } else if (!error) {
-    return (
-      <Placeholder />
-    );
+  if (processing) {
+    return (<Placeholder />);
+  } else if (error) {
+    return (<Error />);
   } else {
     return (
-      <Error />
+      <FeeCard total={total} interchange={interchange} refunds={refunds} chargebacks={chargebacks}/>
     );
   }
 }
 
 function FeeCard(props) {
   const theme = useTheme();
+  Chart.defaults.color = theme.palette.text.primary;
 
   const chartData = {
     labels: ['Interchange', 'Refunds', 'Chargebacks'],
@@ -98,14 +112,14 @@ function FeeCard(props) {
       {
         data: [props.interchange, props.refunds, props.chargebacks],
         backgroundColor: [
-          theme.palette.orange.main,
-          theme.palette.green.main,
-          theme.palette.red.main,
+          theme.palette.primary.main,
+          theme.palette.secondary.light,
+          theme.palette.secondary.main,
         ],
         borderColor: [
-          theme.palette.orange.main,
-          theme.palette.green.main,
-          theme.palette.red.main,
+          theme.palette.primary.main,
+          theme.palette.secondary.light,
+          theme.palette.secondary.main,
         ],
         borderWidth: 1,
       },
@@ -123,7 +137,7 @@ function FeeCard(props) {
 
   return (
     <React.Fragment>
-      <Typography component="h2" variant="h6" sx={{color: theme.palette.text.main, width: '100%'}} gutterBottom>
+      <Typography component="h2" variant="h6" sx={{ width: '100%'}} gutterBottom>
         Yesterday's Deduction Breakdown
       </Typography>
       <Box sx={{display: 'flex', height: '100%'}}>
