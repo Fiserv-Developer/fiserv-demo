@@ -8,10 +8,10 @@ export default function Placeholder() {
   const theme = useTheme();
   return (
     <React.Fragment>
-      <Box style={{ textAlign: 'center', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0 auto'}}>
-        <Box style={{display: 'block'}}>
-          <CircularProgress style={{fontSize: '8em', color: theme.palette.text.faded}} />
-          <Typography style={{ color: theme.palette.text.faded, fontStyle: 'italic', fontWeight: 'bold' }}>Loading...</Typography>
+      <Box sx={{ textAlign: 'center', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0 auto'}}>
+        <Box sx={{ display: 'block' }}>
+          <CircularProgress sx={{fontSize: '8em', color: theme.palette.text.secondary}} />
+          <Typography sx={{ color: theme.palette.text.secondary, fontStyle: 'italic', fontWeight: 'bold' }}>Loading...</Typography>
         </Box>
       </Box>
     </React.Fragment>

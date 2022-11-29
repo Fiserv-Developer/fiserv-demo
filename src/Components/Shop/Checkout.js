@@ -1,15 +1,32 @@
 import { Box, Button, Checkbox, Divider, FormControlLabel, Grid, Modal, Paper, TextField, Typography, useTheme } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PaymentIcon from '@mui/icons-material/Payment';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function Checkout(props) {
   const theme = useTheme();
+  const [name, setName] = useState('');
+  const [addressLine1, setAddressLine1] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zip, setZip] = useState('');
+  const [country, setCountry] = useState('');
+  const [valid, setValid] = useState(false);
 
   const backToBasket = () => {
-    props.handleCheckoutClose(); // TODO animate
+    props.handleCheckoutClose();
     props.handleBasketOpen();
   }
+
+  const updateButtonState = () => {
+    if (name !== '' && addressLine1 !== '' && city !== '' && zip !== '' && country !== '' ) {
+      setValid(true);
+    } else {
+      setValid(false);
+    }
+  }
+
+  useEffect(() => updateButtonState(), [name, addressLine1, city, zip, country]);
 
   return (
     <Modal
@@ -28,124 +45,92 @@ export default function Checkout(props) {
         p: 4,
       }}>
         <Paper
-          sx={{ backgroundColor: theme.palette.primary.main, p: 4 }} 
+          sx={{ p: 4 }} 
           className={props.checkoutAnimationState} 
           onAnimationEnd={() => {
             if (props.checkoutAnimationState === "contract") {
               props.setCheckoutOpen(false);
-            }}}>
+            }
+          }}
+        >
           <Typography id="modal-modal-title" variant="h4" component="h2">
             Shipping
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Please enter your shipping details:
           </Typography>
+          <br />
           <Grid container item spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="firstName"
-                name="firstName"
-                label="First name"
-                fullWidth
-                autoComplete="given-name"
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="lastName"
-                name="lastName"
-                label="Last name"
-                fullWidth
-                autoComplete="family-name"
-                variant="standard"
-              />
+            <Grid item xs={12} sm={12}>
+              <AddressInput name="name" label="Name" auto="name" required={true}
+                stateValue={name} updateState={setName} updateButtonState={updateButtonState} />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                id="address1"
-                name="address1"
-                label="Address line 1"
-                fullWidth
-                autoComplete="shipping address-line1"
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="address2"
-                name="address2"
-                label="Address line 2"
-                fullWidth
-                autoComplete="shipping address-line2"
-                variant="standard"
-              />
+              <AddressInput name="address1" label="Address Line 1" auto="shipping address-line1" required={true}
+                stateValue={addressLine1} updateState={setAddressLine1} updateButtonState={updateButtonState} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="city"
-                name="city"
-                label="City"
-                fullWidth
-                autoComplete="shipping address-level2"
-                variant="standard"
-              />
+              <AddressInput name="city" label="City" stateValue={city} auto="shipping address-level2" required={true}
+                updateState={setCity} updateButtonState={updateButtonState} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                id="state"
-                name="state"
-                label="State/Province/Region"
-                fullWidth
-                variant="standard"
-              />
+              <AddressInput name="state" label="State / Region / Province" required={false} 
+                stateValue={state} updateState={setState} updateButtonState={updateButtonState} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="zip"
-                name="zip"
-                label="Zip / Postal code"
-                fullWidth
-                autoComplete="shipping postal-code"
-                variant="standard"
-              />
+              <AddressInput name="zip" label="Zip / Postal Code" auto="shipping postal-code" required={true}
+                stateValue={zip} updateState={setZip} updateButtonState={updateButtonState} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="country"
-                name="country"
-                label="Country"
-                fullWidth
-                autoComplete="shipping country"
-                variant="standard"
-              />
+              <AddressInput name="country" label="Country" required={true} auto="shipping country"
+                stateValue={country} updateState={setCountry} updateButtonState={updateButtonState} />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+                control={<Checkbox name="saveAddress" value="yes" />}
                 label="Use this address for payment details"
               />
             </Grid>
           </Grid>
-          <Divider sx={{ borderColor: theme.palette.primary.main, margin: 4}}/>
+          <Divider sx={{ borderColor: theme.palette.background.default, margin: 4}}/>
           <Button 
-            sx={{color: theme.palette.orange.main, left: '10px', bottom: '10px', position: 'fixed'}}
+            sx={{ left: '10px', bottom: '10px', position: 'fixed'}}
             onClick={backToBasket}>
             <ArrowBackIcon /> Back
           </Button>
-          <Button 
-            sx={{color: theme.palette.white.main, backgroundColor: theme.palette.orange.main, right: '10px', bottom: '10px', position: 'fixed'}}
-            onClick={() => { props.handleProcessingOpen(); props.checkout(); }}>
+          <Button disabled={!valid}
+            sx={{
+              color: theme.palette.primary.contrastText, 
+              backgroundColor: theme.palette.primary.main, 
+              right: '10px', bottom: '10px', position: 'fixed',
+              '&:hover': {
+                backgroundColor: theme.palette.primary.light, 
+              }
+            }}
+            onClick={() => { 
+              props.handleProcessingOpen(); 
+              props.checkout(); 
+            }}
+          >
             <PaymentIcon /> Pay
           </Button>
         </Paper>
       </Box>
     </Modal>
+  );
+}
+
+function AddressInput(props) {
+  return (
+    <TextField
+      required={props.required} fullWidth
+      id={props.name}
+      name={props.name}
+      label={props.label}
+      autoComplete={props.auto}
+      variant="standard"
+      value={props.stateValue}
+      onChange={(e) => props.updateState(e.target.value)}
+    />
   );
 }

@@ -31,7 +31,7 @@ export default function Basket(props) {
         p: 4,
       }}>
         <Paper
-          sx={{ backgroundColor: theme.palette.primary.main, p: 4, color: theme.palette.text.main, }} 
+          sx={{ p: 4 }} 
           className={props.basketAnimationState} 
           onAnimationEnd={() => {
             if (props.basketAnimationState === "contract") {
@@ -49,25 +49,25 @@ export default function Basket(props) {
                 {props.basket.map((item) => 
                   <TableRow key={item.name}>
                     <TableCell><img width='60px' alt={item.name + " product photo"} src={ "../products/" + item.name.toLowerCase() + ".jpeg" } /></TableCell>
-                    <TableCell><Typography sx={{color: theme.palette.text.main}}>{item.name}</Typography></TableCell>
-                    <TableCell><Typography sx={{color: theme.palette.text.main}}>£{item.value}</Typography></TableCell>
-                    <TableCell><Typography sx={{color: theme.palette.text.main}}>{item.quantity}</Typography></TableCell>
-                    <TableCell><Button onClick={() => removeItem(item.name)} sx={{color: theme.palette.text.main}}><PlaylistRemoveIcon /></Button></TableCell>
+                    <TableCell><Typography>{item.name}</Typography></TableCell>
+                    <TableCell><Typography>£{item.value}</Typography></TableCell>
+                    <TableCell><Typography>{item.quantity}</Typography></TableCell>
+                    <TableCell><Button onClick={() => removeItem(item.name)}><PlaylistRemoveIcon /></Button></TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </Box>
           <Typography sx={{ textAlign: 'right'}}>Total: £{basketTotal}</Typography>
-          <Divider sx={{ borderColor: theme.palette.primary.main, margin: 4}}/>
+          <Divider sx={{ borderColor: theme.palette.background.default, margin: 4}}/>
           <Button 
-            sx={{color: theme.palette.orange.main, left: '10px', bottom: '10px', position: 'fixed'}}
+            sx={{color: theme.palette.primary.main, left: '10px', bottom: '10px', position: 'fixed'}}
             onClick={props.handleBasketClose}>
             <ArrowBackIcon /> Continue Shopping
           </Button>
           {/* TODO only work if there are items in basket */}
           <Button 
-            sx={{color: theme.palette.white.main, backgroundColor: theme.palette.orange.main, right: '10px', bottom: '10px', position: 'fixed'}}
+            sx={{color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, right: '10px', bottom: '10px', position: 'fixed'}}
             onClick={props.handleCheckoutOpen}>
             <ShoppingCartCheckoutIcon /> Checkout
           </Button>

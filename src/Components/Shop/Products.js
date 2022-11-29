@@ -1,5 +1,5 @@
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import { Badge, Box, Button, IconButton, Paper, ThemeProvider, Typography, useTheme } from "@mui/material";
+import { Badge, Box, Button, IconButton, Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { products } from "../../Config/data";
 import BodyElement from "../BodyElement";
@@ -8,7 +8,6 @@ import Checkout from './Checkout';
 import Processing from './Processing';
 
 export default function Products(props) {
-  const theme = useTheme();
 
   // basket modal
   const [basketOpen, setBasketOpen] = useState(false);
@@ -47,8 +46,7 @@ export default function Products(props) {
 
   return (
     <React.Fragment>
-      <BasketInfo 
-        sx={{ backgroundColor: theme.palette.secondary.main }}
+      <BasketInfo
         basket={props.basket} handleBasketOpen={handleBasketOpen} />
       <BodyElement xs={12} md={12} lg={12}>
         <h1>Shop</h1>
@@ -63,8 +61,6 @@ export default function Products(props) {
 }
 
 function Product(props) {
-  const theme = useTheme();
-
   const addItem = (product) => {
     props.setBasket([ ...props.basket, {name: product.name, value: product.value, quantity: 1}]);
   };
@@ -112,19 +108,19 @@ function Product(props) {
   const buttons = basketHasItem(props.product.name) ? 
     (
       <Box sx={{display: 'flex', margin: '0 auto'}}>
-        <Button sx={{color: theme.palette.text.main}} onClick={() => decreaseQuantity(props.product.name)}>-</Button>
-        <Typography sx={{color: theme.palette.text.main, lineHeight: '40px', height: '40px'}}>{basketItemQuantity(props.product.name)}</Typography>
-        <Button sx={{color: theme.palette.text.main}} onClick={() => increaseQuantity(props.product.name)}>+</Button>
+        <Button onClick={() => decreaseQuantity(props.product.name)}>-</Button>
+        <Typography sx={{lineHeight: '40px', height: '40px'}}>{basketItemQuantity(props.product.name)}</Typography>
+        <Button onClick={() => increaseQuantity(props.product.name)}>+</Button>
       </Box>
     )
     :
     (
-      <Button sx={{color: theme.palette.text.main}} onClick={() => addItem(props.product)}>Add to basket</Button>
+      <Button onClick={() => addItem(props.product)}>Add to basket</Button>
     );
 
   return (
     <BodyElement xs={12} md={4} lg={3}>
-      <img alt={props.name + " product photo"} src={ "../products/" + props.product.name.toLowerCase() + ".jpeg" } />
+      <img alt={props.product.name + " product photo"} src={ "../products/" + props.product.name.toLowerCase() + ".jpeg" } />
       <p><b>{props.product.name}</b></p>
       <p>£{props.product.value}</p>
       {buttons}
@@ -134,22 +130,22 @@ function Product(props) {
 
 // TODO make this look good on mobile
 function BasketInfo(props) {
-  const theme = useTheme();
-
   const items = props.basket.reduce((partialSum, item) => partialSum + item.quantity, 0);
 
-  return (
-    <Box sx={{ background: theme.palette.secondary.main, position: 'absolute', right: '15px', top: '15px' }}>
-      <Paper sx={{ background: theme.palette.secondary.main }}>
-        <IconButton onClick={props.handleBasketOpen} style={{ color: theme.palette.text.main }}>
-          <ThemeProvider theme={theme}>
-            <Badge badgeContent={items} color="orange" sx={{ color: theme.palette.white.main }}>
-              <ShoppingBasketIcon sx={{ color: theme.palette.text.main }} />
+  if (items > 0) {
+    return (
+      <Box sx={{ position: 'absolute', right: '15px', top: '15px' }}>
+        <Paper>
+          <IconButton onClick={props.handleBasketOpen}>
+            <Badge badgeContent={items} color="primary">
+              <ShoppingBasketIcon />
             </Badge>
-          </ThemeProvider>
-        </IconButton>
-      </Paper>
-    </Box>
-  )
+          </IconButton>
+        </Paper>
+      </Box>
+    );
+  } else {
+    return (null);
+  }
 }
 

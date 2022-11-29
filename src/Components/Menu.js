@@ -48,7 +48,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
-    backgroundColor: theme.palette.menu.main,
+    backgroundColor: theme.palette.menu.background,
     ...(open && {
       ...openedMixin(theme),
       '& .MuiDrawer-paper': openedMixin(theme),
@@ -76,7 +76,7 @@ export default function Menu(props) {
   };
 
   const handleButtonBackground = (isActive) => {
-    return isActive ? { background: theme.palette.orange.main } : { background: 'transparent' };
+    return isActive ? { background: theme.palette.primary.main } : { background: 'transparent' };
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -89,7 +89,7 @@ export default function Menu(props) {
           display: { xs: 'block', sm: 'none' },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          backgroundColor: theme.palette.menu.main,
+          backgroundColor: theme.palette.menu.background,
         }}
       >
         <Toolbar>
@@ -117,7 +117,7 @@ export default function Menu(props) {
           sx={{
             display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-            '& .MuiDrawer-paperAnchorLeft': { backgroundColor: theme.palette.menu.main + ' !important'}
+            '& .MuiDrawer-paperAnchorLeft': { backgroundColor: theme.palette.menu.background + ' !important'}
           }}>
             <br />
             <img alt='Fiserv developer logo' src='../logo-dark.svg' width='80%' style={{margin: '0 auto'}} />
@@ -129,10 +129,10 @@ export default function Menu(props) {
                   return (
                   <NavLink key={index} to={route.url} style={({ isActive }) => handleButtonBackground(isActive)}>
                     <ListItem button sx={{paddingLeft: '20px', background: 'inherit'}} onClick={handleMobileDrawerToggle}>
-                      <ListItemIcon sx={{ color: 'var(--white)' }}>
+                      <ListItemIcon sx={{ color: theme.palette.menu.text }}>
                         {route.icon}
                       </ListItemIcon>
-                      <ListItemText primary={route.name} sx={{ color: 'var(--white)', textDecoration: 'none' }} />
+                      <ListItemText primary={route.name} sx={{ color: theme.palette.menu.text, textDecoration: 'none' }} />
                     </ListItem>
                   </NavLink>
                 );
@@ -148,23 +148,28 @@ export default function Menu(props) {
           sx={{
             display: { xs: 'none', sm: 'block',
             '& .MuiDrawer-paperAnchorLeft': { backgroundColor: theme.palette.menu.main + ' !important'}
-          }}}>
+          }}}
+        >
           <br />
           <a href="https://fiserv.dev" target="_blank" rel="noreferrer noopener" style={{width: '100%', textAlign: 'center'}}>
             <img alt='Fiserv developer logo' src='../logo-dark.svg'  style={{width: '80%'}} />
           </a>
           <br />
-          <Divider sx={{borderColor: theme.palette.darkGrey.main}} />
+          <Divider sx={{ borderColor: theme.palette.menu.line }} />
           <List>
               {routes.map((route, index) => {
                 if (route.type === 'component') {
                   return (
                     <NavLink key={index} to={route.url} style={({ isActive }) => handleButtonBackground(isActive)}>
-                      <ListItem button sx={{paddingLeft: '20px', background: 'inherit'}}>
-                        <ListItemIcon sx={{ color: 'var(--white)' }}>
+                      <ListItem button sx={{
+                        paddingLeft: '20px', 
+                        background: 'inherit !important', 
+                        '&:hover': { background: theme.palette.primary.light + ' !important' }
+                      }}>
+                        <ListItemIcon sx={{color: theme.palette.menu.text }}>
                           {route.icon}
                         </ListItemIcon>
-                        <ListItemText primary={route.name} sx={{ color: 'var(--white)', textDecoration: 'none' }} />
+                        <ListItemText primary={route.name} sx={{ textDecoration: 'none', color: theme.palette.menu.text }} />
                       </ListItem>
                     </NavLink>
                   );
@@ -173,10 +178,10 @@ export default function Menu(props) {
                 }
               })}
             </List>
-          <Divider sx={{borderColor: theme.palette.darkGrey.main}} />
+          <Divider sx={{ borderColor: theme.palette.menu.line }} />
           <br />
           <IconButton 
-            sx={{ color: 'var(--white)' }} 
+            sx={{ color: theme.palette.menu.text }} 
             onClick={() => handleDrawerToggle()}>
             {open ? <KeyboardDoubleArrowLeftIcon /> : <KeyboardDoubleArrowRightIcon />}
           </IconButton>
@@ -190,7 +195,7 @@ export default function Menu(props) {
               onClick={() => {
                 props.setThemeToggle(!props.themeToggle);
               }}
-              sx={{ color: theme.palette.orange.main, margin: 0}}>
+              sx={{ color: theme.palette.primary.main, margin: 0}}>
                 {icon}
             </IconButton>
           </Box>         

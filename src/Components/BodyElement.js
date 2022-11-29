@@ -9,11 +9,15 @@ export default function BodyElement(props) {
       <Paper
         sx={{
           p: 2,
-          color: theme.palette.text.main,
-          backgroundColor: theme.palette.secondary.main,
           height: '100%',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          '& .MuiLink-root': {
+            color: theme.palette.primary.main
+          },
+          '& .MuiLink-root:hover': {
+            color: theme.palette.primary.light
+          },
         }}>
         {props.children}
       </Paper>

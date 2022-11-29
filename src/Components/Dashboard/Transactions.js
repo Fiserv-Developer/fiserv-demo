@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { useTheme } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import Placeholder from '../Placeholder';
-import { config } from '../../Config/constants';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import LanguageIcon from '@mui/icons-material/Language';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import Typography from '@mui/material/Typography';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import React, { useEffect, useState } from 'react';
+import { config } from '../../Config/constants';
 import { fetchWithRetry } from '../../Config/utils';
 import Error from '../Error';
+import Placeholder from '../Placeholder';
 
 // TODO make this look better on mobile
 export default function Transactions(props) {
@@ -44,12 +45,10 @@ export default function Transactions(props) {
 }
 
 function TransactionsTable(props) {
-  const theme = useTheme();
-
   const rows = mapTransactions(props.transactions);
   const columns = [
     { 
-      field: 'status', headerName: 'Status', width: 150, align: 'center', headerAlign: 'center',
+      field: 'status', headerName: 'Status', width: 150, align: 'center', headerAlign: 'center', flex: 0.1,
       renderCell: (params) => {
         if (params.value === 'CLEARED') {
           return <CheckCircleIcon />
@@ -59,16 +58,23 @@ function TransactionsTable(props) {
       },
     },
     { 
-      field: 'authorised', headerName: 'Authorised', width: 300, align: 'center', headerAlign: 'center',
+      field: 'authorised', headerName: 'Authorised', width: 300, align: 'center', headerAlign: 'center', flex: 0.2,
     },
     { 
-      field: 'posted', headerName: 'Cleared', width: 300, align: 'center', headerAlign: 'center',
+      field: 'posted', headerName: 'Cleared', width: 300, align: 'center', headerAlign: 'center', flex: 0.2,
     },
     { 
-      field: 'channel', headerName: 'Channel', width: 150, align: 'center', headerAlign: 'center',
+      field: 'channel', headerName: 'Channel', width: 150, align: 'center', headerAlign: 'center', flex: 0.1,
+      renderCell: (params) => {
+        if (params.value === 'ECOMMERCE') {
+          return <LanguageIcon />
+        } else {
+          return <PointOfSaleIcon />
+        }
+      },
     },
     { 
-      field: 'method', headerName: 'Method', width: 150, align: 'center', headerAlign: 'center',
+      field: 'method', headerName: 'Method', width: 150, align: 'center', headerAlign: 'center', flex: 0.2,
       renderCell: (params) => {
         return (
           <Method type={params.value}/>
@@ -76,36 +82,18 @@ function TransactionsTable(props) {
       },
     },
     { 
-      field: 'amount', headerName: 'Amount', width: 150, align: 'center', headerAlign: 'center',
+      field: 'amount', headerName: 'Amount', width: 150, align: 'center', headerAlign: 'center', flex: 0.2,
     }
   ];
 
-  // todo review the master detail pro component
-  // const handleRowClick = (
-  //   params, // GridRowParams
-  //   event, // MuiEvent<React.MouseEvent<HTMLElement>>
-  //   details, // GridCallbackDetails
-  // ) => {
-  //   showDetail();
-  // };
-
-  // const showDetail = () => {
-  //   console.log("Showing grid item ifo")
-  // }
-
   return (
     <React.Fragment>
-      <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
+      <Typography component="h2" variant="h6" gutterBottom>
         Recent Transactions
       </Typography>
       <DataGrid rows={rows} columns={columns} 
         components={{ Toolbar: GridToolbar }} 
         autoHeight
-        sx={{
-          '& .MuiDataGrid-cellContent, & .MuiDataGrid-columnHeaderTitleContainer, & .MuiButton-root, & .MuiTablePagination-displayedRows, & .MuiTablePagination-actions': {
-            color: theme.palette.text.main
-          },
-        }}
         checkboxSelection={true}
         disableSelectionOnClick
         rowsPerPageOptions={[5, 10, 20]}
@@ -113,16 +101,7 @@ function TransactionsTable(props) {
           pagination: {
             pageSize: 10,
           },
-        }}
-        componentsProps={{
-          toolbar: {
-            sx: {
-              '& .MuiButton-root': {
-                color: theme.palette.text.main
-              }
-            }
-          }
-      }}/>
+        }}/>
     </React.Fragment>
   )
 }

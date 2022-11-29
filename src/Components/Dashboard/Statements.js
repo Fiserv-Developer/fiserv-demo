@@ -1,5 +1,4 @@
 import { Box, Button, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { config } from '../../Config/constants';
@@ -64,19 +63,17 @@ export default function Statements(props) {
 }
 
 function StatementsTable(props) {
-  const theme = useTheme();
-
   const rows = mapStatements(props.statements);
   const columns = [
     { 
-      field: 'year', headerName: 'Year', align: 'center', headerAlign: 'center',
+      field: 'year', headerName: 'Year', align: 'center', headerAlign: 'center', flex: 1,
     },
     { 
-      field: 'month', headerName: 'Month', align: 'center', headerAlign: 'center',
+      field: 'month', headerName: 'Month', align: 'center', headerAlign: 'center', flex: 1,
       sortComparator: (v1, v2) => new Date(`${v1} 1, 2022`).getMonth() - new Date(`${v2} 1, 2022`).getMonth(),
     },
     { 
-      field: 'id', headerName: '', align: 'center', headerAlign: 'center',
+      field: 'id', headerName: 'Actions', align: 'center', headerAlign: 'center', flex: 1,
       renderCell: (params) => {
         return (
           <Button onClick={() => downloadPdf(props.apiKey, params.value, props.setDownloadStatement)}>View</Button>
@@ -87,18 +84,11 @@ function StatementsTable(props) {
 
 
   return (
-    <Box style={{ overflow: 'auto', height: '100%'}}>
-      <Typography component="h2" variant="h6" color={theme.palette.text.main} gutterBottom>
+    <Box style={{ overflow: 'auto', height: '100%', width: '100%'}}>
+      <Typography component="h2" variant="h6" gutterBottom>
         Recent Statements
       </Typography>
-      <DataGrid rows={rows} columns={columns} 
-        sx={{
-          height: '100%', color: theme.palette.text.main,
-          '& .MuiDataGrid-cellContent, & .MuiDataGrid-columnHeaderTitleContainer, & .MuiButton-root, & .MuiTablePagination-displayedRows, & .MuiTablePagination-actions': {
-            color: theme.palette.text.main
-          },
-          
-        }}
+      <DataGrid rows={rows} columns={columns} sx={{ height: '100%', width: '100%', }}
         autoHeight
         pagination
         disableSelectionOnClick
@@ -107,15 +97,6 @@ function StatementsTable(props) {
           pagination: {
             pageSize: 7,
           },
-        }}
-        componentsProps={{
-          toolbar: {
-            sx: {
-              '& .MuiButton-root': {
-                color: theme.palette.text.main
-              },
-            }
-          }
         }}/>
     </Box>
   );

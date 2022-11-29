@@ -3,8 +3,10 @@ import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } fr
 
 export default function KeyFormControl(props) {
   return (
-    <FormControl variant="outlined" sx={{ marginBottom: "20px" }}>
-      <InputLabel htmlFor="outlined-adornment-password">{props.label}</InputLabel>
+    <FormControl variant="outlined" sx={{ marginBottom: "20px", }}>
+      <InputLabel htmlFor="outlined-adornment-password">
+        {props.label}
+      </InputLabel>
       <OutlinedInput
         label={props.label}
         type={props.display ? 'text' : 'password'}
@@ -18,10 +20,11 @@ export default function KeyFormControl(props) {
               onMouseDown={props.handleMouseDownPassword}
               edge="end"
             >
-              {props.display ? <VisibilityOff /> : <Visibility />}
+                {props.display ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           </InputAdornment>
-        }/>
+        }
+      />
     </FormControl>
   );
 }
