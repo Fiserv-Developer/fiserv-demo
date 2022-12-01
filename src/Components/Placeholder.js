@@ -1,19 +1,17 @@
-import React from 'react'
-import { useTheme } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
-
-import { Box, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import React from 'react';
+import { Typography } from '@mui/material';
+import { CenteredBox } from './CenteredBox';
 
 export default function Placeholder() {
   const theme = useTheme();
   return (
     <React.Fragment>
-      <Box sx={{ textAlign: 'center', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0 auto'}}>
-        <Box sx={{ display: 'block' }}>
-          <CircularProgress sx={{fontSize: '8em', color: theme.palette.text.secondary}} />
-          <Typography sx={{ color: theme.palette.text.secondary, fontStyle: 'italic', fontWeight: 'bold' }}>Loading...</Typography>
-        </Box>
-      </Box>
+      <CenteredBox>
+        <CircularProgress sx={{fontSize: '8em', color: theme.palette.text.secondary}} />
+        <Typography sx={{ color: theme.palette.text.secondary, fontStyle: 'italic', fontWeight: 'bold' }}>Loading...</Typography>
+      </CenteredBox>
     </React.Fragment>
   );
 }

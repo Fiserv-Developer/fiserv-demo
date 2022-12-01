@@ -47,15 +47,14 @@ export default function Products(props) {
 
   return (
     <React.Fragment>
-      <BasketInfo
-        basket={props.basket} handleBasketOpen={handleBasketOpen} />
+      <BasketInfo basket={props.basket} handleBasketOpen={handleBasketOpen} />
       <BodyElement xs={12} md={12} lg={12}>
         <Title icon={<ShoppingBasketIcon />} primary="Shop" secondary="Select your favourite products and purchase them using our streamlined Checkout flow" />
       </BodyElement>
       {products.map((product) => <Product key={product.name} basket={props.basket} setBasket={props.setBasket} product={product} />)}
-      <Basket open={basketOpen} basket={props.basket} setBasket={props.setBasket} handleCheckoutOpen={handleCheckoutOpen} setBasketOpen={setBasketOpen} handleBasketClose={handleBasketClose} basketAnimationState={basketAnimationState} />
-      <Checkout open={checkoutOpen} basket={props.basket} setCheckoutOpen={setCheckoutOpen} handleCheckoutClose={handleCheckoutClose} handleBasketOpen={handleBasketOpen} checkoutAnimationState={checkoutAnimationState} checkout={props.checkout} handleProcessingOpen={handleProcessingOpen}/>
-      <Processing open={processingOpen} setProcessingOpen={setProcessingOpen} handleProcessingClose={handleProcessingClose} processingAnimationState={processingAnimationState} />
+      <Basket open={basketOpen} basket={props.basket} setBasket={props.setBasket} handleCheckoutOpen={handleCheckoutOpen} setOpen={setBasketOpen} handleClose={handleBasketClose} animationState={basketAnimationState} />
+      <Checkout open={checkoutOpen} basket={props.basket} setOpen={setCheckoutOpen} handleClose={handleCheckoutClose} handleBasketOpen={handleBasketOpen} animationState={checkoutAnimationState} checkout={props.checkout} handleProcessingOpen={handleProcessingOpen}/>
+      <Processing open={processingOpen} setOpen={setProcessingOpen} handleClose={handleProcessingClose} animationState={processingAnimationState} />
     </React.Fragment>
   );
 }
@@ -128,7 +127,7 @@ function Product(props) {
   );
 } 
 
-// TODO make this look good on mobile
+// TODO make this track scroll
 function BasketInfo(props) {
   const items = props.basket.reduce((partialSum, item) => partialSum + item.quantity, 0);
 

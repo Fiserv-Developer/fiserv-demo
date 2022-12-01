@@ -1,8 +1,9 @@
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import EmailIcon from '@mui/icons-material/Email';
-import { Box, Button, Divider, Grid, Modal, Paper, TextField, useTheme } from "@mui/material";
+import { Button, Grid, TextField, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { ResponsiveModal } from '../ResponsiveModal';
 import { Title } from '../Title';
 
 export default function SendInvoice(props) {
@@ -18,69 +19,60 @@ export default function SendInvoice(props) {
     }
   }, [email]);
 
-  return (
-    <Modal
-      open={props.open}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '90%',
-        maxWidth: '600px',
-        boxShadow: 24,
-        p: 4,
-      }}>
-        <Paper
-          sx={{ p: 4 }} 
-          className={props.sendInvoiceAnimationState} 
-          onAnimationEnd={() => {
-            if (props.sendInvoiceAnimationState === "contract") {
-              props.setSendInvoiceOpen(false);
-            }
-          }}
-        >
-          <Title icon={<CheckBoxIcon />} primary="Send Invoice" secondary="Enter an email address to send to" />
-          <Divider />
-          <br />
-          <Grid container item spacing={3}>
-            <Grid item xs={12}>
-              <TextField
-                required fullWidth
-                id="email"
-                name="email"
-                label="Email Address"
-                variant="standard"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}/>
-            </Grid>
-          </Grid>
-        
-          <Divider sx={{ borderColor: theme.palette.background.default, margin: 4}}/>
-          <Button 
-            sx={{color: theme.palette.primary.main, left: '10px', bottom: '10px', position: 'fixed'}}
-            onClick={props.handleSendInvoiceClose}>
-            <ArrowBackIcon /> Cancel
-          </Button>
-          <Button
-            disabled={!valid}
-            sx={{
-              color: theme.palette.primary.contrastText, 
-              backgroundColor: theme.palette.primary.main, 
-              right: '10px', bottom: '10px', position: 'fixed',
-              '&:hover': {
-                backgroundColor: theme.palette.primary.light, 
-              }
-            }}
-            onClick={() => props.handleSendInvoiceClose()}
-          >
-            <EmailIcon /> Send
-          </Button>
-        </Paper>
-      </Box>
-    </Modal>
+  const modalTitle = (
+    <Title icon={<CheckBoxIcon />} primary="Send Invoice" secondary="Enter an email address to send to" />
   );
+
+  const modalContent = (
+    <Grid container item spacing={3}>
+      <Grid item xs={12}>
+        <TextField
+          required fullWidth
+          id="email"
+          name="email"
+          label="Email Address"
+          variant="standard"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}/>
+      </Grid>
+    </Grid>
+  );
+
+  const modalButtons = (
+    <React.Fragment>
+      <Button 
+        sx={{
+          color: theme.palette.primary.main, 
+          left: '20px', 
+          position: 'absolute'
+        }}
+        onClick={props.handleClose}>
+        <ArrowBackIcon /> Cancel
+      </Button>
+
+      <Button
+        disabled={!valid}
+        sx={{
+          color: theme.palette.primary.contrastText, 
+          backgroundColor: theme.palette.primary.main, 
+          '&:hover': {
+            backgroundColor: theme.palette.primary.light, 
+          }
+        }}
+        onClick={() => props.handleClose()}
+      >
+        <EmailIcon /> Send
+      </Button>
+    </React.Fragment>
+  )
+
+  return (
+    <ResponsiveModal 
+      title={modalTitle} 
+      content={modalContent} 
+      buttons={modalButtons} 
+      open={props.open} 
+      setOpen={props.setOpen} 
+      animationState={props.animationState} />
+  )
 }

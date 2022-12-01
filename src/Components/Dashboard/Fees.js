@@ -22,13 +22,6 @@ export default function Fees(props) {
   const [error, setError] = useState(false);
   const [processing, setProcessing] = useState(true);
 
-  const zeroOut = () => {
-    setTotal(zero);
-    setInterchange(zero);
-    setRefunds(zero);
-    setChargebacks(zero);
-  };
-
   // get fundings
   useEffect(() => {
     setError(false);
@@ -55,8 +48,6 @@ export default function Fees(props) {
       method: 'GET',
       headers: headers,
     }).then(fundings => {
-      zeroOut();
-
       // get all details and sum up the values
       fundings.forEach(funding => {
         count = count + 1;
@@ -79,15 +70,14 @@ export default function Fees(props) {
           }
         })
         .catch(rejected => { 
-          zeroOut(); 
           setError(true);
           setProcessing(false);
         });
       });
     })
     .catch(rejected => { 
-      zeroOut(); 
       setError(true);
+      setProcessing(false);
     });
   }, [props.apiKey, props.merchantId]);
 
