@@ -5,6 +5,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import { Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import React from 'react';
 import BodyElement from '../Components/BodyElement';
 import { Title } from '../Components/Title';
@@ -33,12 +34,18 @@ export default function Home() {
         </Typography>
         <List>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => window.location = "/settings" }>
-              <ListItemIcon>
-                <SettingsIcon sx={{ color: theme.palette.primary.main }} />
-              </ListItemIcon>
-              <ListItemText primary="Settings" secondary="Enter your API credentials and prepare any custom demo configuration" />
-            </ListItemButton>
+            <RouterLink to="/settings">
+              <ListItemButton>
+                <ListItemIcon>
+                  <SettingsIcon sx={{ color: theme.palette.primary.main }} />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Settings" 
+                  secondary="Enter your API credentials and prepare any custom demo configuration"
+                  sx={{ color: theme.palette.text.primary }}
+                />
+              </ListItemButton>
+            </RouterLink>
           </ListItem>
         </List>
       </BodyElement>
@@ -48,28 +55,46 @@ export default function Home() {
         <br />
         <List>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => window.location = "/dashboard" }>
-              <ListItemIcon>
-                <DashboardIcon sx={{ color: theme.palette.primary.main }} />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" secondary="An example merchant dashboard using our Transactional Data and Statements APIs" />
-            </ListItemButton>
+            <RouterLink to="/dashboard">
+              <ListItemButton>
+                <ListItemIcon>
+                  <DashboardIcon sx={{ color: theme.palette.primary.main }} />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Dashboard" 
+                  secondary="An example merchant dashboard using our Transactional Data and Statements APIs" 
+                  sx={{ color: theme.palette.text.primary }}
+                />
+              </ListItemButton>
+            </RouterLink>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => window.location = "/shop" }>
-              <ListItemIcon>
-                <ShoppingBasket sx={{ color: theme.palette.primary.main }} />
-              </ListItemIcon>
-              <ListItemText primary="Shop" secondary="An example ecommerce store using our Checkouts API" />
-            </ListItemButton>
+            <RouterLink to="/shop">
+              <ListItemButton>
+                <ListItemIcon>
+                  <ShoppingBasket sx={{ color: theme.palette.primary.main }} />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Shop" 
+                  secondary="An example ecommerce store using our Checkouts API" 
+                  sx={{ color: theme.palette.text.primary }}
+                />
+              </ListItemButton>
+            </RouterLink>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => window.location = "/shop" }>
+          <RouterLink to="/invoices">
+            <ListItemButton>
               <ListItemIcon>
                 <ReceiptIcon sx={{ color: theme.palette.primary.main }} />
               </ListItemIcon>
-              <ListItemText primary="Invoices" secondary="An example invoice management suite using our Payment Links API" />
+              <ListItemText 
+                primary="Invoices" 
+                secondary="An example invoice management suite using our Payment Links API" 
+                sx={{ color: theme.palette.text.primary }}
+              />
             </ListItemButton>
+          </RouterLink>
           </ListItem>
         </List>
       </BodyElement>
