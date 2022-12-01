@@ -8,9 +8,11 @@ import { getValueOrDefault } from '../Config/utils';
 import AddIcon from '@mui/icons-material/Add';
 import NewInvoice from '../Components/Invoices/NewInvoice';
 import CreatedInvoice from '../Components/Invoices/CreatedInvoice';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { CenteredBox } from '../Components/CenteredBox';
 import { Title } from '../Components/Title';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 export default function Invoices() {
   const theme = useTheme();
@@ -78,8 +80,10 @@ export default function Invoices() {
             color: theme.palette.primary.contrastText, 
             backgroundColor: theme.palette.primary.main, 
             '&:hover': {
-              backgroundColor: theme.palette.primary.light 
-            }
+              backgroundColor: theme.palette.primary.light,
+            },
+            position: 'absolute',
+            right: '44px',
           }} 
           onClick={handleNewInvoiceOpen}
         >
@@ -138,7 +142,10 @@ function InvoicesTable(props) {
       field: 'link', headerName: 'Link', align: 'center', headerAlign: 'center', flex: 1,
       renderCell: (params) => {
         return (
-          <Button onClick={() => window.location.href = params.value}>GO</Button>
+          <React.Fragment>
+            <Button onClick={() => window.location.href = params.value} sx={{marginRight: '10px'}}><ExitToAppIcon /> Go</Button>
+            <Button onClick={() => navigator.clipboard.writeText(params.value)}><ContentCopyIcon /> Copy</Button>
+          </React.Fragment>
         );
       },
     }

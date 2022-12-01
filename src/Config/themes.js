@@ -8,6 +8,7 @@ const colours = {
   blueTranslucent: '#11686C40',
   green: '#85CB33',
   grey: '#656565',
+  greyMedium: '#858585',
   greyDark: '#232323',
   greyDarkAccent: '#424242',
   greyLight: '#FBFAFA',
@@ -75,7 +76,7 @@ export const dark = {
     ...commonPalette,
     text: {
       primary: colours.greyMuted,
-      secondary: colours.grey,
+      secondary: colours.greyMedium,
     },
     background: {
       paper: colours.black,
