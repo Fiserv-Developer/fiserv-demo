@@ -18,16 +18,21 @@ export function ResponsiveModal(props) {
             transform: 'translate(-50%, -50%)',
             width: '90%',
             maxWidth: '600px',
-            boxShadow: 24,
             p: 1,
           },
           [theme.breakpoints.down('md')]: { 
             width: '100%', 
             height: '100vh', 
-          }
+          },
         }}
       >
         <Paper
+          className={props.animationState}
+          onAnimationEnd={() => {
+            if (props.animationState === "contract") {
+              props.setOpen(false);
+            }
+          }}
           sx={{ 
             p: 4, 
             [theme.breakpoints.down('sm')]: { 
@@ -35,12 +40,6 @@ export function ResponsiveModal(props) {
               borderRadius: 0, 
               height: '100vh', 
             } 
-          }} 
-          className={props.animationState} 
-          onAnimationEnd={() => {
-            if (props.animationState === "contract") {
-              props.setOpen(false);
-            }
           }}
         >
           {props.title}
