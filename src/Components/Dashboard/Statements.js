@@ -88,7 +88,9 @@ function StatementsTable(props) {
       <Typography component="h2" variant="h6" gutterBottom>
         Recent Statements
       </Typography>
-      <DataGrid rows={rows} columns={columns} sx={{ height: '100%', width: '100%', }}
+      <DataGrid 
+        rows={rows} columns={columns} 
+        sx={{ height: '100%', width: '100%', }}
         autoHeight
         pagination
         disableSelectionOnClick
