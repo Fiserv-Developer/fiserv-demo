@@ -3,6 +3,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import { Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import BodyElement from '../Components/BodyElement';
@@ -15,16 +16,21 @@ export default function Home() {
     <React.Fragment>
       <BodyElement xs={12}>
         <Title icon={<HomeIcon />} primary="Home" secondary="The fiserv.dev integration demo landing page" />
-      </BodyElement>
-
-      <BodyElement xs={12}>
+        <br />
         <Typography variant="p" sx={{pb: '20px'}}>
           Welcome to the Fiserv EMEA Developer Platform Demo, designed to showcase usages of our APIs 
           and integration products available at <Link href="https://fiserv.dev"> https://fiserv.dev</Link>.
         </Typography>
         <Typography variant="p" sx={{pb: '20px'}}>For <b>developers</b>, the code for this demo is open source and can be found on <Link href="https://github.com/Fiserv-Developer/fiserv-demo">GitHub</Link>.</Typography>
-        <Typography variant="p" sx={{pb: '20px'}}>For those wanting to <b>use the demo</b>, we recommend first <b>configuring</b> your demo experience:</Typography>
+      </BodyElement>
 
+      <BodyElement xs={12}>
+        <Title icon={<SettingsIcon />} primary="Configuration" secondary="How to configure and tailor your demo experience" />
+        <br />
+        <Typography variant="p" sx={{pb: '20px'}}>
+          For those wanting to use the demo, we recommend first configuring your 
+          demo experience by providing your sandbox API credentials and customising the demo:
+        </Typography>
         <List>
           <ListItem disablePadding>
             <ListItemButton onClick={() => window.location = "/settings" }>
@@ -38,8 +44,8 @@ export default function Home() {
       </BodyElement>
 
       <BodyElement xs={12}>
-        <Typography variant="p" sx={{pb: '20px'}}>Once configured, see one of the following <b>demos</b>:</Typography>
-
+        <Title icon={<SubscriptionsIcon />} primary="Demos" secondary="See one of the available demo products below" />
+        <br />
         <List>
           <ListItem disablePadding>
             <ListItemButton onClick={() => window.location = "/dashboard" }>
