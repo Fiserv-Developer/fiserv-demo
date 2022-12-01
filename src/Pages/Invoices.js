@@ -13,6 +13,8 @@ import { CenteredBox } from '../Components/CenteredBox';
 import { Title } from '../Components/Title';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import SendInvoice from '../Components/Invoices/SendInvoice';
 
 export default function Invoices() {
   const theme = useTheme();
@@ -22,6 +24,7 @@ export default function Invoices() {
   const [outstandingAmount, setOutstandingAmount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
   const [newLink, setNewLink] = useState("");
+  const [currentLink, setCurrentLink] = useState("");
   const [error, setError] = useState(false);
 
   // modals
@@ -45,6 +48,16 @@ export default function Invoices() {
   }
   const handleCreatedInvoiceClose = () => {
     setCreatedInvoiceAnimationState("contract"); // the actual close is done on animation end (see below)
+  }
+
+  const [sendInvoiceOpen, setSendInvoiceOpen] = useState(false);
+  const [sendInvoiceAnimationState, setSendInvoiceAnimationState] = useState("expand");
+  const handleSendInvoiceOpen = () => {
+    setSendInvoiceAnimationState("expand");
+    setSendInvoiceOpen(true);
+  }
+  const handleSendInvoiceClose = () => {
+    setSendInvoiceAnimationState("contract"); // the actual close is done on animation end (see below)
   }
 
   useEffect(() => {
@@ -113,10 +126,11 @@ export default function Invoices() {
       </BodyElement>
 
       <BodyElement xs={12}>
-        <InvoicesTable invoices={invoices} />
+        <InvoicesTable invoices={invoices} setCurrentLink={setCurrentLink} handleSendInvoiceOpen={handleSendInvoiceOpen} />
       </BodyElement>
       <NewInvoice setNewLink={setNewLink} open={newInvoiceOpen} handleNewInvoiceOpen={handleNewInvoiceOpen} handleCreatedInvoiceOpen={handleCreatedInvoiceOpen} setNewInvoiceOpen={setNewInvoiceOpen} handleNewInvoiceClose={handleNewInvoiceClose} newInvoiceAnimationState={newInvoiceAnimationState} />
       <CreatedInvoice newLink={newLink} open={createdInvoiceOpen} handleCreatedInvoiceOpen={handleCreatedInvoiceOpen} setCreatedInvoiceOpen={setCreatedInvoiceOpen} handleCreatedInvoiceClose={handleCreatedInvoiceClose} createdInvoiceAnimationState={createdInvoiceAnimationState} />
+      <SendInvoice link={currentLink} open={sendInvoiceOpen} handleSendInvoiceOpen={handleSendInvoiceOpen} setSendInvoiceOpen={setSendInvoiceOpen} handleSendInvoiceClose={handleSendInvoiceClose} sendInvoiceAnimationState={sendInvoiceAnimationState} />
     </React.Fragment>
   );
 }
@@ -144,7 +158,8 @@ function InvoicesTable(props) {
         return (
           <React.Fragment>
             <Button onClick={() => window.location.href = params.value} sx={{marginRight: '10px'}}><ExitToAppIcon /> Go</Button>
-            <Button onClick={() => navigator.clipboard.writeText(params.value)}><ContentCopyIcon /> Copy</Button>
+            <Button onClick={() => navigator.clipboard.writeText(params.value)} sx={{marginRight: '10px'}}><ContentCopyIcon /> Copy</Button>
+            <Button onClick={() => {props.setCurrentLink(params.value); props.handleSendInvoiceOpen()}}><MailOutlineIcon /> Send</Button>
           </React.Fragment>
         );
       },

@@ -1,17 +1,15 @@
 import AddIcon from '@mui/icons-material/Add';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, Divider, Grid, Modal, Paper, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, Grid, Modal, Paper, TextField, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { config } from '../../Config/constants';
-import { fetchWithRetry, withSignature } from '../../Config/utils';
 import { Title } from '../Title';
-import AddBoxIcon from '@mui/icons-material/AddBox';
 
 export default function NewInvoice(props) {
   const theme = useTheme();
   const baseUrl = config.nonProdBaseUrl;
   const [valid, setValid] = useState();
-  const [failed, setFailed] = useState(false);
 
   // form fields
   const [storeId, setStoreId] = useState("");
@@ -20,25 +18,7 @@ export default function NewInvoice(props) {
   const [amount, setAmount] = useState("");
 
   const create = () => {
-    const url = baseUrl + "/payment-links";
-    const data = {
-      "storeId": "72305408",
-      "transactionType": "SALE",
-      "transactionAmount": {
-        "currency": "EUR",
-        "total": 100
-      },
-    };
- 
-    // withSignature(
-    //   "POST",
-    //   data,
-    //   (options) => fetchWithRetry(url, options)
-    //     .then(data => window.location.href = data.checkout.redirectionUrl)
-    //     .catch(rejected => {
-    //       window.location.href = "/shop?failure=true"; // todo improve callback flow
-    //     }));
-
+    // todo eventually do an actual API call
     props.setNewLink("https://www.checkout-lane.com/pl/dBpYUi");
     props.handleCreatedInvoiceOpen();
     setStoreId("");
@@ -48,7 +28,7 @@ export default function NewInvoice(props) {
   }
 
   useEffect(() => {
-    if (storeId !== '' && transactionType !== '' && currency !== '' && amount !== '' ) {
+    if (storeId !== '' && transactionType !== '' && currency !== '' && amount !== '') {
       setValid(true);
     } else {
       setValid(false);
