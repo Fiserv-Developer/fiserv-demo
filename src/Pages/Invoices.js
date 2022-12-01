@@ -25,7 +25,6 @@ export default function Invoices() {
   const [paidAmount, setPaidAmount] = useState(0);
   const [newLink, setNewLink] = useState("");
   const [currentLink, setCurrentLink] = useState("");
-  const [error, setError] = useState(false);
 
   // modals
   const [newInvoiceOpen, setNewInvoiceOpen] = useState(false);
@@ -60,9 +59,7 @@ export default function Invoices() {
     setSendInvoiceAnimationState("contract"); // the actual close is done on animation end (see below)
   }
 
-  useEffect(() => {
-    setError(false);
-    
+  useEffect(() => {  
     // make request TODO for now we just use static mock data
     const invoices = mapInvoices(links)
     setInvoices(invoices);
@@ -128,9 +125,9 @@ export default function Invoices() {
       <BodyElement xs={12}>
         <InvoicesTable invoices={invoices} setCurrentLink={setCurrentLink} handleSendInvoiceOpen={handleSendInvoiceOpen} />
       </BodyElement>
-      <NewInvoice setNewLink={setNewLink} open={newInvoiceOpen} handleNewInvoiceOpen={handleNewInvoiceOpen} handleCreatedInvoiceOpen={handleCreatedInvoiceOpen} setNewInvoiceOpen={setNewInvoiceOpen} handleNewInvoiceClose={handleNewInvoiceClose} newInvoiceAnimationState={newInvoiceAnimationState} />
-      <CreatedInvoice newLink={newLink} open={createdInvoiceOpen} handleCreatedInvoiceOpen={handleCreatedInvoiceOpen} setCreatedInvoiceOpen={setCreatedInvoiceOpen} handleCreatedInvoiceClose={handleCreatedInvoiceClose} createdInvoiceAnimationState={createdInvoiceAnimationState} />
-      <SendInvoice link={currentLink} open={sendInvoiceOpen} handleSendInvoiceOpen={handleSendInvoiceOpen} setSendInvoiceOpen={setSendInvoiceOpen} handleSendInvoiceClose={handleSendInvoiceClose} sendInvoiceAnimationState={sendInvoiceAnimationState} />
+      <NewInvoice setNewLink={setNewLink} open={newInvoiceOpen} handleCreatedInvoiceOpen={handleCreatedInvoiceOpen} setOpen={setNewInvoiceOpen} handleClose={handleNewInvoiceClose} animationState={newInvoiceAnimationState} />
+      <CreatedInvoice newLink={newLink} open={createdInvoiceOpen} setOpen={setCreatedInvoiceOpen} handleClose={handleCreatedInvoiceClose} animationState={createdInvoiceAnimationState} />
+      <SendInvoice link={currentLink} open={sendInvoiceOpen} setOpen={setSendInvoiceOpen} handleClose={handleSendInvoiceClose} animationState={sendInvoiceAnimationState} />
     </React.Fragment>
   );
 }

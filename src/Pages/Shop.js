@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import CheckoutFailure from '../Components/Shop/CheckoutFailure';
-import CheckoutSuccess from '../Components/Shop/CheckoutSuccess';
 import Products from '../Components/Shop/Products';
 import { config } from '../Config/constants';
 import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/utils';
-import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
 
 export default function Shop() {
   const baseUrl = config.nonProdBaseUrl;
   const apiKey = getValueOrDefault(config.nonProdApiKey, "");
   const secretKey = getValueOrDefault(config.nonProdSecretKey, "");
   const [basket, setBasket] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const checkout = () => {
     const basketTotal = basket.reduce((partialSum, item) => partialSum + (parseFloat(item.value) * item.quantity), 0).toFixed(2);
@@ -29,8 +24,8 @@ export default function Shop() {
         "preSelectedPaymentMethod": null,
         "webHooksUrl": null,
         "redirectBackUrls": {
-             "successUrl": "https://demo.fiserv.dev/shop?success=true", // todo improve callback flow
-             "failureUrl": "https://demo.fiserv.dev/shop?failure=true"
+             "successUrl": "https://demo.fiserv.dev/checkout-success", // todo improve callback flow
+             "failureUrl": "https://demo.fiserv.dev/checkout-failure"
         }
       },
     };
@@ -45,11 +40,5 @@ export default function Shop() {
         }));
   }
 
-  if (searchParams.get('success')) {
-    return <CheckoutSuccess />;
-  } else if (searchParams.get('failure')) {
-    return <CheckoutFailure />;
-  } else {
-    return (<Products basket={basket} setBasket={setBasket} checkout={checkout}/>);
-  }
+  return (<Products basket={basket} setBasket={setBasket} checkout={checkout}/>);
 }

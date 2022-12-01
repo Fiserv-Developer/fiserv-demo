@@ -8,6 +8,8 @@ import Home from '../Pages/Home';
 import Settings from '../Pages/Settings';
 import Shop from '../Pages/Shop';
 import Invoices from '../Pages/Invoices';
+import CheckoutSuccess from '../Components/Shop/CheckoutSuccess';
+import CheckoutFailure from '../Components/Shop/CheckoutFailure';
 
 let routes = [
     {type: "component", "name": "Home", "url": "/", "component": <Home/>, icon: <HomeIcon/>},
@@ -15,6 +17,9 @@ let routes = [
     {type: "component", "name": "Shop", "url": "/shop", "component": <Shop/>, icon: <ShoppingBasket/>},
     {type: "component", "name": "Invoices", "url": "/invoices", "component": <Invoices/>, icon: <ReceiptIcon/>},
     {type: "component", "name": "Settings", "url": "/settings", "component": <Settings/>, icon: <SettingsIcon/>},
+    // hidden pages
+    {"name": "CheckoutSuccess", "url": "/checkout-success", "component": <CheckoutSuccess/>},
+    {"name": "CheckoutFailure", "url": "/checkout-failure", "component": <CheckoutFailure/>},
 ];
 
 export default routes;
