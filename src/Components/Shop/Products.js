@@ -3,6 +3,7 @@ import { Badge, Box, Button, IconButton, Paper, Typography } from "@mui/material
 import React, { useState } from "react";
 import { products } from "../../Config/data";
 import BodyElement from "../BodyElement";
+import { Title } from '../Title';
 import Basket from "./Basket";
 import Checkout from './Checkout';
 import Processing from './Processing';
@@ -49,8 +50,7 @@ export default function Products(props) {
       <BasketInfo
         basket={props.basket} handleBasketOpen={handleBasketOpen} />
       <BodyElement xs={12} md={12} lg={12}>
-        <h1>Shop</h1>
-        <p>Welcome to this amazing ecommerce shop, we recommend trying out our first-class checkout flow powered by Fiserv!</p>
+        <Title icon={<ShoppingBasketIcon />} primary="Shop" secondary="Select your favourite products and purchase them using our streamlined Checkout flow" />
       </BodyElement>
       {products.map((product) => <Product key={product.name} basket={props.basket} setBasket={props.setBasket} product={product} />)}
       <Basket open={basketOpen} basket={props.basket} setBasket={props.setBasket} handleCheckoutOpen={handleCheckoutOpen} setBasketOpen={setBasketOpen} handleBasketClose={handleBasketClose} basketAnimationState={basketAnimationState} />

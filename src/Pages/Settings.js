@@ -2,8 +2,10 @@ import { Alert, Link, MenuItem, Select, Snackbar } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import BodyElement from '../Components/BodyElement';
 import KeyFormControl from '../Components/Settings/KeyFormControl';
+import { Title } from '../Components/Title';
 import { config } from '../Config/constants';
 import { getValueOrDefault } from '../Config/utils';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export default function Settings() {
   const [apiKey, setApiKey] = useState(() => getValueOrDefault(config.apiKey, ""));
@@ -57,13 +59,7 @@ export default function Settings() {
   return (
     <React.Fragment>
       <BodyElement xs={12}>
-        <h1>Settings</h1>
-        <p>
-          <i>This page contains all of your demo configuration, make sure you review all fields to tailor the best demo experience.</i>        
-        </p>
-        <p>
-          <i><b>Changes to this configuration are saved and applied automatically.</b></i>
-        </p>
+        <Title icon={<SettingsIcon />} primary="Settings" secondary="Configure the demo with your API credentials and tailor your experience"  />
       </BodyElement>
 
       <BodyElement xs={12} md={6}>

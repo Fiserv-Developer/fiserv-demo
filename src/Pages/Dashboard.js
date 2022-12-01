@@ -8,6 +8,8 @@ import Statements from '../Components/Dashboard/Statements';
 import Transactions from '../Components/Dashboard/Transactions';
 import { config } from '../Config/constants';
 import { getValueOrDefault } from '../Config/utils';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import { Title } from '../Components/Title';
 
 export default function Dashboard() {
   const apiKey = getValueOrDefault(config.apiKey, "");
@@ -16,14 +18,8 @@ export default function Dashboard() {
   return (
     <React.Fragment>
       <BodyElement xs={12}>
-        <h1>Dashboard</h1>
-        <p>Welcome to the merchant dashboard, it contains demo integrations for viewing merchant transactional data and statements.</p>
+        <Title icon={<DashboardIcon />} primary="Dashboard" secondary="View your merchant transactional data or download recent statements" />
       </BodyElement>
-
-      {/* Authorisations */}
-      {/* <BodyElement xs={12} md={4} lg={4}>
-        <Authorisations apiKey={apiKey} merchantId={merchantId} />
-      </BodyElement> */}
     
       {/* Fundings */}
       <Grid container item xs={12} md={8} lg={8} direction="row" spacing={3}>

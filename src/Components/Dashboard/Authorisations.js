@@ -61,13 +61,15 @@ function AuthorisationsChart(props) {
         label: 'Approved',
         data: props.data.approved,
         borderColor: theme.palette.primary.main,
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.palette.primary.translucent,
+        fill: '1',
       },
       {
         label: 'Declined',
         data: props.data.declined,
         borderColor: theme.palette.secondary.light,
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.secondary.translucent,
+        fill: 'origin',
       },
     ],
   };

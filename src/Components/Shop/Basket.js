@@ -1,14 +1,21 @@
 import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import { Box, Button, Divider, Modal, Paper, Table, TableBody, TableCell, TableRow, Typography, useTheme } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Title } from '../Title';
 
 export default function Basket(props) {
   const theme = useTheme();
+  const [checkoutEnabled, setCheckoutEnabled] = useState(true);
+
   const removeItem = (name) => {
     const basket = props.basket.filter((item) => item.name !== name );
     props.setBasket(basket);
+    if (basket.length < 1) {
+      setCheckoutEnabled(false);
+    }
   };
 
   const basketTotal = props.basket.reduce((partialSum, item) => partialSum + (parseFloat(item.value) * item.quantity), 0).toFixed(2);
@@ -29,20 +36,19 @@ export default function Basket(props) {
         maxWidth: '600px',
         boxShadow: 24,
         p: 4,
-      }}>
+      }}
+      >
         <Paper
           sx={{ p: 4 }} 
           className={props.basketAnimationState} 
           onAnimationEnd={() => {
             if (props.basketAnimationState === "contract") {
               props.setBasketOpen(false);
-            }}}>
-          <Typography id="modal-modal-title" variant="h4" component="h2">
-            Shopping Basket
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Your basket contains the following:
-          </Typography>
+            }}}
+        >
+          <Title icon={<ShoppingBasketIcon />} primary="Shopping Basket" secondary="Your basket contains the following:"></Title>
+          <Divider />
+          <br />
           <Box sx={{ width: '100%', display: 'flex', p: 2 }}>
             <Table>
               <TableBody>
@@ -61,14 +67,30 @@ export default function Basket(props) {
           <Typography sx={{ textAlign: 'right'}}>Total: £{basketTotal}</Typography>
           <Divider sx={{ borderColor: theme.palette.background.default, margin: 4}}/>
           <Button 
-            sx={{color: theme.palette.primary.main, left: '10px', bottom: '10px', position: 'fixed'}}
+            sx={{
+              color: theme.palette.primary.main, 
+              left: '10px', 
+              bottom: '10px', 
+              position: 'fixed'
+            }}
             onClick={props.handleBasketClose}>
             <ArrowBackIcon /> Continue Shopping
           </Button>
           {/* TODO only work if there are items in basket */}
-          <Button 
-            sx={{color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, right: '10px', bottom: '10px', position: 'fixed'}}
-            onClick={props.handleCheckoutOpen}>
+          <Button
+            disabled={!checkoutEnabled}
+            sx={{
+              color: theme.palette.primary.contrastText, 
+              backgroundColor: theme.palette.primary.main, 
+              '&:hover': {
+                backgroundColor: theme.palette.primary.light 
+              },
+              right: '10px', 
+              bottom: '10px', 
+              position: 'fixed'
+            }}
+            onClick={props.handleCheckoutOpen}
+          >
             <ShoppingCartCheckoutIcon /> Checkout
           </Button>
         </Paper>

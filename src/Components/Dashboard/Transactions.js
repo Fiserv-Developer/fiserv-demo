@@ -91,7 +91,8 @@ function TransactionsTable(props) {
       <Typography component="h2" variant="h6" gutterBottom>
         Recent Transactions
       </Typography>
-      <DataGrid rows={rows} columns={columns} 
+      <DataGrid 
+        rows={rows} columns={columns} 
         components={{ Toolbar: GridToolbar }} 
         autoHeight
         checkboxSelection={true}

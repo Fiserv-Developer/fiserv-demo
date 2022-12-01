@@ -1,7 +1,9 @@
-import { Box, Button, Checkbox, Divider, FormControlLabel, Grid, Modal, Paper, TextField, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import PaymentIcon from '@mui/icons-material/Payment';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import PaymentIcon from '@mui/icons-material/Payment';
+import { Box, Button, Checkbox, Divider, FormControlLabel, Grid, Modal, Paper, TextField, useTheme } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Title } from "../Title";
 
 export default function Checkout(props) {
   const theme = useTheme();
@@ -18,15 +20,13 @@ export default function Checkout(props) {
     props.handleBasketOpen();
   }
 
-  const updateButtonState = () => {
+  useEffect(() => {
     if (name !== '' && addressLine1 !== '' && city !== '' && zip !== '' && country !== '' ) {
       setValid(true);
     } else {
       setValid(false);
     }
-  }
-
-  useEffect(() => updateButtonState(), [name, addressLine1, city, zip, country]);
+  }, [name, addressLine1, city, zip, country]);
 
   return (
     <Modal
@@ -53,37 +53,33 @@ export default function Checkout(props) {
             }
           }}
         >
-          <Typography id="modal-modal-title" variant="h4" component="h2">
-            Shipping
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Please enter your shipping details:
-          </Typography>
+          <Title icon={<LocalShippingIcon />} primary="Shipping" secondary="Please enter your shipping details"></Title>
+          <Divider />
           <br />
           <Grid container item spacing={3}>
             <Grid item xs={12} sm={12}>
               <AddressInput name="name" label="Name" auto="name" required={true}
-                stateValue={name} updateState={setName} updateButtonState={updateButtonState} />
+                stateValue={name} updateState={setName} />
             </Grid>
             <Grid item xs={12}>
               <AddressInput name="address1" label="Address Line 1" auto="shipping address-line1" required={true}
-                stateValue={addressLine1} updateState={setAddressLine1} updateButtonState={updateButtonState} />
+                stateValue={addressLine1} updateState={setAddressLine1} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <AddressInput name="city" label="City" stateValue={city} auto="shipping address-level2" required={true}
-                updateState={setCity} updateButtonState={updateButtonState} />
+                updateState={setCity} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <AddressInput name="state" label="State / Region / Province" required={false} 
-                stateValue={state} updateState={setState} updateButtonState={updateButtonState} />
+                stateValue={state} updateState={setState} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <AddressInput name="zip" label="Zip / Postal Code" auto="shipping postal-code" required={true}
-                stateValue={zip} updateState={setZip} updateButtonState={updateButtonState} />
+                stateValue={zip} updateState={setZip} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <AddressInput name="country" label="Country" required={true} auto="shipping country"
-                stateValue={country} updateState={setCountry} updateButtonState={updateButtonState} />
+                stateValue={country} updateState={setCountry} />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel

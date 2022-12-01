@@ -1,12 +1,11 @@
-import CryptoJS from 'crypto-js';
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import CheckoutFailure from '../Components/Shop/CheckoutFailure';
 import CheckoutSuccess from '../Components/Shop/CheckoutSuccess';
 import Products from '../Components/Shop/Products';
 import { config } from '../Config/constants';
-import { fetchWithRetry, getValueOrDefault } from '../Config/utils';
+import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/utils';
+import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
 
 export default function Shop() {
   const baseUrl = config.nonProdBaseUrl;
@@ -36,33 +35,7 @@ export default function Shop() {
       },
     };
   
-    function withSignature(method, body, callback) {
-      var ClientRequestId = uuidv4();
-      var time = new Date().getTime();
-      var requestBody = JSON.stringify(body);
-      if (method === 'GET') {
-        requestBody = '';
-      }  
-      const messageSignatureString = apiKey + ClientRequestId + time + requestBody;
-      const messageSignature = CryptoJS.HmacSHA256(messageSignatureString, secretKey);
-      const messageSignatureBase64 = CryptoJS.enc.Base64.stringify(messageSignature);
-    
-      var options = {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          "Client-Request-Id": ClientRequestId,
-          "Api-Key": apiKey,
-          "Timestamp": time.toString(),
-          "Message-Signature": messageSignatureBase64
-        },
-        body: JSON.stringify(body),
-      };
-    
-      callback(options);
-    }
-    
-    withSignature(
+    withSignature(apiKey, secretKey,
       "POST",
       data,
       (options) => fetchWithRetry(url, options)
