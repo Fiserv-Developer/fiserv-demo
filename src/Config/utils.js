@@ -13,7 +13,7 @@ export function getValueOrDefault(key, defaultValue) {
 
 export async function fetchWithRetry(url, options = {}, attempts = 1) {
   const maxAttempts = 3;
-  var wait = 500; // milliseconds
+  var wait = 1000; // milliseconds
 
   return fetch(url, options).then(response => {
     if (response.ok) {

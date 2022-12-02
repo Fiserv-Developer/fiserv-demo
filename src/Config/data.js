@@ -33,7 +33,7 @@ export const products = [
     name: "Lawnmower",
     value: "49.99"
   },
-]
+];
 
 export const links = [
   {
@@ -190,4 +190,4 @@ export const links = [
     "transactionType": "SALE",
     "transactionStatus": "APPROVED",
   },
-]
+];

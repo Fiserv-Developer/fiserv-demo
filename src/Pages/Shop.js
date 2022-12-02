@@ -4,7 +4,7 @@ import { config } from '../Config/constants';
 import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/utils';
 
 export default function Shop() {
-  const baseUrl = config.nonProdBaseUrl;
+  const baseUrl = config.nonProdIntBaseUrl;
   const apiKey = getValueOrDefault(config.nonProdApiKey, "");
   const secretKey = getValueOrDefault(config.nonProdSecretKey, "");
   const [basket, setBasket] = useState([]);

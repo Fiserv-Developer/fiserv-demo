@@ -12,7 +12,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Title } from '../Components/Title';
 
 export default function Dashboard() {
-  const apiKey = getValueOrDefault(config.apiKey, "");
+  const apiKey = getValueOrDefault(config.apiKey, config.defaultApiKey);
   const merchantId = getValueOrDefault(config.merchantId, "");
 
   return (

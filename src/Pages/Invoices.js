@@ -15,10 +15,14 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import SendInvoice from '../Components/Invoices/SendInvoice';
+import Processing from '../Components/Shop/Processing';
 
 export default function Invoices() {
   const theme = useTheme();
-  const apiKey = getValueOrDefault(config.apiKey, "");
+  const baseUrl = config.nonProdQaBaseUrl;
+  const apiKey = getValueOrDefault(config.nonProdApiKey, "");
+  const secretKey = getValueOrDefault(config.nonProdSecretKey, "");
+
   const [invoices, setInvoices] = useState([]);
   const [activeLinks, setActiveLinks] = useState(0);
   const [outstandingAmount, setOutstandingAmount] = useState(0);
@@ -36,6 +40,18 @@ export default function Invoices() {
   }
   const handleNewInvoiceClose = () => {
     setNewInvoiceAnimationState("contract"); // the actual close is done on animation end (see below)
+  }
+
+  // processing modal
+  const [processingOpen, setProcessingOpen] = useState(false);
+  const [processingAnimationState, setProcessingAnimationState] = useState("expand");
+  const handleProcessingOpen = () => {
+    setNewInvoiceAnimationState("contract");
+    setProcessingAnimationState("expand");
+    setProcessingOpen(true);
+  }
+  const handleProcessingClose = () => {
+    setProcessingAnimationState("contract"); // the actual close is done on animation end (see below)
   }
 
   const [createdInvoiceOpen, setCreatedInvoiceOpen] = useState(false);
@@ -125,9 +141,31 @@ export default function Invoices() {
       <BodyElement xs={12}>
         <InvoicesTable invoices={invoices} setCurrentLink={setCurrentLink} handleSendInvoiceOpen={handleSendInvoiceOpen} />
       </BodyElement>
-      <NewInvoice setNewLink={setNewLink} open={newInvoiceOpen} handleCreatedInvoiceOpen={handleCreatedInvoiceOpen} setOpen={setNewInvoiceOpen} handleClose={handleNewInvoiceClose} animationState={newInvoiceAnimationState} />
-      <CreatedInvoice newLink={newLink} open={createdInvoiceOpen} setOpen={setCreatedInvoiceOpen} handleClose={handleCreatedInvoiceClose} animationState={createdInvoiceAnimationState} />
-      <SendInvoice link={currentLink} open={sendInvoiceOpen} setOpen={setSendInvoiceOpen} handleClose={handleSendInvoiceClose} animationState={sendInvoiceAnimationState} />
+
+      <NewInvoice 
+        baseUrl={baseUrl} apiKey={apiKey} secretKey={secretKey} 
+        setNewLink={setNewLink} 
+        open={newInvoiceOpen} setOpen={setNewInvoiceOpen} handleClose={handleNewInvoiceClose}
+        handleCreatedInvoiceOpen={handleCreatedInvoiceOpen} 
+        handleProcessingOpen={handleProcessingOpen}
+        handleProcessingClose={handleProcessingClose}
+        animationState={newInvoiceAnimationState} />
+
+      <Processing 
+        open={processingOpen} 
+        setOpen={setProcessingOpen} 
+        handleClose={handleProcessingClose} 
+        animationState={processingAnimationState} />
+
+      <CreatedInvoice 
+        newLink={newLink} 
+        open={createdInvoiceOpen} setOpen={setCreatedInvoiceOpen} handleClose={handleCreatedInvoiceClose} 
+        animationState={createdInvoiceAnimationState} />
+      
+      <SendInvoice 
+        link={currentLink} 
+        open={sendInvoiceOpen} setOpen={setSendInvoiceOpen} handleClose={handleSendInvoiceClose} 
+        animationState={sendInvoiceAnimationState} />
     </React.Fragment>
   );
 }

@@ -7,6 +7,9 @@ import Body from "./Components/Body";
 import Footer from "./Components/Footer";
 import Menu from "./Components/Menu";
 import { dark, light } from "./Config/themes";
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 
 function App() {
   const [themeToggle, setThemeToggle] = useState(true); // false is dark, true is light
@@ -14,14 +17,16 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <BrowserRouter>
-        <Box sx={{ display: 'flex' }}>
-          <Menu themeToggle={themeToggle} setThemeToggle={setThemeToggle} />
-          <Body />
-        </Box>
-      </BrowserRouter>
-      <Footer />
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <CssBaseline />
+        <BrowserRouter>
+          <Box sx={{ display: 'flex' }}>
+            <Menu themeToggle={themeToggle} setThemeToggle={setThemeToggle} />
+            <Body />
+          </Box>
+        </BrowserRouter>
+        <Footer />
+      </LocalizationProvider>
     </ThemeProvider>
   );
 }
