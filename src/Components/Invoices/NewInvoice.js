@@ -22,9 +22,6 @@ export default function NewInvoice(props) {
   const create = () => {
     props.handleProcessingOpen();
 
-    // DUMMY
-    // handleLinkCreated("https://www.checkout-lane.com/pl/dBpYUi");
-
     // REAL
     const random = "" + Math.floor(100000000 + Math.random() * 900000000);
     const url = props.baseUrl + "/payment-links";
@@ -160,7 +157,6 @@ export default function NewInvoice(props) {
   }
 
   const handleLinkCreated = (newLink) => {
-    // props.setNewLink("https://www.checkout-lane.com/pl/dBpYUi");
     props.setNewLink(newLink)
     props.handleProcessingClose();
     props.handleCreatedInvoiceOpen();
