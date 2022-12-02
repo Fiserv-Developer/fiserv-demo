@@ -85,62 +85,62 @@ export default function NewInvoice(props) {
             "region": "Nordrhein-Westfalen"
           }
         },
-        "orderDetails": {
-          "customerId": "1234567890",
-          "dynamicMerchantName": "Merchant XYZ",
-          "invoiceNumber": "96126098",
-          "purchaseOrderNumber": "123055342"
-        },
-        "basket": {
-          "lineItems": [
-            {
-              "itemIdentifier": "Item001",
-              "name": "Mobile",
-              "price": 98,
-              "quantity": 1,
-              "shippingCost": 10,
-              "valueAddedTax": 22,
-              "miscellaneousFee": 0,
-              "total": 130
-            }
-          ]
-        }
+        // "orderDetails": {
+        //   "customerId": "1234567890",
+        //   "dynamicMerchantName": "Merchant XYZ",
+        //   "invoiceNumber": "96126098",
+        //   "purchaseOrderNumber": "123055342"
+        // },
+        // "basket": {
+        //   "lineItems": [
+        //     {
+        //       "itemIdentifier": "Item001",
+        //       "name": "Mobile",
+        //       "price": 98,
+        //       "quantity": 1,
+        //       "shippingCost": 10,
+        //       "valueAddedTax": 22,
+        //       "miscellaneousFee": 0,
+        //       "total": 130
+        //     }
+        //   ]
+        // }
       },
       "checkoutSettings": {
-        "locale": "de_DE",
-        "preSelectedPaymentMethod": "cards",
-        "webHooksUrl": "https://yourapp.com/data",
+        "locale": null,
+        "preSelectedPaymentMethod": null,
+        "webHooksUrl": null,
         "redirectBackUrls": {
-          "successUrl": "https://www.successexample.com",
-          "failureUrl": "https://www.failureexample.com"
+             "successUrl": "https://demo.fiserv.dev/checkout-success", // todo improve callback flow
+             "failureUrl": "https://demo.fiserv.dev/checkout-failure"
         }
       },
-      "paymentMethodDetails": {
-        "cards": {
-          "authenticationPreferences": {
-            "challengeIndicator": "01",
-            "scaExemptionType": "LOW_VALUE_EXEMPTION",
-            "skipTra": false
-          },
-          "createToken": {
-            "customTokenValue": "234ljl124l12",
-            "declineDuplicateToken": false,
-            "reusable": true,
-            "toBeUsedFor": "UNSCHEDULED"
-          },
-          "tokenBasedTransaction": {
-            "value": "234ljl124l12",
-            "transactionSequence": "FIRST",
-            "schemeTransactionId": "012243800355698"
-          }
-        },
-        "sepaDirectDebit": {
-          "mandateReference": "3RBQVEE",
-          "signatureDate": "2021-06-15",
-          "transactionSequenceType": "SINGLE",
-          "mandateReferenceUrl": "https://www.example.com"
-        }
-      },
+      // "paymentMethodDetails": {
+      //   "cards": {
+      //     "authenticationPreferences": {
+      //       "challengeIndicator": "01",
+      //       "scaExemptionType": "LOW_VALUE_EXEMPTION",
+      //       "skipTra": false
+      //     },
+      //     "createToken": {
+      //       "customTokenValue": "234ljl124l12",
+      //       "declineDuplicateToken": false,
+      //       "reusable": true,
+      //       "toBeUsedFor": "UNSCHEDULED"
+      //     },
+      //     "tokenBasedTransaction": {
+      //       "value": "234ljl124l12",
+      //       "transactionSequence": "FIRST",
+      //       "schemeTransactionId": "012243800355698"
+      //     }
+      //   },
+      //   "sepaDirectDebit": {
+      //     "mandateReference": "3RBQVEE",
+      //     "signatureDate": "2021-06-15",
+      //     "transactionSequenceType": "SINGLE",
+      //     "mandateReferenceUrl": "https://www.example.com"
+      //   }
+      // },
       "paymentLinkDetails": {
         "expiryDateTime": expires
       }
@@ -164,6 +164,7 @@ export default function NewInvoice(props) {
     setTransactionType("");
     setCurrency("");
     setAmount("");
+    setExpires("");
   }
 
   useEffect(() => {

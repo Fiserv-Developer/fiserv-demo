@@ -36,7 +36,7 @@ export default function Shop() {
       (options) => fetchWithRetry(url, options)
         .then(data => window.location.href = data.checkout.redirectionUrl)
         .catch(rejected => {
-          window.location.href = "/shop?failure=true"; // todo improve callback flow
+          window.location.href = "/checkout-failure"; // todo improve callback flow
         }));
   }
 

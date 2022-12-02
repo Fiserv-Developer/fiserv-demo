@@ -45,7 +45,7 @@ export default function CreatedInvoice(props) {
           backgroundColor: theme.palette.primary.light, 
         }
       }}
-      onClick={() => props.handleClose()}
+      onClick={() => { props.handleClose(); setCopied(false) }}
     >
       <DoneIcon /> OK
     </Button>
