@@ -3,29 +3,42 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 export function getValueOrDefault(key, defaultValue) {
-  const value = localStorage.getItem(key);
-  if (value) {
-    return value;
-  } else {
+  const rawValue = localStorage.getItem(key);
+
+  if (!rawValue) {
     return defaultValue;
   }
+
+  return isJsonObject(rawValue) ? JSON.parse(rawValue) : rawValue;
 }
 
-export async function fetchWithRetry(url, options = {}, attempts = 1) {
+function isJsonObject(object) {
+  if (object === null || object === undefined || object.length === 0) {
+      return false;
+  }
+
+  if (object[0] === '"' || object[0] === '[' || object[0] === '{') {
+    return true;
+  }
+
+  return false;
+}
+
+export async function fetchWithRetry(url, options = {}, attempt = 1) {
   const maxAttempts = 3;
   var wait = 500; // milliseconds
 
   return fetch(url, options).then(response => {
     if (response.ok) {
       return response.json();
-    } else if (attempts <= maxAttempts) {
-      if (attempts > 1) {
+    } else if (attempt <= maxAttempts) {
+      if (attempt > 1) {
         wait = wait * 2; // double the wait between each attempt for backoff
       }
       return new Promise(res => { 
         setTimeout(res, wait); 
       }).then(() => { 
-        return fetchWithRetry(url, options, attempts + 1);
+        return fetchWithRetry(url, options, attempt + 1);
       }); 
     } else {
       return Promise.reject(response.json());
@@ -53,8 +66,11 @@ export function withSignature(apiKey, secretKey, method, body, fetch) {
       "Timestamp": time.toString(),
       "Message-Signature": messageSignatureBase64
     },
-    body: JSON.stringify(body),
   };
+
+  if (method !== 'GET') {
+    options.body = requestBody;
+  }
 
   fetch(options);
 }

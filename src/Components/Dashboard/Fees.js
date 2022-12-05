@@ -8,6 +8,7 @@ import Placeholder from '../Placeholder';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { Box } from '@mui/material';
+import { CenteredBox } from '../CenteredBox';
 
 Chart.register(ArcElement, Tooltip, Legend);
 var bigDecimal = require('js-big-decimal');
@@ -126,14 +127,14 @@ function FeeCard(props) {
   };
 
   return (
-    <React.Fragment>
+    <CenteredBox>
       <Typography component="h2" variant="h6" sx={{ width: '100%'}} gutterBottom>
         Yesterday's Deduction Breakdown
       </Typography>
-      <Box sx={{display: 'flex', height: '100%'}}>
+      <Box sx={{display: 'flex', height: '100%', maxWidth: '260px', maxHeight: '150px', margin: '0 auto'}}>
         <Doughnut options={options} data={chartData} style={{maxWidth: '260px', maxHeight: '150px'}}/>        
       </Box>
-    </React.Fragment>
+    </CenteredBox>
   );
 }
 

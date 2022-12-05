@@ -1,7 +1,25 @@
 import { Box, Divider, Modal, Paper, useTheme } from "@mui/material";
+import React from "react";
 
 export function ResponsiveModal(props) {
   const theme = useTheme();
+
+  const titleSection = props.title ? (
+    <React.Fragment>
+    {props.title}
+    <Divider />
+    <br />
+    </React.Fragment>
+  ) : (null);
+
+  const buttonsSection = props.buttons ? (
+    <React.Fragment>
+      <Divider sx={{ margin: 4}}/>
+      <Box sx={{ width: '100%', textAlign: 'right' }}>
+        {props.buttons}
+      </Box>
+    </React.Fragment>
+  ) : (null);
 
   return (
     <Modal
@@ -42,16 +60,9 @@ export function ResponsiveModal(props) {
             } 
           }}
         >
-          {props.title}
-          <Divider />
-          <br />
-
+          {titleSection}
           {props.content}
-          <Divider sx={{ margin: 4}}/>
-
-          <Box sx={{ width: '100%', textAlign: 'right' }}>
-            {props.buttons}
-          </Box>
+          {buttonsSection}
         </Paper>
       </Box>
     </Modal>

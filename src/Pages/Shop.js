@@ -4,7 +4,7 @@ import { config } from '../Config/constants';
 import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/utils';
 
 export default function Shop() {
-  const baseUrl = config.nonProdBaseUrl;
+  const baseUrl = config.nonProdIntBaseUrl;
   const apiKey = getValueOrDefault(config.nonProdApiKey, "");
   const secretKey = getValueOrDefault(config.nonProdSecretKey, "");
   const [basket, setBasket] = useState([]);
@@ -36,7 +36,7 @@ export default function Shop() {
       (options) => fetchWithRetry(url, options)
         .then(data => window.location.href = data.checkout.redirectionUrl)
         .catch(rejected => {
-          window.location.href = "/shop?failure=true"; // todo improve callback flow
+          window.location.href = "/checkout-failure"; // todo improve callback flow
         }));
   }
 

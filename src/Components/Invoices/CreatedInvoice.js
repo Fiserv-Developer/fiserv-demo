@@ -24,10 +24,10 @@ export default function CreatedInvoice(props) {
         padding: '2px'
       }}
     >
-      {props.newLink} 
+      {props.newLink.url} 
       <Button 
         onClick={() => {
-          navigator.clipboard.writeText(props.newLink);
+          navigator.clipboard.writeText(props.newLink.url);
           setCopied(true);
         }}
       >
@@ -45,7 +45,7 @@ export default function CreatedInvoice(props) {
           backgroundColor: theme.palette.primary.light, 
         }
       }}
-      onClick={() => props.handleClose()}
+      onClick={() => { props.handleClose(); setCopied(false) }}
     >
       <DoneIcon /> OK
     </Button>
