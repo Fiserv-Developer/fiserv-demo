@@ -11,3 +11,15 @@ export const config = {
   paymentIntegration: "config-paymentIntegration",
   merchantId: "config-merchantId",
 }
+
+export const resources = {
+  authorisations: "authorisations",
+  transactions: "transactions",
+  fundings: "fundings",
+  paymentLinks: "payment-links",
+  statements: "statements",
+}
+
+export const state = {
+  linkIds: "state-linkIds",
+}

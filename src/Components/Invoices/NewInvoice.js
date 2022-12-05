@@ -7,6 +7,7 @@ import { fetchWithRetry, withSignature } from '../../Config/utils';
 import { ResponsiveModal } from '../ResponsiveModal';
 import { Title } from '../Title';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { resources } from '../../Config/constants';
 
 export default function NewInvoice(props) {
   const theme = useTheme();
@@ -24,7 +25,7 @@ export default function NewInvoice(props) {
 
     // REAL
     const random = "" + Math.floor(100000000 + Math.random() * 900000000);
-    const url = props.baseUrl + "/payment-links";
+    const url = `${props.baseUrl}/${resources.paymentLinks}`;
     const data = {
       "storeId": "72305408",
       "merchantTransactionId": "AB-1234",
@@ -33,11 +34,6 @@ export default function NewInvoice(props) {
       "transactionAmount": {
         "total": parseFloat(amount),
         "currency": currency,
-        // "components": {
-        //   "subtotal": 98,
-        //   "vatAmount": 22,
-        //   "shipping": 10
-        // }
       },
       "order": {
         "orderId": random,
@@ -85,26 +81,6 @@ export default function NewInvoice(props) {
             "region": "Nordrhein-Westfalen"
           }
         },
-        // "orderDetails": {
-        //   "customerId": "1234567890",
-        //   "dynamicMerchantName": "Merchant XYZ",
-        //   "invoiceNumber": "96126098",
-        //   "purchaseOrderNumber": "123055342"
-        // },
-        // "basket": {
-        //   "lineItems": [
-        //     {
-        //       "itemIdentifier": "Item001",
-        //       "name": "Mobile",
-        //       "price": 98,
-        //       "quantity": 1,
-        //       "shippingCost": 10,
-        //       "valueAddedTax": 22,
-        //       "miscellaneousFee": 0,
-        //       "total": 130
-        //     }
-        //   ]
-        // }
       },
       "checkoutSettings": {
         "locale": null,
@@ -115,32 +91,6 @@ export default function NewInvoice(props) {
              "failureUrl": "https://demo.fiserv.dev/checkout-failure"
         }
       },
-      // "paymentMethodDetails": {
-      //   "cards": {
-      //     "authenticationPreferences": {
-      //       "challengeIndicator": "01",
-      //       "scaExemptionType": "LOW_VALUE_EXEMPTION",
-      //       "skipTra": false
-      //     },
-      //     "createToken": {
-      //       "customTokenValue": "234ljl124l12",
-      //       "declineDuplicateToken": false,
-      //       "reusable": true,
-      //       "toBeUsedFor": "UNSCHEDULED"
-      //     },
-      //     "tokenBasedTransaction": {
-      //       "value": "234ljl124l12",
-      //       "transactionSequence": "FIRST",
-      //       "schemeTransactionId": "012243800355698"
-      //     }
-      //   },
-      //   "sepaDirectDebit": {
-      //     "mandateReference": "3RBQVEE",
-      //     "signatureDate": "2021-06-15",
-      //     "transactionSequenceType": "SINGLE",
-      //     "mandateReferenceUrl": "https://www.example.com"
-      //   }
-      // },
       "paymentLinkDetails": {
         "expiryDateTime": expires
       }
@@ -150,14 +100,14 @@ export default function NewInvoice(props) {
       "POST",
       data,
       (options) => fetchWithRetry(url, options)
-        .then(data => handleLinkCreated(data.paymentLink.paymentLinkUrl))
+        .then(data => handleLinkCreated(data.paymentLink.paymentLinkId, data.paymentLink.paymentLinkUrl))
         .catch(rejected => {
           window.location.href = "/checkout-failure"; // todo improve callback flow
         }));
   }
 
-  const handleLinkCreated = (newLink) => {
-    props.setNewLink(newLink)
+  const handleLinkCreated = (id, url) => {
+    props.setNewLink({id: id, url: url });
     props.handleProcessingClose();
     props.handleCreatedInvoiceOpen();
     setStoreId("");

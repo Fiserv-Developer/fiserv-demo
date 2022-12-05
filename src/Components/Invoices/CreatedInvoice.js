@@ -24,10 +24,10 @@ export default function CreatedInvoice(props) {
         padding: '2px'
       }}
     >
-      {props.newLink} 
+      {props.newLink.url} 
       <Button 
         onClick={() => {
-          navigator.clipboard.writeText(props.newLink);
+          navigator.clipboard.writeText(props.newLink.url);
           setCopied(true);
         }}
       >
