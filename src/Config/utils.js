@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js';
+import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -24,25 +25,34 @@ function isJsonObject(object) {
   return false;
 }
 
-export async function fetchWithRetry(url, options = {}, attempt = 1) {
+export async function fetchWithRetry(url, options = {}, attempt = 1, waitMillis = 500) {
   const maxAttempts = 3;
-  var wait = 500; // milliseconds
+  console.log(`Making call to: ${url}, attempt #${attempt}`)
+
+  const reattempt = (response) => {
+    console.log(`Request failed, checking for next attempt...`)
+    const nextAttempt = attempt + 1;
+    const nextWaitMillis = waitMillis * 2; // increase the wait between each attempt for backoff
+
+    if (nextAttempt <= maxAttempts) {
+      return new Promise(res => {
+        setTimeout(res, nextWaitMillis);
+      }).then(() => {
+        return fetchWithRetry(url, options, nextAttempt, nextWaitMillis); 
+      });
+    } else {
+      return Promise.reject(response);
+    }
+  }
 
   return fetch(url, options).then(response => {
     if (response.ok) {
       return response.json();
-    } else if (attempt <= maxAttempts) {
-      if (attempt > 1) {
-        wait = wait * 2; // double the wait between each attempt for backoff
-      }
-      return new Promise(res => { 
-        setTimeout(res, wait); 
-      }).then(() => { 
-        return fetchWithRetry(url, options, attempt + 1);
-      }); 
-    } else {
-      return Promise.reject(response.json());
+    } else { // for any 4x / 5x errors such as 429
+      return reattempt(response);
     }
+  }).catch(rejected => { // for any network errors
+    return reattempt(rejected);
   });
 }
 
@@ -73,4 +83,27 @@ export function withSignature(apiKey, secretKey, method, body, fetch) {
   }
 
   fetch(options);
+}
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
+
+export default function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
 }

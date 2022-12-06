@@ -1,18 +1,13 @@
 import AddIcon from '@mui/icons-material/Add';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import ReceiptIcon from '@mui/icons-material/Receipt';
-import { Box, Button, Typography, useTheme } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Button, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import BodyElement from '../Components/BodyElement';
 import { CenteredBox } from '../Components/CenteredBox';
-import Error from '../Components/Error';
 import CreatedInvoice from '../Components/Invoices/CreatedInvoice';
+import { InvoicesTable } from '../Components/Invoices/InvoicesTable';
 import NewInvoice from '../Components/Invoices/NewInvoice';
 import SendInvoice from '../Components/Invoices/SendInvoice';
-import Placeholder from '../Components/Placeholder';
 import Processing from '../Components/Shop/Processing';
 import { Title } from '../Components/Title';
 import { config, resources, state } from '../Config/constants';
@@ -34,7 +29,7 @@ export default function Invoices() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // modals
+  // modal config for 'new invoice'
   const [newInvoiceOpen, setNewInvoiceOpen] = useState(false);
   const [newInvoiceAnimationState, setNewInvoiceAnimationState] = useState("expand");
   const handleNewInvoiceOpen = () => {
@@ -46,7 +41,7 @@ export default function Invoices() {
     setNewInvoiceAnimationState("contract");
   }
 
-  // processing modal
+  // modal config for 'processing' (on new invoice creation)
   const [processingOpen, setProcessingOpen] = useState(false);
   const [processingAnimationState, setProcessingAnimationState] = useState("expand");
   const handleProcessingOpen = () => {
@@ -58,6 +53,7 @@ export default function Invoices() {
     setProcessingAnimationState("contract"); 
   }
 
+  // modal config for a successful 'created invoice'
   const [createdInvoiceOpen, setCreatedInvoiceOpen] = useState(false);
   const [createdInvoiceAnimationState, setCreatedInvoiceAnimationState] = useState("expand");
   const handleCreatedInvoiceOpen = () => {
@@ -70,6 +66,7 @@ export default function Invoices() {
     setLinkIds([...linkIds, newLink.id]);
   }
 
+  // modal config for 'send invoice'
   const [sendInvoiceOpen, setSendInvoiceOpen] = useState(false);
   const [sendInvoiceAnimationState, setSendInvoiceAnimationState] = useState("expand");
   const handleSendInvoiceOpen = () => {
@@ -80,8 +77,36 @@ export default function Invoices() {
     setSendInvoiceAnimationState("contract");
   }
 
+  // for calculating the outstanding invoice amount from active links
+  const getOustandingAmount = (invoices) => {
+    return invoices
+      .filter((invoice) => invoice.status === 'INITIATED' || invoice.status === 'WAITING')
+      .reduce((partialSum, invoice) => partialSum + parseFloat(invoice.amount), 0);
+  }
+
+  // for calculating the paid invoice amount from approved links
+  const getPaidAmound = (invoices) => {
+    return invoices
+      .filter((invoice) => invoice.status === 'APPROVED')
+      .reduce((partialSum, invoice) => partialSum + parseFloat(invoice.amount), 0);
+  }
+
+  // for taking a 'link' returned by the API and converting it to an internal invoice model
+  const mapInvoice = (link) => {
+    return {
+      id: link.checkoutId,
+      status: link.transactionStatus,
+      expires: (new Date(link.paymentLink.expiryDateTime)).toUTCString(),
+      amount: link.approvedAmount.total,
+      link: link.paymentLink.paymentLinkUrl
+    }
+  }
+
+  // Update local storage if links state changes
+  useEffect(() => localStorage.setItem(state.linkIds, JSON.stringify(linkIds)), [linkIds]);
+
   // Load known links
-  useEffect(() => {  
+  useEffect(() => {
     setLoading(true);
     setError(false);
 
@@ -96,7 +121,7 @@ export default function Invoices() {
           (options) => fetchWithRetry(`${baseUrl}/${resources.paymentLinks}/${linkId}`, options)
             .then(data => {
               setInvoices((i) => {
-                if (i.find((invoice) => invoice.id === linkId)) {
+                if (i.find((invoice) => invoice.id === linkId)) { // we've already loaded this link (in case this is triggered more than once)
                   if (i.length === linkIds.length) {
                     setLoading(false);
                     setActiveLinks(i.filter((invoice) => invoice.status === 'INITIATED' || invoice.status === 'WAITING').length);
@@ -120,21 +145,6 @@ export default function Invoices() {
       })
     }
   }, [apiKey, linkIds, baseUrl, secretKey]);
-
-  // Update local storage if links state changes
-  useEffect(() => localStorage.setItem(state.linkIds, JSON.stringify(linkIds)), [linkIds]);
-
-  const getOustandingAmount = (invoices) => {
-    return invoices
-      .filter((invoice) => invoice.status === 'INITIATED' || invoice.status === 'WAITING')
-      .reduce((partialSum, invoice) => partialSum + parseFloat(invoice.amount), 0);
-  }
-
-  const getPaidAmound = (invoices) => {
-    return invoices
-      .filter((invoice) => invoice.status === 'APPROVED')
-      .reduce((partialSum, invoice) => partialSum + parseFloat(invoice.amount), 0);
-  }
 
   return (
     <React.Fragment>
@@ -182,6 +192,8 @@ export default function Invoices() {
         <InvoicesTable error={error} loading={loading} invoices={invoices} setCurrentLink={setCurrentLink} handleSendInvoiceOpen={handleSendInvoiceOpen} />
       </BodyElement>
 
+      {/* modals */}
+
       <NewInvoice 
         baseUrl={baseUrl} apiKey={apiKey} secretKey={secretKey} 
         setNewLink={setNewLink} 
@@ -209,73 +221,4 @@ export default function Invoices() {
         animationState={sendInvoiceAnimationState} />
     </React.Fragment>
   );
-}
-
-function InvoicesTable(props) {
-  const rows = props.invoices;
-  const columns = [
-    { 
-      field: 'status', headerName: 'Status', align: 'center', headerAlign: 'center', flex: 1,
-    },
-    { 
-      field: 'expires', headerName: 'Expires', align: 'center', headerAlign: 'center', flex: 1,
-    },
-    { 
-      field: 'amount', headerName: 'Amount', align: 'center', headerAlign: 'center', flex: 1,
-      renderCell: (params) => {
-        return (
-          <div>{'£' + params.value.toFixed(2)}</div>
-        );
-      },
-    },
-    { 
-      field: 'link', headerName: 'Link', align: 'center', headerAlign: 'center', flex: 1,
-      renderCell: (params) => {
-        return (
-          <React.Fragment>
-            <Button onClick={() => window.location.href = params.value} sx={{marginRight: '10px'}}><ExitToAppIcon /> Go</Button>
-            <Button onClick={() => navigator.clipboard.writeText(params.value)} sx={{marginRight: '10px'}}><ContentCopyIcon /> Copy</Button>
-            <Button onClick={() => {props.setCurrentLink(params.value); props.handleSendInvoiceOpen()}}><MailOutlineIcon /> Send</Button>
-          </React.Fragment>
-        );
-      },
-    }
-  ];
-
-  if (props.error) {
-    return (<Error />);
-  } else if (props.loading) {
-    return (<Placeholder />);
-  } else {
-    return (
-      <Box style={{ overflow: 'auto', height: '100%', width: '100%'}}>
-        <Typography component="h2" variant="h6" gutterBottom>
-          Recent Links
-        </Typography>
-        <DataGrid 
-          rows={rows} columns={columns} 
-          sx={{ height: '100%', width: '100%', }}
-          components={{ Toolbar: GridToolbar }} 
-          autoHeight
-          checkboxSelection={true}
-          disableSelectionOnClick
-          rowsPerPageOptions={[7, 12, 20]}
-          initialState={{
-            pagination: {
-              pageSize: 7,
-            },
-          }}/>
-      </Box>
-    );
-  }
-}
-
-function mapInvoice(link) {
-  return {
-    id: link.checkoutId,
-    status: link.transactionStatus,
-    expires: (new Date(link.paymentLink.expiryDateTime)).toUTCString(),
-    amount: link.approvedAmount.total,
-    link: link.paymentLink.paymentLinkUrl
-  }
 }

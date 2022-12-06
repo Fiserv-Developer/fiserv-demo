@@ -52,6 +52,8 @@ export default function Products(props) {
         <Title icon={<ShoppingBasketIcon />} primary="Shop" secondary="Select your favourite products and purchase them using our streamlined Checkout flow" />
       </BodyElement>
       {products.map((product) => <Product key={product.name} basket={props.basket} setBasket={props.setBasket} product={product} />)}
+
+      {/* modals */}
       <Basket open={basketOpen} basket={props.basket} setBasket={props.setBasket} handleCheckoutOpen={handleCheckoutOpen} setOpen={setBasketOpen} handleClose={handleBasketClose} animationState={basketAnimationState} />
       <Checkout open={checkoutOpen} basket={props.basket} setOpen={setCheckoutOpen} handleClose={handleCheckoutClose} handleBasketOpen={handleBasketOpen} animationState={checkoutAnimationState} checkout={props.checkout} handleProcessingOpen={handleProcessingOpen}/>
       <Processing open={processingOpen} setOpen={setProcessingOpen} handleClose={handleProcessingClose} animationState={processingAnimationState} />
@@ -118,7 +120,7 @@ function Product(props) {
     );
 
   return (
-    <BodyElement xs={12} md={4} lg={3}>
+    <BodyElement xs={12} sm={6} md={4} lg={3}>
       <img alt={props.product.name + " product photo"} src={ "../products/" + props.product.name.toLowerCase() + ".jpeg" } />
       <p><b>{props.product.name}</b></p>
       <p>£{props.product.value}</p>

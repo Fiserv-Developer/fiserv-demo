@@ -5,7 +5,7 @@ export default function BodyElement(props) {
   const theme = useTheme();
 
   return (
-    <Grid item xs={props.xs} md={props.md} lg={props.lg}>
+    <Grid item xs={props.xs} sm={props.sm} md={props.md} lg={props.lg}>
       <Paper
         sx={{
           p: 2,

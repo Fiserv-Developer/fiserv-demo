@@ -98,7 +98,9 @@ a:active { text-decoration: none !important; }
 
 /* RESPONSIVE STYLES FOR MOBILE */
 @media (max-width: 600px) {
+  /* main container for content */
   main {
     margin-top: 56px;
+    padding: 15px !important;
   }
 }
