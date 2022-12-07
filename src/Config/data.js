@@ -39,28 +39,28 @@ export const products2 = {
   coffee: [
     {
       featured: true,
-      image: "art-blue-purple.jpeg",
-      name: "Almond Infusion (500g)",
-      description: "Mild and nutty with a slight sweetness",
+      image: "coffee-special.jpeg",
+      name: "Fan Fave",
+      description: "A perfectly balanced medium roast",
+      value: "12.99"
+    },
+    {
+      image: "coffee-light.jpeg",
+      name: "Cutting Back",
+      description: "Mild everyday roast with a slight sweetness",
       value: "8.99"
     },
     {
-      image: "art-cyan-pink.jpeg",
-      name: "Tropical Kick (500g)",
-      description: "A hint of coconut, with mild pineapple notes",
-      value: "8.99"
+      image: "coffee-blend.jpeg",
+      name: "Bit of Both",
+      description: "Dark and light blend, provides both rich and lighter notes",
+      value: "10.99"
     },
     {
-      image: "art-bright-pink.jpeg",
-      name: "Hazel Nuts (500g)",
-      description: "Bold chocolate and hazulnut vibes",
-      value: "8.99"
-    },
-    {
-      image: "art-cyan-orange.jpeg",
-      name: "Vanilla Swirl (500g)",
-      description: "Strong and sweet, perfect for a cold winter",
-      value: "8.99"
+      image: "coffee-extra-dark.jpeg",
+      name: "The Beast",
+      description: "An extra dark roast sure to kick you in the teeth",
+      value: "17.99"
     },
   ],
   art: [

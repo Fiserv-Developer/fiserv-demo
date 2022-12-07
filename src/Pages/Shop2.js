@@ -1,5 +1,5 @@
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import { Badge, Button, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Badge, Button, Divider, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import BodyElement from '../Components/BodyElement';
@@ -96,15 +96,14 @@ export default function Shop2() {
 
   const product = (product) => {
     const addItem = (product) => {
-      setBasket([ ...basket, {name: product.name, value: product.value, quantity: 1}]);
+      setBasket([ ...basket, {image: product.image, name: product.name, value: product.value, quantity: 1}]);
     };
 
     const increaseQuantity = (name) => {
       setBasket(basket.map((item) => {
         if(item.name === name) {
           return {
-            name: item.name,
-            value: item.value,
+            ...item,
             quantity: item.quantity + 1
           };
         } else {
@@ -134,7 +133,7 @@ export default function Shop2() {
     (
       <Box sx={{display: 'flex', margin: '0 auto'}}>
         <Button onClick={() => decreaseQuantity(product.name)}>-</Button>
-        <Typography sx={{lineHeight: '40px', height: '40px'}}>{basketItemQuantity(product.name)}</Typography>
+        <Typography sx={{lineHeight: '36.5px', height: '36.5px'}}>{basketItemQuantity(product.name)}</Typography>
         <Button onClick={() => increaseQuantity(product.name)}>+</Button>
       </Box>
     ) : (
@@ -144,15 +143,16 @@ export default function Shop2() {
     const featuredText = product.featured ? 
     (
       <Typography variant="h7" sx={{marginTop: '10px', display: 'flex', alignItems: 'center', flexWrap: 'wrap',}}><StarIcon />Best Seller</Typography>
-    ) : (<Typography variant="h7" sx={{marginTop: '30px'}}></Typography>);
+    ) : (<Typography variant="h7" sx={{marginTop: '33px'}}></Typography>);
 
     return (
       <BodyElement key={product.name} xs={12} md={product.featured ? 6 : 4} lg={2} styleOverrides={{paddingLeft: '10px', paddingRight: '10px'}}>
-        <img src={ "../shop/products/" + product.image } style={{objectFit: 'cover', width: '100%', height: '100%'}} />
+        <img alt={product.name + " product image"} src={ "../shop/products/" + product.image } style={{objectFit: 'cover', width: '100%', height: '100%', minHeight: '50%'}} />
         {featuredText}
         <Typography variant="h6">{product.name}</Typography>
         <Typography variant="p" sx={{ color: theme.palette.text.secondary }}>{product.description}</Typography>
-        <Typography variant="p">£{product.value}</Typography>
+        <Typography variant="p" sx={{textAlign: 'right'}}>£{product.value}</Typography>
+        <Divider />
         {buttons}
       </BodyElement>
     );
@@ -178,7 +178,7 @@ export default function Shop2() {
         {/* banner */}
         <Grid item xs={12}>
           <Box sx={{ width: '100%', height: '500px', position: 'relative' }}>
-            <img src="../shop/banner.jpeg" style={{opacity: '0.5', width: '100%', height: '500px', objectFit: 'cover' }} />
+            <img alt="shop banner" src="../shop/banner.jpeg" style={{opacity: '0.5', width: '100%', height: '500px', objectFit: 'cover' }} />
             <Box sx={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', width: '100%', textAlign: 'center' }}>
               <Typography variant="h1"><b>b</b>rush & <b>b</b>ean</Typography>
               <Typography variant="p">Expert coffee roasters and art curators</Typography>
@@ -201,9 +201,9 @@ export default function Shop2() {
 
           {/* beans */}
           <Grid item xs={12} md={6} lg={4} sx={{position: 'relative' }}>
-            <img src="../shop/beans-table.jpeg" style={{opacity: '0.7', width: '100%', height: '100%', objectFit: 'cover'}}/>
+            <img alt="beans banner" src="../shop/beans-table.jpeg" style={{opacity: '0.7', width: '100%', height: '100%', objectFit: 'cover'}}/>
             <Box sx={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', width: '100%', textAlign: 'center' }}>
-              <Typography variant="h1" sx={{ color: theme.palette.primary.contrastText }}>our <b>b</b>eans</Typography>
+              <Typography variant="h2" sx={{ color: theme.palette.primary.contrastText }}>our <b>b</b>eans</Typography>
               <Typography variant="p" sx={{ color: theme.palette.primary.contrastText }}>Premium coffee beans, roasted and infused by us</Typography>
             </Box>
           </Grid>
@@ -211,9 +211,9 @@ export default function Shop2() {
           
           {/* art */}
           <Grid item xs={12} md={6} lg={4} sx={{position: 'relative' }}>
-            <img src="../shop/brush.jpeg" style={{opacity: '0.7', width: '100%', height: '100%', objectFit: 'cover'}}/>
+            <img alt="brush banner" src="../shop/brush.jpeg" style={{opacity: '0.7', width: '100%', height: '100%', objectFit: 'cover'}}/>
             <Box sx={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', width: '100%', textAlign: 'center' }}>
-              <Typography variant="h1" sx={{ color: theme.palette.primary.contrastText }}>our <b>b</b>rush</Typography>
+              <Typography variant="h2" sx={{ color: theme.palette.primary.contrastText }}>our <b>b</b>rush</Typography>
               <Typography variant="p" sx={{ color: theme.palette.primary.contrastText }}>Unique artwork, curated and created by us</Typography>
             </Box>
           </Grid>
@@ -244,6 +244,5 @@ export default function Shop2() {
       <Checkout open={checkoutOpen} basket={basket} setOpen={setCheckoutOpen} handleClose={handleCheckoutClose} handleBasketOpen={handleBasketOpen} animationState={checkoutAnimationState} checkout={checkout} handleProcessingOpen={handleProcessingOpen}/>
       <Processing open={processingOpen} setOpen={setProcessingOpen} handleClose={handleProcessingClose} animationState={processingAnimationState} />
     </React.Fragment>
-  
   );
 }

@@ -2,9 +2,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
-import { Button, Table, TableBody, TableCell, TableRow, Typography, useTheme } from "@mui/material";
+import { Button, Divider, Grid, Table, TableBody, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { CenteredBox } from '../CenteredBox';
 import { ResponsiveModal } from '../ResponsiveModal';
 import { Title } from '../Title';
 
@@ -33,16 +32,19 @@ export default function Basket(props) {
 
   const modalContent = props.basket.length > 0 ? (
     <React.Fragment>
-      <Table>
+      <Table sx={{tableLayout: 'fixed'}}>
         <TableBody>
           {props.basket.map((item) => 
-            <TableRow key={item.name}>
-              <TableCell><img width='60px' alt={item.name + " product photo"} src={ "../products/" + item.name.toLowerCase() + ".jpeg" } /></TableCell>
-              <TableCell><Typography>{item.name}</Typography></TableCell>
-              <TableCell><Typography>£{item.value}</Typography></TableCell>
-              <TableCell><Typography>{item.quantity}</Typography></TableCell>
-              <TableCell><Button onClick={() => removeItem(item.name)}><PlaylistRemoveIcon /></Button></TableCell>
-            </TableRow>
+            <Grid container spacing={2}>
+              <Grid item xs={2}>
+                <img width='60px' alt={item.name + " product photo"} src={ "../shop/products/" + item.image } />
+              </Grid>
+              <Grid item xs={4}><Typography sx={{ textAlign: 'center', height: '40px', lineHeight: '40px' }}>{item.name}</Typography></Grid>
+              <Grid item xs={2}><Typography sx={{ height: '40px', lineHeight: '40px' }}>£{item.value}</Typography></Grid>
+              <Grid item xs={2}><Typography sx={{ textAlign: 'right', height: '40px', lineHeight: '40px' }}>x{item.quantity}</Typography></Grid>
+              <Grid item xs={2}><Button onClick={() => removeItem(item.name)}><PlaylistRemoveIcon /></Button></Grid>
+              <Grid item xs={12}><Divider sx={{ marginBottom: 2 }} /></Grid>
+            </Grid>
           )}
         </TableBody>
       </Table>
@@ -50,9 +52,7 @@ export default function Basket(props) {
       <Typography sx={{ textAlign: 'right'}}>Total: £{basketTotal}</Typography>
     </React.Fragment>
   ) : (
-    <CenteredBox>
-      <Typography variant="h6">Your basket is empty.</Typography>
-    </CenteredBox>
+    <Typography variant="h6" sx={{textAlign: 'center'}}>Your basket is empty.</Typography>
   );
 
   const modalButtons = (
