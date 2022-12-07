@@ -27,10 +27,8 @@ function isJsonObject(object) {
 
 export async function fetchWithRetry(url, options = {}, attempt = 1, waitMillis = 500) {
   const maxAttempts = 3;
-  console.log(`Making call to: ${url}, attempt #${attempt}`)
 
   const reattempt = (response) => {
-    console.log(`Request failed, checking for next attempt...`)
     const nextAttempt = attempt + 1;
     const nextWaitMillis = waitMillis * 2; // increase the wait between each attempt for backoff
 

@@ -16,7 +16,7 @@ export default function Body() {
   return (
     <Box 
       component="main"
-      sx={{ display: 'flex', width: '100%', minHeight: '100vh',  paddingLeft: '30px', padding: '30px', overflow: 'auto' }}
+      sx={{ display: 'flex', width: '100%', minHeight: '100vh', overflow: 'hidden' }}
       className={`${transitionStage}`}
       onAnimationEnd={() => {
         if (transitionStage === "fadeOut") {
@@ -24,13 +24,11 @@ export default function Body() {
           setDisplayLocation(location);
         }
       }}>
-        <Grid container spacing={3}>
-          <Routes location={displayLocation}>
-            {routes.map((route, index) => {
-              return (<Route key={index} path={route.url} element={route.component} />)
-            })}
-          </Routes>
-        </Grid>
+        <Routes location={displayLocation}>
+          {routes.map((route, index) => {
+            return (<Route key={index} path={route.url} element={route.component} />)
+          })}
+        </Routes>
     </Box>
   );
 }

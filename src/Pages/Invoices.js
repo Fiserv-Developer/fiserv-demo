@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import ReceiptIcon from '@mui/icons-material/Receipt';
-import { Button, Typography, useTheme } from '@mui/material';
+import { Button, Grid, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import BodyElement from '../Components/BodyElement';
 import { CenteredBox } from '../Components/CenteredBox';
@@ -96,10 +96,10 @@ export default function Invoices() {
     return {
       id: link.checkoutId,
       status: link.transactionStatus,
-      expires: (new Date(link.paymentLink.expiryDateTime)).toUTCString(),
+      expires: link.paymentLink.expiryDateTime,
       amount: link.approvedAmount.total,
-      link: link.paymentLink.paymentLinkUrl
-    }
+      link: link.paymentLink.paymentLinkUrl,
+    };
   }
 
   // Update local storage if links state changes
@@ -141,13 +141,13 @@ export default function Invoices() {
                 }
               })
             })
-            .catch(rejected => setError(true)))
+            .catch(rejected => setError(true)));
       })
     }
   }, [apiKey, linkIds, baseUrl, secretKey]);
 
   return (
-    <React.Fragment>
+    <Grid container spacing={3} sx={{padding: '30px'}}>
       <BodyElement xs={12}>
         <Title icon={<ReceiptIcon />} primary="Invoices" secondary="View existing open invoices / payment links, or generate new ones" />
         <Button 
@@ -202,7 +202,7 @@ export default function Invoices() {
         handleProcessingOpen={handleProcessingOpen}
         handleProcessingClose={handleProcessingClose}
         animationState={newInvoiceAnimationState}
-        linkIds={linkIds} setLinkIds={setLinkIds} />
+        linkIds={linkIds} />
 
       <Processing 
         open={processingOpen} 
@@ -211,7 +211,7 @@ export default function Invoices() {
         animationState={processingAnimationState} />
 
       <CreatedInvoice 
-        newLink={newLink} 
+        newLink={newLink} setLinkIds={setLinkIds}
         open={createdInvoiceOpen} setOpen={setCreatedInvoiceOpen} handleClose={handleCreatedInvoiceClose} 
         animationState={createdInvoiceAnimationState} />
       
@@ -219,6 +219,6 @@ export default function Invoices() {
         link={currentLink} 
         open={sendInvoiceOpen} setOpen={setSendInvoiceOpen} handleClose={handleSendInvoiceClose} 
         animationState={sendInvoiceAnimationState} />
-    </React.Fragment>
+    </Grid>
   );
 }

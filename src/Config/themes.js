@@ -11,7 +11,7 @@ const colours = {
   greyMedium: '#858585',
   greyDark: '#232323',
   greyDarkAccent: '#424242',
-  greyLight: '#FBFAFA',
+  greyLight: '#FAF5F5',
   greyMuted: '#DFDDDD',
   orange: '#FF6600',
   orangeLight: '#F79500',

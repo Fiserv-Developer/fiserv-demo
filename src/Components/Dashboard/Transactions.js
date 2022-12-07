@@ -105,6 +105,9 @@ function TransactionsTable(props) {
           pagination: {
             pageSize: 10,
           },
+          sorting: {
+            sortModel: [{ field: 'authorised', sort: 'desc' }],
+          },
         }}/>
     </React.Fragment>
   )

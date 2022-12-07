@@ -35,6 +35,63 @@ export const products = [
   },
 ];
 
+export const products2 = {
+  coffee: [
+    {
+      featured: true,
+      image: "art-blue-purple.jpeg",
+      name: "Almond Infusion (500g)",
+      description: "Mild and nutty with a slight sweetness",
+      value: "8.99"
+    },
+    {
+      image: "art-cyan-pink.jpeg",
+      name: "Tropical Kick (500g)",
+      description: "A hint of coconut, with mild pineapple notes",
+      value: "8.99"
+    },
+    {
+      image: "art-bright-pink.jpeg",
+      name: "Hazel Nuts (500g)",
+      description: "Bold chocolate and hazulnut vibes",
+      value: "8.99"
+    },
+    {
+      image: "art-cyan-orange.jpeg",
+      name: "Vanilla Swirl (500g)",
+      description: "Strong and sweet, perfect for a cold winter",
+      value: "8.99"
+    },
+  ],
+  art: [
+    {
+      featured: true,
+      image: "art-blue-purple.jpeg",
+      name: "Midnight Waves",
+      description: "Oil on board, 8\"x6\"",
+      value: "189.00"
+    },
+    {
+      image: "art-cyan-pink.jpeg",
+      name: "Summer Sun",
+      description: "Oil on board, 8\"x6\"",
+      value: "259.00"
+    },
+    {
+      image: "art-bright-pink.jpeg",
+      name: "Hotline Miami",
+      description: "Oil on board, 8\"x6\"",
+      value: "589.00"
+    },
+    {
+      image: "art-cyan-orange.jpeg",
+      name: "Ocean Sunset",
+      description: "Oil on board, 8\"x6\"",
+      value: "389.00"
+    },
+  ]
+}
+
 export const links = [
   {
     "storeId": "72305408",

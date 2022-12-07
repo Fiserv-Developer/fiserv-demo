@@ -1,4 +1,4 @@
-import { Alert, Link, MenuItem, Select, Snackbar } from '@mui/material';
+import { Alert, Grid, Link, MenuItem, Select, Snackbar } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import BodyElement from '../Components/BodyElement';
 import KeyFormControl from '../Components/Settings/KeyFormControl';
@@ -57,7 +57,7 @@ export default function Settings() {
   const hideUpdate = () => setOpen(false);
 
   return (
-    <React.Fragment>
+    <Grid container spacing={3} sx={{padding: '30px'}}>
       <BodyElement xs={12}>
         <Title icon={<SettingsIcon />} primary="Settings" secondary="Configure the demo with your API credentials and tailor your experience"  />
       </BodyElement>
@@ -137,6 +137,6 @@ export default function Settings() {
             Settings saved!
           </Alert>
       </Snackbar>
-    </React.Fragment>
+    </Grid>
   );
 }

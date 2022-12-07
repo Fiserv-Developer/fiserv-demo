@@ -16,7 +16,7 @@ export default function Dashboard() {
   const merchantId = getValueOrDefault(config.merchantId, "");
 
   return (
-    <React.Fragment>
+    <Grid container spacing={3} sx={{padding: '30px'}}>
       <BodyElement xs={12}>
         <Title icon={<DashboardIcon />} primary="Dashboard" secondary="View your merchant transactional data or download recent statements" />
       </BodyElement>
@@ -43,6 +43,6 @@ export default function Dashboard() {
       <BodyElement xs={12}>
         <Transactions apiKey={apiKey} merchantId={merchantId} />
       </BodyElement>
-    </React.Fragment>
+    </Grid>
   );
 }

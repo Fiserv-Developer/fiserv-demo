@@ -101,6 +101,6 @@ a:active { text-decoration: none !important; }
   /* main container for content */
   main {
     margin-top: 56px;
-    padding: 15px !important;
+    /* padding: 15px !important; */
   }
 }

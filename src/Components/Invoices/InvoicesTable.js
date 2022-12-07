@@ -5,6 +5,7 @@ import Error from "../Error";
 import Placeholder from "../Placeholder";
 import React from "react";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import PendingIcon from '@mui/icons-material/Pending';
 import useWindowDimensions from "../../Config/utils";
 import { config } from "../../Config/constants";
@@ -26,6 +27,9 @@ export function InvoicesTable(props) {
     },
     { 
       field: 'expires', headerName: 'Expires', align: 'center', headerAlign: 'center', flex: 1,
+      renderCell: (params) => {
+        return (new Date(params.value)).toUTCString();
+      },
     },
     { 
       field: 'amount', headerName: 'Amount', align: 'center', headerAlign: 'center', flex: 0.8,
@@ -38,11 +42,16 @@ export function InvoicesTable(props) {
     { 
       field: 'link', headerName: 'Link', align: 'center', headerAlign: 'center', flex: 0.8, direction: 'column',
       renderCell: (params) => {
-        return (
-          <React.Fragment>
+        console.log(params)
+        if (params.getValue(params.row.id, 'status') === 'APPROVED') {
+          return (
+            <Button onClick={() => window.open(params.value, '_blank').focus()}><ReceiptIcon /> View Receipt</Button>
+          );
+        } else {
+          return (
             <Button onClick={() => {props.setCurrentLink(params.value); props.handleSendInvoiceOpen()}}><MailOutlineIcon /> Send</Button>
-          </React.Fragment>
-        );
+          );
+        }
       },
     }
   ];
@@ -68,6 +77,9 @@ export function InvoicesTable(props) {
           initialState={{
             pagination: {
               pageSize: 7,
+            },
+            sorting: {
+              sortModel: [{ field: 'expires', sort: 'asc' }],
             },
           }}/>
       </Box>

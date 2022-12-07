@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -19,6 +19,7 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { config } from '../Config/constants';
 import useWindowDimensions from '../Config/utils';
+import { Slide, useScrollTrigger } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -87,6 +88,19 @@ export default function Menu(props) {
   const marginTop = screen.height > config.responsiveScreenHeight ? '30px' : '15px';
   const marginBottom = screen.height > config.responsiveScreenHeight ? '20px' : '10px';
 
+  function HideOnScroll(props) {
+    const { children, window } = props;
+    const trigger = useScrollTrigger({
+      target: window ? window() : undefined,
+    });
+  
+    return (
+      <Slide appear={false} direction="down" in={!trigger}>
+        {children}
+      </Slide>
+    );
+  }
+
   const drawerExpandButton = screen.height > config.responsiveScreenHeight ? (
     <IconButton 
       sx={{ color: theme.palette.menu.text, marginTop: marginTop, marginBottom: marginBottom }} 
@@ -117,27 +131,29 @@ export default function Menu(props) {
     <React.Fragment>
 
       {/* Mobile drawer (temporary) */}
-      <MuiAppBar
-        position="fixed"
-        sx={{
-          display: { xs: 'block', sm: 'none' },
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          backgroundColor: theme.palette.menu.background,
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleMobileDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}>
-            <MenuIcon />
-          </IconButton>
-          <img alt='Fiserv developer logo' src='../logo-dark.svg' height="40px" />
-        </Toolbar>
-      </MuiAppBar>
+      <HideOnScroll {...props}>
+        <AppBar
+          position="fixed"
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            backgroundColor: theme.palette.menu.background,
+          }}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleMobileDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}>
+              <MenuIcon />
+            </IconButton>
+            <img alt='Fiserv developer logo' src='../logo-dark.svg' height="40px" />
+          </Toolbar>
+        </AppBar>
+      </HideOnScroll>
       <Box>
         <MuiDrawer
           container={container}
