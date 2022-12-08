@@ -16,7 +16,7 @@ let routes = [
     {type: "component", "name": "Home", "url": "/", "component": <Home/>, icon: <HomeIcon/>},
     {type: "component", "name": "Dashboard", "url": "/dashboard", "component": <Dashboard/>, icon: <DashboardIcon/>},
     {type: "hidden", "name": "Shop", "url": "/shop-old", "component": <Shop/>, icon: <ShoppingBasket/>}, // todo remove once we're happy
-    {type: "component", "name": "Shop2", "url": "/shop", "component": <Shop2/>, icon: <ShoppingBasket/>},
+    {type: "component", "name": "Shop", "url": "/shop", "component": <Shop2/>, icon: <ShoppingBasket/>},
     {type: "component", "name": "Invoices", "url": "/invoices", "component": <Invoices/>, icon: <ReceiptIcon/>},
     {type: "component", "name": "Settings", "url": "/settings", "component": <Settings/>, icon: <SettingsIcon/>},
     // hidden pages
