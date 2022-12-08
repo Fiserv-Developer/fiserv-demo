@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -17,6 +17,9 @@ import routes from '../Config/routes'
 import { NavLink } from 'react-router-dom';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { config } from '../Config/constants';
+import useWindowDimensions from '../Config/utils';
+import { Slide, useScrollTrigger } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -65,6 +68,7 @@ export default function Menu(props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const screen = useWindowDimensions();
   const icon = !props.themeToggle ? <WbSunnyIcon /> : <DarkModeIcon />
 
   const handleDrawerToggle = () => {
@@ -81,31 +85,76 @@ export default function Menu(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
+  const marginTop = screen.height > config.responsiveScreenHeight ? '30px' : '15px';
+  const marginBottom = screen.height > config.responsiveScreenHeight ? '20px' : '10px';
+
+  function HideOnScroll(props) {
+    const { children, window } = props;
+    const trigger = useScrollTrigger({
+      target: window ? window() : undefined,
+    });
+  
+    return (
+      <Slide appear={false} direction="down" in={!trigger}>
+        {children}
+      </Slide>
+    );
+  }
+
+  const drawerExpandButton = screen.height > config.responsiveScreenHeight ? (
+    <IconButton 
+      sx={{ color: theme.palette.menu.text, marginTop: marginTop, marginBottom: marginBottom }} 
+      onClick={() => handleDrawerToggle()}>
+      {open ? <KeyboardDoubleArrowLeftIcon /> : <KeyboardDoubleArrowRightIcon />}
+    </IconButton>
+  ) : (null);
+
+  const themeButton = screen.height > config.responsiveScreenHeight ? (
+    <Box sx={{ position: 'absolute', bottom: '20px', width: '100%', textAlign: 'center' }}>
+      <IconButton
+        onClick={() => props.setThemeToggle(!props.themeToggle)}
+        sx={{ color: theme.palette.primary.main, margin: 0}}
+      >
+        {icon}
+      </IconButton>  
+    </Box> 
+  ) : (
+    <IconButton
+      onClick={() => props.setThemeToggle(!props.themeToggle)}
+      sx={{ color: theme.palette.primary.main, marginTop: marginTop, marginBottom: marginBottom}}
+    >
+      {icon}
+    </IconButton>  
+  );
+
   return (
     <React.Fragment>
-      <MuiAppBar
-        position="fixed"
-        sx={{
-          display: { xs: 'block', sm: 'none' },
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          backgroundColor: theme.palette.menu.background,
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleMobileDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}>
-            <MenuIcon />
-          </IconButton>
-          <img alt='Fiserv developer logo' src='../logo-dark.svg' height="40px" />
-        </Toolbar>
-      </MuiAppBar>
+
+      {/* Mobile drawer (temporary) */}
+      <HideOnScroll {...props}>
+        <AppBar
+          position="fixed"
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            backgroundColor: theme.palette.menu.background,
+          }}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleMobileDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}>
+              <MenuIcon />
+            </IconButton>
+            <img alt='Fiserv developer logo' src='../logo-dark.svg' height="40px" />
+          </Toolbar>
+        </AppBar>
+      </HideOnScroll>
       <Box>
-        {/* Mobile drawer (temporary) */}
         <MuiDrawer
           container={container}
           variant="temporary"
@@ -147,14 +196,12 @@ export default function Menu(props) {
         <Drawer theme={theme} variant="permanent" open={open} 
           sx={{
             display: { xs: 'none', sm: 'block',
-            '& .MuiDrawer-paperAnchorLeft': { backgroundColor: theme.palette.menu.main + ' !important'}
+            '& .MuiDrawer-paperAnchorLeft': { backgroundColor: theme.palette.menu.background + ' !important'}
           }}}
         >
-          <br />
-          <a href="https://fiserv.dev" target="_blank" rel="noreferrer noopener" style={{width: '100%', textAlign: 'center'}}>
+          <a href="https://fiserv.dev" target="_blank" rel="noreferrer noopener" style={{width: '100%', textAlign: 'center', marginTop: marginTop, marginBottom: marginBottom}}>
             <img alt='Fiserv developer logo' src='../logo-dark.svg'  style={{width: '80%'}} />
           </a>
-          <br />
           <Divider sx={{ borderColor: theme.palette.menu.line }} />
           <List>
               {routes.map((route, index) => {
@@ -179,27 +226,8 @@ export default function Menu(props) {
               })}
             </List>
           <Divider sx={{ borderColor: theme.palette.menu.line }} />
-          <br />
-          <IconButton 
-            sx={{ color: theme.palette.menu.text }} 
-            onClick={() => handleDrawerToggle()}>
-            {open ? <KeyboardDoubleArrowLeftIcon /> : <KeyboardDoubleArrowRightIcon />}
-          </IconButton>
-          <br /><br/>
-
-          <Box sx={{ position: 'absolute', bottom: '20px', width: '100%', textAlign: 'center' }}>
-            <IconButton
-              edge="end"
-              color="inherit"
-              aria-label="mode"
-              onClick={() => {
-                props.setThemeToggle(!props.themeToggle);
-              }}
-              sx={{ color: theme.palette.primary.main, margin: 0}}>
-                {icon}
-            </IconButton>
-          </Box>         
-          <br /><br />
+          {drawerExpandButton}
+          {themeButton}
         </Drawer>
       </Box>
     </React.Fragment>

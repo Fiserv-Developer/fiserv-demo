@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { config } from '../../Config/constants';
-import { fetchWithRetry } from '../../Config/utils';
+import useWindowDimensions, { fetchWithRetry } from '../../Config/utils';
 import Error from '../Error';
 import Placeholder from '../Placeholder';
 
@@ -45,6 +45,7 @@ export default function Transactions(props) {
 }
 
 function TransactionsTable(props) {
+  const screen = useWindowDimensions();
   const rows = mapTransactions(props.transactions);
   const columns = [
     { 
@@ -61,7 +62,8 @@ function TransactionsTable(props) {
       field: 'authorised', headerName: 'Authorised', width: 300, align: 'center', headerAlign: 'center', flex: 0.2,
     },
     { 
-      field: 'posted', headerName: 'Cleared', width: 300, align: 'center', headerAlign: 'center', flex: 0.2,
+      field: 'posted', headerName: 'Cleared', width: 300, align: 'center', headerAlign: 'center', flex: 0.2, 
+      hide: (screen.width <= config.responsiveScreenWidth),
     },
     { 
       field: 'channel', headerName: 'Channel', width: 150, align: 'center', headerAlign: 'center', flex: 0.1,
@@ -80,6 +82,7 @@ function TransactionsTable(props) {
           <Method type={params.value}/>
         );
       },
+      hide: (screen.width <= config.responsiveScreenWidth),
     },
     { 
       field: 'amount', headerName: 'Amount', width: 150, align: 'center', headerAlign: 'center', flex: 0.2,
@@ -95,12 +98,15 @@ function TransactionsTable(props) {
         rows={rows} columns={columns} 
         components={{ Toolbar: GridToolbar }} 
         autoHeight
-        checkboxSelection={true}
+        checkboxSelection={screen.width > config.responsiveScreenWidth ? true : false}
         disableSelectionOnClick
         rowsPerPageOptions={[5, 10, 20]}
         initialState={{
           pagination: {
             pageSize: 10,
+          },
+          sorting: {
+            sortModel: [{ field: 'authorised', sort: 'desc' }],
           },
         }}/>
     </React.Fragment>

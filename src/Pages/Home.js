@@ -4,7 +4,7 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
-import { Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
+import { Grid, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import React from 'react';
 import BodyElement from '../Components/BodyElement';
@@ -14,7 +14,7 @@ export default function Home() {
   const theme = useTheme();
 
   return (
-    <React.Fragment>
+    <Grid container spacing={3} sx={{padding: '30px'}}>
       <BodyElement xs={12}>
         <Title icon={<HomeIcon />} primary="Home" secondary="The fiserv.dev integration demo landing page" />
         <br />
@@ -98,6 +98,6 @@ export default function Home() {
           </ListItem>
         </List>
       </BodyElement>
-    </React.Fragment>
+    </Grid>
   );
 }

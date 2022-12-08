@@ -11,20 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-/* :root {
-  --bg: #111;
-  --dark-gray: rgb(39, 39, 39);
-  --light-gray: rgb(68, 68, 68);
-  --black: black;
-  --white: white;
-  --accent: #ff6600;
-} */
-
-.MuiDrawer-paperAnchorLeft {
-  background-color: var(--dark-gray) !important;
-} 
-
-.MuiListItem-button:hover {
-  background-color: var(--light-gray) !important;
-}

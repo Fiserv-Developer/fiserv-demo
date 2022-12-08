@@ -1,7 +1,8 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import EmailIcon from '@mui/icons-material/Email';
-import { Button, Grid, TextField, useTheme } from "@mui/material";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { Button, Grid, TextField, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ResponsiveModal } from '../ResponsiveModal';
 import { Title } from '../Title';
@@ -9,7 +10,8 @@ import { Title } from '../Title';
 export default function SendInvoice(props) {
   const theme = useTheme();
   const [email, setEmail] = useState("");
-  const [valid, setValid] = useState();
+  const [valid, setValid] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (email !== '') {
@@ -25,6 +27,27 @@ export default function SendInvoice(props) {
 
   const modalContent = (
     <Grid container item spacing={3}>
+      <Grid item xs={12}>
+        <Typography 
+        sx={{
+          textAlign: 'center', 
+          border: '1px solid ' + theme.palette.background.line, 
+          backgroundColor: theme.palette.background.default,
+          color: theme.palette.primary.main,
+          padding: '2px'
+        }}
+        >
+          {props.link} 
+          <Button 
+            onClick={() => {
+              navigator.clipboard.writeText(props.link);
+              setCopied(true);
+            }}
+          >
+            <ContentCopyIcon/> {copied ? "Copied!" : ""}
+          </Button>
+        </Typography>
+      </Grid>
       <Grid item xs={12}>
         <TextField
           required fullWidth

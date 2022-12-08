@@ -1,4 +1,6 @@
 export const config = {
+  responsiveScreenWidth: 600,
+  responsiveScreenHeight: 600,
   baseUrl: "https://prod.emea.api.fiservapps.com/sandbox/exp/v1",
   apiKey: "config-apiKey",
   defaultApiKey: "Sxrp8BDCTY3FqekgVIj4GX8Ukdjb67SG",

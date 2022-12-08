@@ -14,7 +14,7 @@ export function ResponsiveModal(props) {
 
   const buttonsSection = props.buttons ? (
     <React.Fragment>
-      <Divider sx={{ margin: 4}}/>
+      <Divider sx ={{ marginTop: 4, marginBottom: 4 }}/>
       <Box sx={{ width: '100%', textAlign: 'right' }}>
         {props.buttons}
       </Box>
@@ -56,7 +56,8 @@ export function ResponsiveModal(props) {
             [theme.breakpoints.down('sm')]: { 
               overflow: 'auto', 
               borderRadius: 0, 
-              height: '100vh', 
+              height: '100vh',
+              padding: '16px'
             } 
           }}
         >

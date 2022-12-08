@@ -2,8 +2,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
-import { Button, Table, TableBody, TableCell, TableRow, Typography, useTheme } from "@mui/material";
-import React, { useState } from "react";
+import { Button, Divider, Grid, Table, TableBody, Typography, useTheme } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { ResponsiveModal } from '../ResponsiveModal';
 import { Title } from '../Title';
 
@@ -11,12 +11,17 @@ export default function Basket(props) {
   const theme = useTheme();
   const [checkoutEnabled, setCheckoutEnabled] = useState(true);
 
+  useEffect(() => {
+    if (props.basket.length > 0) {
+      setCheckoutEnabled(true);
+    } else {
+      setCheckoutEnabled(false);
+    }
+  }, [props.basket])
+
   const removeItem = (name) => {
     const basket = props.basket.filter((item) => item.name !== name );
     props.setBasket(basket);
-    if (basket.length < 1) {
-      setCheckoutEnabled(false);
-    }
   };
 
   const basketTotal = props.basket.reduce((partialSum, item) => partialSum + (parseFloat(item.value) * item.quantity), 0).toFixed(2);
@@ -25,24 +30,29 @@ export default function Basket(props) {
     <Title icon={<ShoppingBasketIcon />} primary="Shopping Basket" secondary="Your basket contains the following:" />
   );
 
-  const modalContent = (
-      <React.Fragment>
-      <Table>
+  const modalContent = props.basket.length > 0 ? (
+    <React.Fragment>
+      <Table sx={{tableLayout: 'fixed'}}>
         <TableBody>
           {props.basket.map((item) => 
-            <TableRow key={item.name}>
-              <TableCell><img width='60px' alt={item.name + " product photo"} src={ "../products/" + item.name.toLowerCase() + ".jpeg" } /></TableCell>
-              <TableCell><Typography>{item.name}</Typography></TableCell>
-              <TableCell><Typography>£{item.value}</Typography></TableCell>
-              <TableCell><Typography>{item.quantity}</Typography></TableCell>
-              <TableCell><Button onClick={() => removeItem(item.name)}><PlaylistRemoveIcon /></Button></TableCell>
-            </TableRow>
+            <Grid container spacing={2}>
+              <Grid item xs={2}>
+                <img width='60px' alt={item.name + " product photo"} src={ "../shop/products/" + item.image } />
+              </Grid>
+              <Grid item xs={4}><Typography sx={{ textAlign: 'center', height: '40px', lineHeight: '40px' }}>{item.name}</Typography></Grid>
+              <Grid item xs={2}><Typography sx={{ height: '40px', lineHeight: '40px' }}>£{item.value}</Typography></Grid>
+              <Grid item xs={2}><Typography sx={{ textAlign: 'right', height: '40px', lineHeight: '40px' }}>x{item.quantity}</Typography></Grid>
+              <Grid item xs={2}><Button onClick={() => removeItem(item.name)}><PlaylistRemoveIcon /></Button></Grid>
+              <Grid item xs={12}><Divider sx={{ marginBottom: 2 }} /></Grid>
+            </Grid>
           )}
         </TableBody>
       </Table>
       <br />
       <Typography sx={{ textAlign: 'right'}}>Total: £{basketTotal}</Typography>
     </React.Fragment>
+  ) : (
+    <Typography variant="h6" sx={{textAlign: 'center'}}>Your basket is empty.</Typography>
   );
 
   const modalButtons = (
