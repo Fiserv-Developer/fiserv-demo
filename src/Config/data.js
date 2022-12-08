@@ -68,25 +68,25 @@ export const products2 = {
       featured: true,
       image: "art-blue-purple.jpeg",
       name: "Midnight Waves",
-      description: "Oil on board, 8\"x6\"",
-      value: "189.00"
+      description: "Oil [Print], 8\"x6\"",
+      value: "49.99"
     },
     {
       image: "art-cyan-pink.jpeg",
       name: "Summer Sun",
-      description: "Oil on board, 8\"x6\"",
+      description: "Oil on board [Original], 8\"x6\"",
       value: "259.00"
     },
     {
       image: "art-bright-pink.jpeg",
       name: "Hotline Miami",
-      description: "Oil on board, 8\"x6\"",
+      description: "Oil on board [Original], 8\"x6\"",
       value: "589.00"
     },
     {
       image: "art-cyan-orange.jpeg",
       name: "Ocean Sunset",
-      description: "Oil on board, 8\"x6\"",
+      description: "Acrylic on canvas [original], 8\"x6\"",
       value: "389.00"
     },
   ]

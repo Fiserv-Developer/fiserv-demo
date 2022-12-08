@@ -6,22 +6,22 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import Dashboard from '../Pages/Dashboard';
 import Home from '../Pages/Home';
 import Settings from '../Pages/Settings';
-// import Shop from '../Pages/Shop';
 import Invoices from '../Pages/Invoices';
 import CheckoutSuccess from '../Components/Shop/CheckoutSuccess';
 import CheckoutFailure from '../Components/Shop/CheckoutFailure';
 import Shop2 from '../Pages/Shop2';
+import Shop from '../Pages/Shop';
 
 let routes = [
     {type: "component", "name": "Home", "url": "/", "component": <Home/>, icon: <HomeIcon/>},
     {type: "component", "name": "Dashboard", "url": "/dashboard", "component": <Dashboard/>, icon: <DashboardIcon/>},
-    // {type: "component", "name": "Shop", "url": "/shop", "component": <Shop/>, icon: <ShoppingBasket/>}, todo remove once we're happy
-    {type: "component", "name": "Shop2", "url": "/shop2", "component": <Shop2/>, icon: <ShoppingBasket/>},
+    {type: "hidden", "name": "Shop", "url": "/shop-old", "component": <Shop/>, icon: <ShoppingBasket/>}, // todo remove once we're happy
+    {type: "component", "name": "Shop2", "url": "/shop", "component": <Shop2/>, icon: <ShoppingBasket/>},
     {type: "component", "name": "Invoices", "url": "/invoices", "component": <Invoices/>, icon: <ReceiptIcon/>},
     {type: "component", "name": "Settings", "url": "/settings", "component": <Settings/>, icon: <SettingsIcon/>},
     // hidden pages
-    {"name": "CheckoutSuccess", "url": "/checkout-success", "component": <CheckoutSuccess/>},
-    {"name": "CheckoutFailure", "url": "/checkout-failure", "component": <CheckoutFailure/>},
+    {type: "hidden", "name": "CheckoutSuccess", "url": "/checkout-success", "component": <CheckoutSuccess/>},
+    {type: "hidden", "name": "CheckoutFailure", "url": "/checkout-failure", "component": <CheckoutFailure/>},
 ];
 
 export default routes;
