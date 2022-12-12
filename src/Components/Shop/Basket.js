@@ -32,22 +32,18 @@ export default function Basket(props) {
 
   const modalContent = props.basket.length > 0 ? (
     <React.Fragment>
-      <Table sx={{tableLayout: 'fixed'}}>
-        <TableBody>
-          {props.basket.map((item) => 
-            <Grid container spacing={2}>
-              <Grid item xs={2}>
-                <img width='60px' alt={item.name + " product photo"} src={ "../shop/products/" + item.image } />
-              </Grid>
-              <Grid item xs={4}><Typography sx={{ textAlign: 'center', height: '40px', lineHeight: '40px' }}>{item.name}</Typography></Grid>
-              <Grid item xs={2}><Typography sx={{ height: '40px', lineHeight: '40px' }}>£{item.value}</Typography></Grid>
-              <Grid item xs={2}><Typography sx={{ textAlign: 'right', height: '40px', lineHeight: '40px' }}>x{item.quantity}</Typography></Grid>
-              <Grid item xs={2}><Button onClick={() => removeItem(item.name)}><PlaylistRemoveIcon /></Button></Grid>
-              <Grid item xs={12}><Divider sx={{ marginBottom: 2 }} /></Grid>
-            </Grid>
-          )}
-        </TableBody>
-      </Table>
+      {props.basket.map((item) => 
+        <Grid container spacing={2} key={item.name}>
+          <Grid item xs={2}>
+            <img width='60px' alt={item.name + " product photo"} src={ "../shop/products/" + item.image } />
+          </Grid>
+          <Grid item xs={4}><Typography sx={{ textAlign: 'center', height: '40px', lineHeight: '40px' }}>{item.name}</Typography></Grid>
+          <Grid item xs={2}><Typography sx={{ height: '40px', lineHeight: '40px' }}>£{item.value}</Typography></Grid>
+          <Grid item xs={2}><Typography sx={{ textAlign: 'right', height: '40px', lineHeight: '40px' }}>x{item.quantity}</Typography></Grid>
+          <Grid item xs={2}><Button onClick={() => removeItem(item.name)}><PlaylistRemoveIcon /></Button></Grid>
+          <Grid item xs={12}><Divider sx={{ marginBottom: 2 }} /></Grid>
+        </Grid>
+      )}
       <br />
       <Typography sx={{ textAlign: 'right'}}>Total: £{basketTotal}</Typography>
     </React.Fragment>

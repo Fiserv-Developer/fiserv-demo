@@ -173,7 +173,7 @@ export default function Menu(props) {
             <br />
             <Divider />
             <List>
-              {routes.map((route, index) => {
+              {routes().map((route, index) => {
                 if (route.type === 'component') {
                   return (
                   <NavLink key={index} to={route.url} style={({ isActive }) => handleButtonBackground(isActive)}>
@@ -204,7 +204,7 @@ export default function Menu(props) {
           </a>
           <Divider sx={{ borderColor: theme.palette.menu.line }} />
           <List>
-              {routes.map((route, index) => {
+              {routes().map((route, index) => {
                 if (route.type === 'component') {
                   return (
                     <NavLink key={index} to={route.url} style={({ isActive }) => handleButtonBackground(isActive)}>

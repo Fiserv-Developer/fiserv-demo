@@ -4,7 +4,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import routes from "../Config/routes";
 
 // A standard body item for the routed content panel in this project
-export default function Body() {
+export default function Body(props) {
   const location = useLocation();
   const [displayLocation, setDisplayLocation] = useState(location);
   const [transitionStage, setTransitionStage] = useState("fadeIn");
@@ -25,7 +25,7 @@ export default function Body() {
         }
       }}>
         <Routes location={displayLocation}>
-          {routes.map((route, index) => {
+          {routes(props).map((route, index) => {
             return (<Route key={index} path={route.url} element={route.component} />)
           })}
         </Routes>
