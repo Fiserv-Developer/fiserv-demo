@@ -2,6 +2,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LanguageIcon from '@mui/icons-material/Language';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import { useTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
@@ -17,7 +18,14 @@ export default function Transactions(props) {
   
   useEffect(() => {
     setError(false);
-    const url = config.baseUrl + '/transactions?limit=1000';
+
+    // calculate dates
+    const yesterdayDate = new Date()
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+    const yesterday = yesterdayDate.toISOString().substring(0, 10);
+    const today = new Date().toISOString().substring(0, 10);
+
+    const url = config.baseUrl + `/transactions?postedAfter=${yesterday}&postedBefore=${today}&limit=1000`;
     const headers = {
       'Api-Key': props.apiKey,
       'Accept': 'application/json',
@@ -45,6 +53,7 @@ export default function Transactions(props) {
 }
 
 function TransactionsTable(props) {
+  const theme = useTheme();
   const screen = useWindowDimensions();
   const rows = mapTransactions(props.transactions);
   const columns = [
@@ -52,9 +61,9 @@ function TransactionsTable(props) {
       field: 'status', headerName: 'Status', width: 150, align: 'center', headerAlign: 'center', flex: 0.1,
       renderCell: (params) => {
         if (params.value === 'CLEARED') {
-          return <CheckCircleIcon />
+          return (<CheckCircleIcon sx={{ color: theme.palette.green.main }}/>);
         } else {
-          return <CancelIcon />
+          return (<CancelIcon sx={{ color: theme.palette.red.main }}/>);
         }
       },
     },
