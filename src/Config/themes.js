@@ -34,8 +34,11 @@ const commonPalette = {
     light: colours.blueLight,
     translucent: colours.blueTranslucent,
   },
-  tertiary: {
+  green: {
     main: colours.green,
+  },
+  red: {
+    main: colours.red,
   },
   menu: {
     background: colours.black,

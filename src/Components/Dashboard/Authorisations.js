@@ -18,7 +18,14 @@ export default function Authorisations(props) {
   useEffect(() => {
     setProcessing(true);
     setError(false);
-    const url = config.baseUrl + '/authorisations?createdAfter=2022-11-01&createdBefore=2022-11-08&limit=1000';
+
+    // calculate dates
+    const lastWeekDate = new Date()
+    lastWeekDate.setDate(lastWeekDate.getDate() - 7);
+    const lastWeek = lastWeekDate.toISOString().substring(0, 10);
+    const today = new Date().toISOString().substring(0, 10);
+
+    const url = `${config.baseUrl}/authorisations?createdAfter=${lastWeek}&createdBefore=${today}&limit=1000`;
     const headers = {
       'Api-Key': props.apiKey,
       'Accept': 'application/json',

@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Error from "../Error";
@@ -11,6 +11,7 @@ import useWindowDimensions from "../../Config/utils";
 import { config } from "../../Config/constants";
 
 export function InvoicesTable(props) {
+  const theme = useTheme();
   const screen = useWindowDimensions();
 
   const rows = props.invoices;
@@ -19,7 +20,7 @@ export function InvoicesTable(props) {
       field: 'status', headerName: 'Status', align: 'center', headerAlign: 'center', flex: 0.2,
       renderCell: (params) => {
         if (params.value === 'APPROVED') {
-          return (<CheckCircleIcon />);
+          return (<CheckCircleIcon sx={{ color: theme.palette.green.main }}/>);
         } else {
           return (<PendingIcon />);
         }
@@ -42,7 +43,6 @@ export function InvoicesTable(props) {
     { 
       field: 'link', headerName: 'Link', align: 'center', headerAlign: 'center', flex: 0.8, direction: 'column',
       renderCell: (params) => {
-        console.log(params)
         if (params.getValue(params.row.id, 'status') === 'APPROVED') {
           return (
             <Button onClick={() => window.open(params.value, '_blank').focus()}><ReceiptIcon /> View Receipt</Button>
