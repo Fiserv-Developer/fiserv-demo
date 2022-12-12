@@ -1,41 +1,6 @@
 // Any mock data used by the demo that isn't pulled from an API
 
-export const products = [
-  {
-    name: "Drone",
-    value: "89.99"
-  },
-  {
-    name: "Pizza",
-    value: "19.99"
-  },
-  {
-    name: "Game",
-    value: "9.99"
-  },
-  {
-    name: "Bike",
-    value: "300.00"
-  },
-  {
-    name: "Car",
-    value: "459.50"
-  },
-  {
-    name: "Necklace",
-    value: "198.99"
-  },
-  {
-    name: "Sheets",
-    value: "29.99"
-  },
-  {
-    name: "Lawnmower",
-    value: "49.99"
-  },
-];
-
-export const products2 = {
+export const products = {
   coffee: [
     {
       featured: true,
@@ -53,7 +18,7 @@ export const products2 = {
     {
       image: "coffee-blend.jpeg",
       name: "Bit of Both",
-      description: "Dark and light blend, provides both rich and lighter notes",
+      description: "Dark and light, combining rich and light notes",
       value: "10.99"
     },
     {
@@ -86,7 +51,7 @@ export const products2 = {
     {
       image: "art-cyan-orange.jpeg",
       name: "Ocean Sunset",
-      description: "Acrylic on canvas [original], 8\"x6\"",
+      description: "Oil on board [Original], 8\"x6\"",
       value: "389.00"
     },
   ]

@@ -9,19 +9,53 @@ import Settings from '../Pages/Settings';
 import Invoices from '../Pages/Invoices';
 import CheckoutSuccess from '../Components/Shop/CheckoutSuccess';
 import CheckoutFailure from '../Components/Shop/CheckoutFailure';
-import Shop2 from '../Pages/Shop2';
 import Shop from '../Pages/Shop';
 
-let routes = [
-    {type: "component", "name": "Home", "url": "/", "component": <Home/>, icon: <HomeIcon/>},
-    {type: "component", "name": "Dashboard", "url": "/dashboard", "component": <Dashboard/>, icon: <DashboardIcon/>},
-    {type: "hidden", "name": "Shop", "url": "/shop-old", "component": <Shop/>, icon: <ShoppingBasket/>}, // todo remove once we're happy
-    {type: "component", "name": "Shop", "url": "/shop", "component": <Shop2/>, icon: <ShoppingBasket/>},
-    {type: "component", "name": "Invoices", "url": "/invoices", "component": <Invoices/>, icon: <ReceiptIcon/>},
-    {type: "component", "name": "Settings", "url": "/settings", "component": <Settings/>, icon: <SettingsIcon/>},
-    // hidden pages
-    {type: "hidden", "name": "CheckoutSuccess", "url": "/checkout-success", "component": <CheckoutSuccess/>},
-    {type: "hidden", "name": "CheckoutFailure", "url": "/checkout-failure", "component": <CheckoutFailure/>},
-];
+const routes = (props) => {
+  const home = {
+    type: "component", 
+    name: "Home", 
+    url: "/", 
+    icon: <HomeIcon/>,
+    component: <Home/>, 
+  };
+
+  const dashboard = {
+    type: "component", 
+    name: "Dashboard",
+    url: "/dashboard", 
+    icon: <DashboardIcon/>,
+    component: <Dashboard/>, 
+  };
+
+  const shop = {
+    type: "component", 
+    name: "Shop", 
+    url: "/shop", 
+    icon: <ShoppingBasket/>,
+    component: props ? <Shop setSnackbarOpen={props.setSnackbarOpen} setSnackbarText={props.setSnackbarText}/> : <Shop />, 
+  };
+
+  const invoices = {
+    type: "component", 
+    name: "Invoices", 
+    url: "/invoices",
+    icon: <ReceiptIcon/>,
+    component: <Invoices/>
+  };
+
+  const settings = {
+    type: "component", 
+    name: "Settings", 
+    url: "/settings", 
+    icon: <SettingsIcon/>,
+    component: props ? <Settings setSnackbarOpen={props.setSnackbarOpen} setSnackbarText={props.setSnackbarText}/> : <Settings />, 
+  };
+
+  const checkoutSuccess = {type: "hidden", "name": "CheckoutSuccess", "url": "/checkout-success", "component": <CheckoutSuccess/>};
+  const checkoutFailure = {type: "hidden", "name": "CheckoutFailure", "url": "/checkout-failure", "component": <CheckoutFailure/>};
+
+  return [home, dashboard, shop, invoices, settings, checkoutSuccess, checkoutFailure];
+}
 
 export default routes;

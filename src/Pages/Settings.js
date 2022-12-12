@@ -6,8 +6,9 @@ import { Title } from '../Components/Title';
 import { config } from '../Config/constants';
 import { getValueOrDefault } from '../Config/utils';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { PropaneSharp } from '@mui/icons-material';
 
-export default function Settings() {
+export default function Settings(props) {
   const [apiKey, setApiKey] = useState(() => getValueOrDefault(config.apiKey, ""));
   const [secretKey, setSecretKey] = useState(() => getValueOrDefault(config.secretKey, ""));
   const [nonProdApiKey, setNonProdApiKey] = useState(() => getValueOrDefault(config.nonProdApiKey, ""));
@@ -27,14 +28,6 @@ export default function Settings() {
   useEffect(() => updateConfig(config.nonProdSecretKey, nonProdSecretKey), [nonProdSecretKey]);
   useEffect(() => updateConfig(config.merchantId, merchantId), [merchantId]);
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    hideUpdate();
-  };
-
   const togglePasswordVisibility = (field) => {
     const updated = {
       ...passwords
@@ -44,17 +37,14 @@ export default function Settings() {
   };
 
   const onSettingChange = (value, updateState) => {
-    showUpdate();
     updateState(value);
+    props.setSnackbarText("Settings updated");
+    props.setSnackbarOpen(true);
   }
 
   const handleMouseDownPassword = (event) => event.preventDefault();
 
   const updateConfig = (keyName, value) => localStorage.setItem(keyName, value);
-
-  const showUpdate = () => setOpen(true);
-
-  const hideUpdate = () => setOpen(false);
 
   return (
     <Grid container spacing={3} sx={{padding: '30px'}}>
@@ -128,15 +118,6 @@ export default function Settings() {
           <MenuItem value="60004">60004</MenuItem>
         </Select>
       </BodyElement>
-      
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        onClose={handleClose}>
-          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-            Settings saved!
-          </Alert>
-      </Snackbar>
     </Grid>
   );
 }
