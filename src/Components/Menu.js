@@ -109,7 +109,7 @@ export default function Menu(props) {
     </IconButton>
   ) : (null);
 
-  const themeButton = screen.height > config.responsiveScreenHeight ? (
+  const themeButton = screen.height > config.responsiveScreenHeight && screen.width > config.responsiveScreenWidth ? (
     <Box sx={{ position: 'absolute', bottom: '20px', width: '100%', textAlign: 'center' }}>
       <IconButton
         onClick={() => props.setThemeToggle(!props.themeToggle)}
@@ -121,7 +121,7 @@ export default function Menu(props) {
   ) : (
     <IconButton
       onClick={() => props.setThemeToggle(!props.themeToggle)}
-      sx={{ color: theme.palette.primary.main, marginTop: marginTop, marginBottom: marginBottom}}
+      sx={{ color: theme.palette.primary.main, marginTop: marginTop, marginBottom: marginBottom, width: '100%', textAlign: 'center'}}
     >
       {icon}
     </IconButton>  
@@ -189,6 +189,8 @@ export default function Menu(props) {
                 return (null); // don't show any non-component links
               }
               })}
+              <Divider sx={{ borderColor: theme.palette.menu.line }} />
+              {themeButton}
             </List>
         </MuiDrawer>
 

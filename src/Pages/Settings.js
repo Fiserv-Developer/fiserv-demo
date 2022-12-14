@@ -1,12 +1,11 @@
-import { Alert, Grid, Link, MenuItem, Select, Snackbar } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { Grid, Link, MenuItem, Select } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import BodyElement from '../Components/BodyElement';
 import KeyFormControl from '../Components/Settings/KeyFormControl';
 import { Title } from '../Components/Title';
 import { config } from '../Config/constants';
 import { getValueOrDefault } from '../Config/utils';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { PropaneSharp } from '@mui/icons-material';
 
 export default function Settings(props) {
   const [apiKey, setApiKey] = useState(() => getValueOrDefault(config.apiKey, ""));
@@ -14,7 +13,6 @@ export default function Settings(props) {
   const [nonProdApiKey, setNonProdApiKey] = useState(() => getValueOrDefault(config.nonProdApiKey, ""));
   const [nonProdSecretKey, setNonProdSecretKey] = useState(() => getValueOrDefault(config.nonProdSecretKey, ""));
   const [merchantId, setMerchantId] = useState(() => getValueOrDefault(config.merchantId, ""));
-  const [open, setOpen] = useState(false);
   const [passwords, setPasswords] = useState({
     apiKey: false,
     secretKey: false,

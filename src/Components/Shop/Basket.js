@@ -2,7 +2,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
-import { Button, Divider, Grid, Table, TableBody, Typography, useTheme } from "@mui/material";
+import { Button, Divider, Grid, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ResponsiveModal } from '../ResponsiveModal';
 import { Title } from '../Title';

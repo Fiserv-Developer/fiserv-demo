@@ -1,16 +1,16 @@
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import { Alert, Badge, Button, Divider, Grid, IconButton, Snackbar, Typography, useTheme } from '@mui/material';
+import StarIcon from '@mui/icons-material/Star';
+import { Badge, Button, Divider, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import BodyElement from '../Components/BodyElement';
 import { CenteredBox } from '../Components/CenteredBox';
-import { config } from '../Config/constants';
-import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/utils';
-import StarIcon from '@mui/icons-material/Star';
-import { products } from '../Config/data';
 import Basket from '../Components/Shop/Basket';
 import Checkout from '../Components/Shop/Checkout';
 import Processing from '../Components/Shop/Processing';
+import { config } from '../Config/constants';
+import { products } from '../Config/data';
+import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/utils';
 
 export default function Shop(props) {
   const theme = useTheme();
