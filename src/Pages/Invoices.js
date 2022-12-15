@@ -95,6 +95,7 @@ export default function Invoices() {
   const mapInvoice = (link) => {
     return {
       id: link.checkoutId,
+      active: link.paymentLink.active,
       status: link.transactionStatus,
       expires: link.paymentLink.expiryDateTime,
       amount: link.approvedAmount.total,
