@@ -7,6 +7,7 @@ import React from "react";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import PendingIcon from '@mui/icons-material/Pending';
+import CancelIcon from '@mui/icons-material/Cancel';
 import useWindowDimensions from "../../Config/utils";
 import { config } from "../../Config/constants";
 
@@ -21,8 +22,10 @@ export function InvoicesTable(props) {
       renderCell: (params) => {
         if (params.value === 'APPROVED') {
           return (<CheckCircleIcon sx={{ color: theme.palette.green.main }}/>);
-        } else {
+        } else if (params.row.active === 'true') {
           return (<PendingIcon />);
+        } else {
+          return (<CancelIcon sx={{ color: theme.palette.red.main }}/>);
         }
       },
     },
@@ -43,7 +46,7 @@ export function InvoicesTable(props) {
     { 
       field: 'link', headerName: 'Link', align: 'center', headerAlign: 'center', flex: 0.8, direction: 'column',
       renderCell: (params) => {
-        if (params.getValue(params.row.id, 'status') === 'APPROVED') {
+        if (params.row.status === 'APPROVED') {
           return (
             <Button onClick={() => window.open(params.value, '_blank').focus()}><ReceiptIcon /> View Receipt</Button>
           );
