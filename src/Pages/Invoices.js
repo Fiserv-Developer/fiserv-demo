@@ -15,9 +15,9 @@ import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/util
 
 export default function Invoices() {
   const theme = useTheme();
-  const baseUrl = config.nonProdQaBaseUrl;
-  const apiKey = getValueOrDefault(config.nonProdApiKey, "");
-  const secretKey = getValueOrDefault(config.nonProdSecretKey, "");
+  const baseUrl = config.baseUrl;
+  const apiKey = getValueOrDefault(config.apiKey, config.defaultApiKey);
+  const secretKey = getValueOrDefault(config.secretKey, config.defaultSecretKey);
 
   const [linkIds, setLinkIds] = useState(getValueOrDefault(state.linkIds, []));
   const [invoices, setInvoices] = useState([]);

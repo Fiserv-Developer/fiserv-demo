@@ -14,9 +14,9 @@ import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/util
 export default function Shop(props) {
   const theme = useTheme();
   const [basket, setBasket] = useState([]);
-  const baseUrl = config.nonProdIntBaseUrl;
-  const apiKey = getValueOrDefault(config.nonProdApiKey, "");
-  const secretKey = getValueOrDefault(config.nonProdSecretKey, "");
+  const baseUrl = config.baseUrl;
+  const apiKey = getValueOrDefault(config.apiKey, config.defaultApiKey);
+  const secretKey = getValueOrDefault(config.secretKey, config.defaultSecretKey);
 
   // basket modal
   const [basketOpen, setBasketOpen] = useState(false);

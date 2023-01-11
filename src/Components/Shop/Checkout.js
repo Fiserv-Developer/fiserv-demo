@@ -2,7 +2,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PaymentIcon from '@mui/icons-material/Payment';
 import { Button, Checkbox, FormControlLabel, Grid, TextField, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ResponsiveModal } from '../ResponsiveModal';
 import { Title } from "../Title";
 
@@ -14,20 +14,12 @@ export default function Checkout(props) {
   const [state, setState] = useState('');
   const [zip, setZip] = useState('');
   const [country, setCountry] = useState('');
-  const [valid, setValid] = useState(false);
+  const shippingValid = name !== '' && addressLine1 !== '' && city !== '' && zip !== '' && country !== '';
 
   const backToBasket = () => {
     props.handleClose();
     props.handleBasketOpen();
   }
-
-  useEffect(() => {
-    if (name !== '' && addressLine1 !== '' && city !== '' && zip !== '' && country !== '' ) {
-      setValid(true);
-    } else {
-      setValid(false);
-    }
-  }, [name, addressLine1, city, zip, country]);
 
   const modalTitle = (
     <Title icon={<LocalShippingIcon />} primary="Shipping" secondary="Please enter your shipping details" />
@@ -80,7 +72,7 @@ export default function Checkout(props) {
         <ArrowBackIcon /> Back
       </Button>
       <Button 
-        disabled={!valid}
+        disabled={!shippingValid}
         sx={{
           color: theme.palette.primary.contrastText, 
           backgroundColor: theme.palette.primary.main, 
