@@ -1,13 +1,12 @@
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import StarIcon from '@mui/icons-material/Star';
-import { Badge, Button, Divider, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Badge, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useState } from 'react';
-import BodyElement from '../Components/BodyElement';
+import React, { useState, useEffect } from 'react';
 import { CenteredBox } from '../Components/CenteredBox';
 import Basket from '../Components/Shop/Basket';
 import Checkout from '../Components/Shop/Checkout';
 import Processing from '../Components/Shop/Processing';
+import Product from '../Components/Shop/Product';
 import { config } from '../Config/constants';
 import { products } from '../Config/data';
 import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/utils';
@@ -15,9 +14,9 @@ import { fetchWithRetry, getValueOrDefault, withSignature } from '../Config/util
 export default function Shop(props) {
   const theme = useTheme();
   const [basket, setBasket] = useState([]);
-  const baseUrl = config.nonProdIntBaseUrl;
-  const apiKey = getValueOrDefault(config.nonProdApiKey, "");
-  const secretKey = getValueOrDefault(config.nonProdSecretKey, "");
+  const baseUrl = config.baseUrl;
+  const apiKey = getValueOrDefault(config.apiKey, config.defaultApiKey);
+  const secretKey = getValueOrDefault(config.secretKey, config.defaultSecretKey);
 
   // basket modal
   const [basketOpen, setBasketOpen] = useState(false);
@@ -85,84 +84,62 @@ export default function Shop(props) {
         }));
   }
 
-  const basketHasItem = (name) => {
+  const addItem = (product) => {
+    setBasket([ ...basket, {image: product.image, name: product.name, value: product.value, quantity: 1}]);
+    props.setSnackbarText("Item added to basket");
+    props.setSnackbarOpen(true);
+  };
+
+  const increaseQuantity = (name) => {
+    setBasket(basket.map((item) => {
+      if(item.name === name) {
+        return {
+          ...item,
+          quantity: item.quantity + 1
+        };
+      } else {
+        return item;
+      }
+    }));
+    props.setSnackbarText("Item added to basket");
+    props.setSnackbarOpen(true);
+  };
+
+  const decreaseQuantity = (name) => {
+    const decreased = basket.map((item) => {
+      if(item.name === name) {
+        return {
+          name: item.name,
+          value: item.value,
+          quantity: item.quantity - 1
+        };
+      } else {
+        return item;
+      }
+    });
+
+    const filtered = decreased.filter((item) => item.quantity > 0);
+    setBasket(filtered);
+    props.setSnackbarText("Item removed from basket");
+    props.setSnackbarOpen(true);
+  };
+
+  const isInBasket = (name) => {
     const quantity = basket.filter((item) => item.name === name).length;
     return quantity > 0;
   };
-
-  const basketItemQuantity = (name) => {
+  
+  const countInBasket = (name) => {
     return basket.filter((item) => item.name === name)[0].quantity;
   };
 
-  const product = (product) => {
-    const addItem = (product) => {
-      setBasket([ ...basket, {image: product.image, name: product.name, value: product.value, quantity: 1}]);
-      props.setSnackbarText("Item added to basket");
-      props.setSnackbarOpen(true);
-    };
-
-    const increaseQuantity = (name) => {
-      setBasket(basket.map((item) => {
-        if(item.name === name) {
-          return {
-            ...item,
-            quantity: item.quantity + 1
-          };
-        } else {
-          return item;
-        }
-      }));
-      props.setSnackbarText("Item added to basket");
-      props.setSnackbarOpen(true);
-    };
-  
-    const decreaseQuantity = (name) => {
-      const decreased = basket.map((item) => {
-        if(item.name === name) {
-          return {
-            name: item.name,
-            value: item.value,
-            quantity: item.quantity - 1
-          };
-        } else {
-          return item;
-        }
-      });
-  
-      const filtered = decreased.filter((item) => item.quantity > 0);
-      setBasket(filtered);
-      props.setSnackbarText("Item removed from basket");
-      props.setSnackbarOpen(true);
-    };
-
-    const buttons = basketHasItem(product.name) ? 
-    (
-      <Box sx={{display: 'flex', margin: '0 auto'}}>
-        <Button onClick={() => decreaseQuantity(product.name)}>-</Button>
-        <Typography sx={{lineHeight: '36.5px', height: '36.5px'}}>{basketItemQuantity(product.name)}</Typography>
-        <Button onClick={() => increaseQuantity(product.name)}>+</Button>
-      </Box>
-    ) : (
-      <Button onClick={() => addItem(product)}>Add</Button>
-    );
-
-    const featuredText = product.featured ? 
-    (
-      <Typography variant="h7" sx={{marginTop: '10px', display: 'flex', alignItems: 'center', flexWrap: 'wrap',}}><StarIcon />Best Seller</Typography>
-    ) : (<Typography variant="h7" sx={{marginTop: '33px'}}></Typography>);
-
-    return (
-      <BodyElement key={product.name} xs={12} md={product.featured ? 6 : 4} lg={product.featured ? 6 : 4} xl={2} styleOverrides={{paddingLeft: '10px', paddingRight: '10px'}}>
-        <img alt={product.name + " product image"} src={ "../shop/products/" + product.image } style={{objectFit: 'cover', width: '100%', height: '100%', minHeight: '50%'}} />
-        {featuredText}
-        <Typography variant="h6">{product.name}</Typography>
-        <Typography variant="p" sx={{ color: theme.palette.text.secondary }}>{product.description}</Typography>
-        <Typography variant="p" sx={{textAlign: 'right'}}>£{product.value}</Typography>
-        <Divider />
-        {buttons}
-      </BodyElement>
-    );
-  }
+  useEffect(() => {
+    const all = [...products.coffee, ...products.art].map((product) => product.image);
+    all.forEach((picture) => {
+      const img = new Image();
+      img.src = picture.fileName;
+    });
+  }, []);
 
   return (
     <React.Fragment>
@@ -213,7 +190,7 @@ export default function Shop(props) {
               <Typography variant="p" sx={{ color: theme.palette.primary.contrastText }}>Premium coffee beans, roasted and infused by us</Typography>
             </Box>
           </Grid>
-          {products.coffee.map((p) => product(p))}
+          {products.coffee.map((p) => <Product product={p} addItem={addItem} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} isInBasket={isInBasket} countInBasket={countInBasket} />)}
           
           {/* art */}
           <Grid item xs={12} md={6} lg={6} xl={4} sx={{position: 'relative' }}>
@@ -223,7 +200,7 @@ export default function Shop(props) {
               <Typography variant="p" sx={{ color: theme.palette.primary.contrastText }}>Unique artwork, curated and created by us</Typography>
             </Box>
           </Grid>
-          {products.art.map((p) => product(p))}
+          {products.art.map((p) => <Product product={p} addItem={addItem} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} isInBasket={isInBasket} countInBasket={countInBasket} />)}
         </Grid>
 
         {/* outtro text */}

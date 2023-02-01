@@ -3,21 +3,13 @@ import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import { Button, Divider, Grid, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ResponsiveModal } from '../ResponsiveModal';
 import { Title } from '../Title';
 
 export default function Basket(props) {
   const theme = useTheme();
-  const [checkoutEnabled, setCheckoutEnabled] = useState(true);
-
-  useEffect(() => {
-    if (props.basket.length > 0) {
-      setCheckoutEnabled(true);
-    } else {
-      setCheckoutEnabled(false);
-    }
-  }, [props.basket])
+  const checkoutEnabled = props.basket.length > 0;
 
   const removeItem = (name) => {
     const basket = props.basket.filter((item) => item.name !== name );
